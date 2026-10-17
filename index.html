@@ -3635,6 +3635,871 @@ const QUESTS = [
  }}
 ];
 
+const SCHOOL_A = [
+// ===== 中1 =====
+{"id":"s-j1-01","g":"中1","t":"be動詞(am / is / are)","sub":"「=(イコール)」でつなぐ動詞","link":"g22",
+ "pts":["be動詞は「主語 = 説明」をつなぐ<b>イコール記号</b>のような動詞です。","主語で形が決まります。<b>I → am</b> / <b>he・she・it・1人・1つ → is</b> / <b>you・複数 → are</b>。","否定は be動詞のあとに <b>not</b>。疑問文は be動詞を<b>主語の前</b>に出します。"],
+ "ex":[{"en":"I am a student.","ja":"私は学生です。"},{"en":"My sister is not tall.","ja":"私の姉は背が高くありません。"},{"en":"Are you tired?","ja":"あなたは疲れていますか?"}],
+ "q":[
+  {"k":"fill","s":"I ____ a student.","c":["am","is","are","be"],"a":0,"why":"主語が I なので am。"},
+  {"k":"fill","s":"My father ____ a teacher.","c":["are","am","is","be"],"a":2,"why":"My father は1人(3人称単数)なので is。"},
+  {"k":"fill","s":"Ken and I ____ friends.","c":["am","are","is","be"],"a":1,"why":"Ken and I は2人(複数)なので are。"},
+  {"k":"fill","s":"This bag ____ not new.","c":["am","are","be","is"],"a":3,"why":"This bag は1つなので is。否定は is not。"},
+  {"k":"fill","s":"____ you hungry?","c":["Are","Is","Am","Do"],"a":0,"why":"主語が you で hungry(形容詞)が続くので be動詞の Are。"},
+  {"k":"order","ja":"私は東京の出身ではありません。","en":"I am not from Tokyo."},
+  {"k":"order","ja":"あなたの先生は親切ですか?","en":"Is your teacher kind?"},
+  {"k":"write","ja":"私の母は看護師です。","model":"My mother is a nurse.","alts":["My mom is a nurse."],"keys":[["mother*","mom*"],["is","mothers","moms"],["nurse"]],"why":"My mother は1人なので is。「看護師」は a nurse。"},
+  {"k":"write","ja":"私たちは今、教室にいます。","model":"We are in the classroom now.","alts":["We're in the classroom now.","We are in class now."],"keys":[["we are"],["classroom","class"]],"why":"主語が We(複数)なので are。be動詞は「〜にいる」の意味にもなります。"},
+  {"k":"meaning","en":"They are not at home.","c":["彼らは家にいません","彼らは家にいます","彼らは家に帰りません","彼らは家を持っていません"],"a":0,"why":"are not at home = 家にいない。"}
+ ]},
+{"id":"s-j1-02","g":"中1","t":"一般動詞(I・you)","sub":"動きや気持ちを表す動詞","link":"g02",
+ "pts":["be動詞以外の動詞(play・like・eat など)を<b>一般動詞</b>といいます。","否定は <b>do not(don't)+ 動詞</b>。","疑問文は <b>Do you ~?</b>。答えは Yes, I do. / No, I don't.","be動詞と一般動詞は一緒に使いません(× I am like ~)。"],
+ "ex":[{"en":"I play tennis.","ja":"私はテニスをします。"},{"en":"I don't drink coffee.","ja":"私はコーヒーを飲みません。"},{"en":"Do you like music?","ja":"あなたは音楽が好きですか?"}],
+ "q":[
+  {"k":"fill","s":"I ____ soccer every Sunday.","c":["play","am play","plays","playing"],"a":0,"why":"主語が I なので動詞はそのままの形 play。be動詞は付けません。"},
+  {"k":"fill","s":"I ____ like cats.","c":["am not","not","don't","doesn't"],"a":2,"why":"一般動詞の否定は don't + 動詞。主語が I なので doesn't ではありません。"},
+  {"k":"fill","s":"____ you have a pen?","c":["Are","Do","Is","Does"],"a":1,"why":"have は一般動詞なので Do you ~? で聞きます。"},
+  {"k":"fill","s":"Do you speak English? — Yes, I ____.","c":["am","does","is","do"],"a":3,"why":"Do you ~? には Yes, I do. と do で答えます。"},
+  {"k":"fill","s":"We ____ in Osaka.","c":["are live","live","lives","living"],"a":1,"why":"主語が We なので live。be動詞と一緒には使いません。"},
+  {"k":"order","ja":"あなたは毎朝朝食を食べますか?","en":"Do you eat breakfast every morning?"},
+  {"k":"order","ja":"私はピアノを弾きません。","en":"I don't play the piano."},
+  {"k":"write","ja":"私は毎日英語を勉強します。","model":"I study English every day.","alts":["I learn English every day."],"keys":[["study","learn"],["english"],["every day","everyday","each day","daily"]],"why":"「勉強する」は一般動詞 study。毎日 = every day。"},
+  {"k":"write","ja":"あなたはコーヒーを飲みますか?","model":"Do you drink coffee?","alts":["Do you have coffee?"],"keys":[["do you"],["drink*","have"],["coffee"]],"why":"一般動詞の疑問文なので Do you で始めます。"},
+  {"k":"meaning","en":"I don't know his name.","c":["私は彼の名前を知っています","私は彼の名前を知りません","私は彼の名前を書きません","彼は私の名前を知りません"],"a":1,"why":"don't know = 知らない。his name = 彼の名前。"}
+ ]},
+{"id":"s-j1-03","g":"中1","t":"三人称単数現在(-s)","sub":"主語が「彼・彼女・それ」なら動詞に s","link":"g22",
+ "pts":["主語が <b>I・you 以外の1人・1つ</b>(he・she・it・my father など)のとき、動詞に <b>-s / -es</b> を付けます。","play → plays、watch → watches、study → studies、<b>have → has</b>。","否定は <b>doesn't + 動詞の元の形</b>。疑問文は <b>Does ~ + 元の形?</b>"],
+ "ex":[{"en":"She plays the guitar.","ja":"彼女はギターを弾きます。"},{"en":"My brother doesn't eat fish.","ja":"私の兄は魚を食べません。"},{"en":"Does he live near here?","ja":"彼はこの近くに住んでいますか?"}],
+ "q":[
+  {"k":"fill","s":"My sister ____ to school by bus.","c":["go","goes","going","is go"],"a":1,"why":"My sister は3人称単数なので goes。"},
+  {"k":"fill","s":"He ____ a big dog.","c":["have","haves","has","having"],"a":2,"why":"have は3人称単数で has になります。"},
+  {"k":"fill","s":"Tom ____ like milk.","c":["don't","isn't","not","doesn't"],"a":3,"why":"主語が Tom(3人称単数)の否定は doesn't + 動詞。"},
+  {"k":"fill","s":"____ your father cook?","c":["Does","Do","Is","Are"],"a":0,"why":"your father は3人称単数なので Does ~? で聞きます。"},
+  {"k":"fill","s":"She doesn't ____ TV in the morning.","c":["watches","watch","watching","watched"],"a":1,"why":"doesn't のあとは動詞の元の形 watch。"},
+  {"k":"order","ja":"私の父は毎日新聞を読みます。","en":"My father reads the newspaper every day."},
+  {"k":"order","ja":"彼女は東京に住んでいますか?","en":"Does she live in Tokyo?"},
+  {"k":"write","ja":"私の兄は毎朝走ります。","model":"My brother runs every morning.","alts":["My older brother runs every morning."],"keys":[["brother"],["runs","jogs","goes running","goes jogging"],["every morning","each morning"]],"why":"主語が3人称単数なので runs。"},
+  {"k":"write","ja":"彼は肉を食べません。","model":"He doesn't eat meat.","alts":["He does not eat meat.","He never eats meat."],"keys":[["he does not eat","he never eats"],["meat"]],"why":"3人称単数の否定は doesn't + eat。"},
+  {"k":"meaning","en":"Does your mother work on Saturdays?","c":["あなたのお母さんは土曜日に働きましたか","あなたは土曜日にお母さんと働きますか","あなたのお母さんは土曜日に働いていますか","あなたのお母さんは土曜日に休みますか"],"a":2,"why":"Does ~ work? は現在の習慣をたずねる文。on Saturdays = 毎週土曜日に。"}
+ ]},
+{"id":"s-j1-04","g":"中1","t":"名詞の複数形と a・an・the","sub":"「いくつ?」「どれ?」を名詞の形で示す","link":"g22",
+ "pts":["2つ以上は名詞に <b>-s / -es</b>。book → books、box → boxes、city → cities、<b>child → children</b>。","<b>a</b> は子音の音の前、<b>an</b> は母音(ア・イ・ウ・エ・オ)の音の前(an apple, an hour)。","<b>the</b> は「どれのことか分かっている」ものに付けます。","water・music のように数えられない名詞には a も -s も付けません。"],
+ "ex":[{"en":"I have two brothers.","ja":"私には兄弟が2人います。"},{"en":"She eats an apple every day.","ja":"彼女は毎日りんごを1つ食べます。"},{"en":"Please open the window.","ja":"窓を開けてください。"}],
+ "q":[
+  {"k":"fill","s":"I have three ____.","c":["box","boxs","boxes","a box"],"a":2,"why":"x で終わる語は -es を付けて boxes。"},
+  {"k":"fill","s":"He is ____ English teacher.","c":["a","an","two","many"],"a":1,"why":"English は母音の音で始まるので an。"},
+  {"k":"fill","s":"Look at ____ moon. It's beautiful.","c":["the","a","an","some"],"a":0,"why":"月は1つしかなく、どれか分かっているので the。"},
+  {"k":"fill","s":"I see two ____ in the park.","c":["childs","children","child","childrens"],"a":1,"why":"child の複数形は children(-s は付けません)。"},
+  {"k":"fill","s":"I eat ____ banana every morning.","c":["an","two","many","a"],"a":3,"why":"banana は子音の音で始まり1本なので a。"},
+  {"k":"order","ja":"私は毎朝卵を2つ食べます。","en":"I eat two eggs every morning."},
+  {"k":"order","ja":"その本はテーブルの上にあります。","en":"The book is on the table."},
+  {"k":"write","ja":"私には姉妹が2人います。","model":"I have two sisters.","alts":["I've got two sisters."],"keys":[["have"],["two sisters"]],"why":"2人なので sister を複数形 sisters にします。"},
+  {"k":"write","ja":"彼女は1時間ピアノを練習します。","model":"She practices the piano for an hour.","alts":["She practices the piano for one hour."],"keys":[["practice*"],["piano"],["an hour","one hour","sixty minutes"]],"why":"hour は母音の音で始まるので an hour。"},
+  {"k":"meaning","en":"The cats are under the table.","c":["1匹のネコがテーブルの下にいます","そのネコたちはテーブルの上にいます","ネコたちがテーブルを持っています","そのネコたちはテーブルの下にいます"],"a":3,"why":"cats は複数、under = 〜の下に。"}
+ ]},
+{"id":"s-j1-05","g":"中1","t":"代名詞(I・my・me・mine)","sub":"文の中の「位置」で形が変わる","link":"g21",
+ "pts":["「〜は」<b>I / you / he / she / it / we / they</b>","「〜の」<b>my / your / his / her / its / our / their</b>","「〜を・〜に」<b>me / you / him / her / it / us / them</b>","「〜のもの」<b>mine / yours / his / hers / ours / theirs</b>"],
+ "ex":[{"en":"This is my bike.","ja":"これは私の自転車です。"},{"en":"Do you know him?","ja":"あなたは彼を知っていますか?"},{"en":"That umbrella is mine.","ja":"あのかさは私のものです。"}],
+ "q":[
+  {"k":"fill","s":"This is Ms. Sato. ____ is our teacher.","c":["Her","She","Hers","He"],"a":1,"why":"文の主語(〜は)で女性なので She。"},
+  {"k":"fill","s":"I like Ken. I often play with ____.","c":["he","his","him","he's"],"a":2,"why":"with のあとは「〜を・〜に」の形 him。"},
+  {"k":"fill","s":"Is this your pen? — Yes, it's ____.","c":["my","me","I","mine"],"a":3,"why":"「私のもの」は mine。"},
+  {"k":"fill","s":"We love ____ dog.","c":["our","us","ours","we"],"a":0,"why":"名詞 dog の前は「〜の」の形 our。"},
+  {"k":"fill","s":"These are Yumi's shoes. They are ____.","c":["her","hers","she","herself"],"a":1,"why":"「彼女のもの」は hers。"},
+  {"k":"order","ja":"彼らの家はとても大きいです。","en":"Their house is very big."},
+  {"k":"order","ja":"あなたは彼女の名前を知っていますか?","en":"Do you know her name?"},
+  {"k":"write","ja":"これは私のかばんです。","model":"This is my bag.","alts":["This bag is mine."],"keys":[["my bag","mine"],["this"]],"why":"「私の」は my、「私のもの」なら mine。"},
+  {"k":"write","ja":"私は彼らをよく知っています。","model":"I know them well.","alts":["I know them very well."],"keys":[["know"],["them"]],"why":"know のあとは「〜を」の形 them。"},
+  {"k":"meaning","en":"Is that car yours?","c":["あの車はあなたのものですか","あれはあなたの車の色ですか","あなたはあの車が好きですか","あの車は私たちのものですか"],"a":0,"why":"yours = あなたのもの。"}
+ ]},
+{"id":"s-j1-06","g":"中1","t":"疑問詞(what・who・where・when・how など)","sub":"知りたいことを文の先頭で聞く","link":"g23",
+ "pts":["疑問詞は<b>文の先頭</b>に置きます。What(何)/ Who(だれ)/ Where(どこ)/ When(いつ)/ Why(なぜ)/ How(どう・どうやって)。","後ろはふつうの疑問文の形です(<b>What do you ~?</b> / <b>Where is ~?</b>)。","<b>How + 形容詞</b>で「どれくらい」:How old / How many / How much。","答えは Yes / No ではなく、具体的な内容で答えます。"],
+ "ex":[{"en":"What do you want for lunch?","ja":"お昼に何が食べたいですか?"},{"en":"Where is the station?","ja":"駅はどこですか?"},{"en":"How many pens do you have?","ja":"ペンを何本持っていますか?"}],
+ "q":[
+  {"k":"fill","s":"____ is your birthday? — It's May 5.","c":["Where","When","Who","How"],"a":1,"why":"日付を答えているので When(いつ)。"},
+  {"k":"fill","s":"____ is that girl? — She is my sister.","c":["Who","What","Where","How"],"a":0,"why":"人がだれかを聞くので Who。"},
+  {"k":"fill","s":"____ do you go to school? — By bike.","c":["What","Who","When","How"],"a":3,"why":"手段(自転車で)を答えているので How(どうやって)。"},
+  {"k":"fill","s":"How ____ is this T-shirt? — It's 2,000 yen.","c":["many","old","much","long"],"a":2,"why":"値段は How much で聞きます。"},
+  {"k":"fill","s":"Where ____ your brother live?","c":["does","is","do","are"],"a":0,"why":"live は一般動詞、your brother は3人称単数なので does。"},
+  {"k":"order","ja":"あなたは何時に起きますか?","en":"What time do you get up?"},
+  {"k":"order","ja":"あなたのかばんはどこにありますか?","en":"Where is your bag?"},
+  {"k":"write","ja":"あなたは何のスポーツが好きですか?","model":"What sport do you like?","alts":["What sports do you like?","What kind of sports do you like?","Which sport do you like?"],"keys":[["what","which"],["sport*"],["like"]],"why":"What sport で始め、後ろは do you like の疑問文の形。"},
+  {"k":"write","ja":"あなたはなぜ英語を勉強するのですか?","model":"Why do you study English?","alts":["Why are you studying English?","Why do you learn English?"],"keys":[["why"],["study*","learn*"],["english"]],"why":"理由を聞くときは Why で始めます。"},
+  {"k":"meaning","en":"How do you go to work?","c":["あなたはいつ仕事に行きますか","あなたはどうやって通勤していますか","あなたはなぜ仕事に行くのですか","あなたの仕事はどうですか"],"a":1,"why":"How do you go ~? = どうやって行くか(手段)。"}
+ ]},
+{"id":"s-j1-07","g":"中1","t":"命令文と Let's","sub":"動詞から始めて「〜して」「〜しよう」","link":"g01",
+ "pts":["主語を言わず<b>動詞の元の形で始める</b>と「〜しなさい・〜して」。","<b>Please</b> を付けると丁寧になります。","<b>Don't + 動詞</b> = 「〜しないで」。be動詞なら <b>Be ~</b>(Be quiet.)。","<b>Let's + 動詞</b> = 「〜しよう」。答えは Yes, let's. / Sorry, I can't."],
+ "ex":[{"en":"Open your textbook.","ja":"教科書を開きなさい。"},{"en":"Don't run in the hallway.","ja":"廊下を走らないで。"},{"en":"Let's have lunch together.","ja":"一緒にお昼を食べましょう。"}],
+ "q":[
+  {"k":"fill","s":"____ careful. The floor is wet.","c":["Be","Are","Is","Do"],"a":0,"why":"careful(形容詞)の命令文は be動詞の元の形 Be で始めます。"},
+  {"k":"fill","s":"____ use your phone in class.","c":["Not","Don't","No","Doesn't"],"a":1,"why":"「〜しないで」は Don't + 動詞。"},
+  {"k":"fill","s":"Let's ____ tennis after school.","c":["plays","playing","play","to play"],"a":2,"why":"Let's のあとは動詞の元の形。"},
+  {"k":"fill","s":"Please ____ down.","c":["sitting","sits","to sit","sit"],"a":3,"why":"命令文は動詞の元の形 sit。"},
+  {"k":"fill","s":"Let's go to the park. — Yes, ____.","c":["I am","let's","it is","you do"],"a":1,"why":"Let's ~. に賛成するときは Yes, let's.。"},
+  {"k":"order","ja":"ここで写真を撮らないでください。","en":"Please don't take pictures here."},
+  {"k":"order","ja":"一緒に夕食を作りましょう。","en":"Let's make dinner together."},
+  {"k":"write","ja":"窓を開けてください。","model":"Please open the window.","alts":["Open the window, please."],"keys":[["open"],["window*"]],"why":"動詞 open で始め、Please を付けて丁寧に。"},
+  {"k":"write","ja":"遅れないでください。","model":"Don't be late.","alts":["Please don't be late."],"keys":[["do not be","never be"],["late"]],"why":"late は形容詞なので Don't be ~ の形。"},
+  {"k":"meaning","en":"Let's take a break.","c":["休憩してもいいですか","休憩しなさい","休憩しましょう","休憩しないでください"],"a":2,"why":"Let's ~ = 〜しましょう。take a break = 休憩する。"}
+ ]},
+{"id":"s-j1-08","g":"中1","t":"助動詞 can","sub":"動詞に「できる」を足す","link":"g07",
+ "pts":["<b>can + 動詞の元の形</b> = 「〜できる」。","主語が he・she でも can の形は同じ。動詞にも -s は付けません。","否定は <b>can't(cannot)</b>。疑問文は <b>Can ~?</b> と can を前に。","<b>Can you ~?</b> は「〜してくれますか」、<b>Can I ~?</b> は「〜してもいいですか」にもなります。"],
+ "ex":[{"en":"She can speak three languages.","ja":"彼女は3つの言語を話せます。"},{"en":"I can't ride a bike.","ja":"私は自転車に乗れません。"},{"en":"Can I use this pen?","ja":"このペンを使ってもいいですか?"}],
+ "q":[
+  {"k":"fill","s":"She can ____ the guitar.","c":["plays","play","playing","played"],"a":1,"why":"can のあとは動詞の元の形。主語が She でも play。"},
+  {"k":"fill","s":"I ____ read this kanji.","c":["can't","don't can","am not can","not can"],"a":0,"why":"can の否定は can't(cannot)。"},
+  {"k":"fill","s":"____ you help me? — Sure.","c":["Are","Can","Is","Does"],"a":1,"why":"「手伝ってくれますか」は Can you ~?。"},
+  {"k":"fill","s":"Can your brother drive? — No, he ____.","c":["doesn't","isn't","can't","don't"],"a":2,"why":"Can ~? には can / can't で答えます。"},
+  {"k":"fill","s":"My dog can ____ very fast.","c":["runs","running","to run","run"],"a":3,"why":"can のあとは動詞の元の形 run。"},
+  {"k":"order","ja":"あなたはイタリア料理を作れますか?","en":"Can you cook Italian food?"},
+  {"k":"order","ja":"ここに座ってもいいですか?","en":"Can I sit here?"},
+  {"k":"write","ja":"私の妹はとても速く泳げます。","model":"My sister can swim very fast.","alts":["My little sister can swim very fast.","My younger sister can swim really fast."],"keys":[["sister"],["can swim"]],"why":"can + swim。主語が3人称単数でも swims にしません。"},
+  {"k":"write","ja":"私は今日、あなたに会えません。","model":"I can't see you today.","alts":["I can't meet you today.","I cannot meet you today."],"keys":[["can not see","can not meet"],["today"]],"why":"「〜できない」は can't + 動詞。"},
+  {"k":"meaning","en":"Can you open the door?","c":["ドアを開けてもいいですか","ドアは開いていますか","ドアを開けましたか","ドアを開けてくれますか"],"a":3,"why":"Can you ~? は「〜してくれますか」というお願いにもなります。"}
+ ]},
+{"id":"s-j1-09","g":"中1","t":"現在進行形","sub":"「今まさに〜している」を映像で切り取る","link":"g02",
+ "pts":["<b>be動詞 + 動詞の -ing</b> = 「(今)〜している」。","主語に合わせて am / is / are を使い分けます。否定は be動詞 + not、疑問文は be動詞を前に。","-ing の作り方:make → <b>making</b>、run → <b>running</b>、swim → <b>swimming</b>。","know・like など「状態」を表す動詞はふつう進行形にしません。"],
+ "ex":[{"en":"I am cooking dinner now.","ja":"私は今、夕食を作っています。"},{"en":"They aren't watching TV.","ja":"彼らはテレビを見ていません。"},{"en":"What are you doing?","ja":"何をしているのですか?"}],
+ "q":[
+  {"k":"fill","s":"Look! The baby ____.","c":["sleep","sleeps","is sleeping","are sleeping"],"a":2,"why":"Look! で「今」の様子。The baby は単数なので is sleeping。"},
+  {"k":"fill","s":"We are ____ for the bus.","c":["wait","waiting","waits","waited"],"a":1,"why":"are のあとは -ing で進行形。"},
+  {"k":"fill","s":"My father is ____ in the pool.","c":["swiming","swim","swims","swimming"],"a":3,"why":"swim は m を重ねて swimming。"},
+  {"k":"fill","s":"____ you studying now? — No, I'm not.","c":["Are","Do","Is","Does"],"a":0,"why":"進行形の疑問文は be動詞を前に。主語が you なので Are。"},
+  {"k":"fill","s":"I ____ the answer.","c":["am knowing","knowing","know","am know"],"a":2,"why":"know は状態の動詞なので進行形にせず know。"},
+  {"k":"order","ja":"彼女は今、電話で話しています。","en":"She is talking on the phone now."},
+  {"k":"order","ja":"あなたは何を読んでいるのですか?","en":"What are you reading?"},
+  {"k":"write","ja":"私は今、昼ごはんを食べています。","model":"I'm eating lunch now.","alts":["I'm having lunch now.","I am eating lunch now."],"keys":[["i am eating","i am having"],["lunch"]],"why":"am + eating で「今食べている」。"},
+  {"k":"write","ja":"子どもたちは公園で遊んでいます。","model":"The children are playing in the park.","alts":["The kids are playing in the park."],"keys":[["children are playing","kids are playing"],["park"]],"why":"children は複数なので are playing。"},
+  {"k":"meaning","en":"My brother isn't working today.","c":["兄は今日働いています","兄は今日は働いていません","兄は今日も働いていました","兄は今日働くつもりです"],"a":1,"why":"isn't working = 働いていない。"}
+ ]},
+{"id":"s-j1-10","g":"中1","t":"過去形(規則動詞・不規則動詞・was / were)","sub":"動詞の形で「もう終わったこと」を表す","link":"g03",
+ "pts":["規則動詞は <b>-ed</b>(play → played、study → studied)。","不規則動詞は形が変わります(go → <b>went</b>、eat → <b>ate</b>、see → <b>saw</b>、buy → <b>bought</b>)。","否定は <b>didn't + 元の形</b>、疑問文は <b>Did ~ + 元の形?</b>","be動詞の過去は <b>was</b>(I・3人称単数)/ <b>were</b>(you・複数)。"],
+ "ex":[{"en":"I visited my grandparents last Sunday.","ja":"私はこの前の日曜日、祖父母を訪ねました。"},{"en":"We didn't watch TV yesterday.","ja":"私たちは昨日テレビを見ませんでした。"},{"en":"Were you busy last week?","ja":"先週は忙しかったですか?"}],
+ "q":[
+  {"k":"fill","s":"I ____ to the library yesterday.","c":["go","goes","went","going"],"a":2,"why":"yesterday なので過去形。go の過去形は went。"},
+  {"k":"fill","s":"She ____ a new bag last week.","c":["buyed","bought","buys","buy"],"a":1,"why":"buy の過去形は bought(不規則動詞)。"},
+  {"k":"fill","s":"Did you ____ the movie?","c":["see","saw","seen","sees"],"a":0,"why":"Did のあとは動詞の元の形 see。"},
+  {"k":"fill","s":"They ____ at home last night.","c":["was","are","be","were"],"a":3,"why":"They は複数で過去なので were。"},
+  {"k":"fill","s":"We ____ eat breakfast this morning.","c":["didn't","don't","weren't","doesn't"],"a":0,"why":"this morning(今朝)の過去のことで、一般動詞の否定なので didn't。"},
+  {"k":"order","ja":"私は昨日、宿題をしませんでした。","en":"I didn't do my homework yesterday."},
+  {"k":"order","ja":"あなたは先週末どこへ行きましたか?","en":"Where did you go last weekend?"},
+  {"k":"write","ja":"私は今朝6時に起きました。","model":"I got up at six this morning.","alts":["I woke up at six this morning.","I got up at 6 this morning."],"keys":[["got up","woke up"],["six"],["this morning"]],"why":"get up の過去形は got up。"},
+  {"k":"write","ja":"昨日はとても寒かったです。","model":"It was very cold yesterday.","alts":["Yesterday was very cold.","It was really cold yesterday."],"keys":[["was"],["cold"],["yesterday"]],"why":"天気・寒さは It で表し、過去なので was。"},
+  {"k":"meaning","en":"Were you at home last night?","c":["今夜は家にいますか","昨夜は家に帰りましたか","昨夜は家にいましたか","昨夜は家で何をしましたか"],"a":2,"why":"Were you at home ~? = 家にいましたか。last night = 昨夜。"}
+ ]},
+// ===== 中2 =====
+{"id":"s-j2-01","g":"中2","t":"過去進行形","sub":"過去のある瞬間を写真のように切り取る","link":"g03",
+ "pts":["<b>was / were + 動詞の -ing</b> = 「(その時)〜していた」。","過去のある時点で<b>途中だった動作</b>を表します。","when と相性がよい:I was taking a bath <b>when</b> you called.","否定は wasn't / weren't、疑問文は Was / Were を前に。"],
+ "ex":[{"en":"I was watching TV at nine last night.","ja":"昨夜9時、私はテレビを見ていました。"},{"en":"They were playing soccer when it started to rain.","ja":"雨が降り出したとき、彼らはサッカーをしていました。"},{"en":"What were you doing then?","ja":"そのとき何をしていたのですか?"}],
+ "q":[
+  {"k":"fill","s":"I ____ dinner when you called me.","c":["was cooking","am cooking","cooking","were cooking"],"a":0,"why":"電話が来た過去の瞬間に途中だった動作。主語 I なので was cooking。"},
+  {"k":"fill","s":"We ____ in the park at three yesterday.","c":["are walking","was walking","were walking","walk"],"a":2,"why":"昨日3時の途中の動作。We なので were walking。"},
+  {"k":"fill","s":"What ____ you doing at that time?","c":["was","were","did","are"],"a":1,"why":"at that time(そのとき)で過去進行形。you なので were。"},
+  {"k":"fill","s":"She wasn't ____ to music then.","c":["listen","listened","listens","listening"],"a":3,"why":"wasn't のあとは -ing。"},
+  {"k":"fill","s":"____ it raining when you left home?","c":["Did","Is","Was","Were"],"a":2,"why":"過去進行形の疑問文。it なので Was。"},
+  {"k":"order","ja":"私はそのとき本を読んでいました。","en":"I was reading a book then."},
+  {"k":"order","ja":"あなたは昨夜10時に何をしていましたか?","en":"What were you doing at ten last night?"},
+  {"k":"write","ja":"私が帰宅したとき、妹は眠っていました。","model":"My sister was sleeping when I got home.","alts":["When I got home, my sister was sleeping.","My little sister was sleeping when I came home."],"keys":[["sister was sleeping"],["when i got home","when i came home","when i came back","when i returned"]],"why":"帰宅した瞬間に途中だった動作なので was sleeping。"},
+  {"k":"write","ja":"彼らはそのときテニスをしていました。","model":"They were playing tennis then.","alts":["They were playing tennis at that time."],"keys":[["were playing"],["tennis"]],"why":"They なので were + playing。"},
+  {"k":"meaning","en":"It was snowing when I woke up.","c":["私が起きたあと雪が降り始めました","私が起きたとき雪が降っていました","雪が降っていたので私は起きました","私が起きたとき雪はやんでいました"],"a":1,"why":"was snowing = (その時)降っていた。"}
+ ]},
+{"id":"s-j2-02","g":"中2","t":"未来(will・be going to)","sub":"これから先のことを言う2つの道具","link":"g04",
+ "pts":["<b>will + 元の形</b> = 「〜でしょう」「(その場で決めて)〜します」。","<b>be going to + 元の形</b> = 「〜するつもり」(前から決めていた予定)。","否定は <b>won't</b>(will not)/ be not going to。","疑問文は <b>Will you ~?</b> / <b>Are you going to ~?</b>"],
+ "ex":[{"en":"It will be sunny tomorrow.","ja":"明日は晴れるでしょう。"},{"en":"I'm going to visit Osaka next week.","ja":"来週、大阪を訪れるつもりです。"},{"en":"I'll call you later.","ja":"あとで電話しますね。"}],
+ "q":[
+  {"k":"fill","s":"It ____ rain tomorrow.","c":["will","is","does","going"],"a":0,"why":"未来の予想で、後ろが元の形 rain なので will。"},
+  {"k":"fill","s":"I'm going ____ my uncle this weekend.","c":["visit","to visit","visiting","visits"],"a":1,"why":"be going to + 元の形。"},
+  {"k":"fill","s":"She will ____ busy next week.","c":["is","being","was","be"],"a":3,"why":"will のあとは元の形。is の元の形は be。"},
+  {"k":"fill","s":"____ you going to join the party?","c":["Will","Do","Are","Did"],"a":2,"why":"be going to の疑問文は be動詞を前に。you なので Are。"},
+  {"k":"fill","s":"I ____ be late. I promise.","c":["don't","am not","won't","isn't"],"a":2,"why":"後ろが元の形 be なので will not = won't。"},
+  {"k":"order","ja":"私は来年カナダで勉強するつもりです。","en":"I'm going to study in Canada next year."},
+  {"k":"order","ja":"彼は試験に合格するでしょう。","en":"He will pass the test."},
+  {"k":"write","ja":"私は今夜、母に電話するつもりです。","model":"I'm going to call my mother tonight.","alts":["I will call my mother tonight.","I'm going to call my mom tonight."],"keys":[["going to call","will call","gonna call"],["mother","mom"],["tonight"]],"why":"予定なので be going to + call。"},
+  {"k":"write","ja":"明日はとても暑くなるでしょう。","model":"It will be very hot tomorrow.","alts":["It's going to be very hot tomorrow.","It'll be really hot tomorrow."],"keys":[["will be","going to be"],["hot"],["tomorrow"]],"why":"予想なので will be。hot の前に be を忘れずに。"},
+  {"k":"meaning","en":"I'll carry your bag.","c":["あなたのかばんを持ちますよ","あなたのかばんを持っていました","あなたのかばんを持ってくれますか","あなたのかばんを持ってはいけません"],"a":0,"why":"I'll ~ はその場で決めた「〜しますよ」。"}
+ ]},
+{"id":"s-j2-03","g":"中2","t":"助動詞(must・have to・should・may)","sub":"動詞に「気持ち」や「ルール」を足す","link":"g07",
+ "pts":["<b>must</b> / <b>have to</b> = 「〜しなければならない」。<b>must not</b> = 「〜してはいけない」。","<b>don't have to</b> = 「〜しなくてよい」(must not と意味がまったく違います)。","<b>should</b> = 「〜したほうがいい」。<b>may</b> = 「〜してもよい」「〜かもしれない」。","どれも後ろは<b>動詞の元の形</b>。have to は主語によって has to。"],
+ "ex":[{"en":"You must wear a helmet.","ja":"ヘルメットをかぶらなければなりません。"},{"en":"I have to get up early tomorrow.","ja":"明日は早く起きなければなりません。"},{"en":"You should see a doctor.","ja":"医者にみてもらったほうがいいですよ。"}],
+ "q":[
+  {"k":"fill","s":"You ____ swim here. It's dangerous.","c":["mustn't","don't have to","may","can"],"a":0,"why":"危険なので「泳いではいけない」= mustn't。"},
+  {"k":"fill","s":"Tomorrow is Sunday. You ____ get up early.","c":["must","don't have to","have to","should"],"a":1,"why":"日曜日なので「早起きしなくてよい」= don't have to。"},
+  {"k":"fill","s":"She has ____ finish her report today.","c":["must","for","to","should"],"a":2,"why":"has to + 元の形 で「〜しなければならない」。"},
+  {"k":"fill","s":"You look tired. You ____ go to bed early.","c":["mustn't","don't have to","may not","should"],"a":3,"why":"疲れているので「早く寝たほうがいい」= should。"},
+  {"k":"fill","s":"____ I use your phone? — Of course.","c":["Am","Have","May","Was"],"a":2,"why":"許可を求める「〜してもいいですか」は May I ~?。"},
+  {"k":"order","ja":"あなたはここで靴を脱がなければなりません。","en":"You have to take off your shoes here."},
+  {"k":"order","ja":"あなたは今日、学校に行かなくてもいいです。","en":"You don't have to go to school today."},
+  {"k":"write","ja":"あなたはもっと野菜を食べたほうがいいです。","model":"You should eat more vegetables.","alts":["You should eat more veggies."],"keys":[["should"],["more vegetables","more veggies"]],"why":"アドバイスは should + 元の形。"},
+  {"k":"write","ja":"私は今日、宿題を終わらせなければなりません。","model":"I have to finish my homework today.","alts":["I must finish my homework today.","I've got to finish my homework today."],"keys":[["have to","must","have got to"],["finish","do","complete"],["homework"]],"why":"「〜しなければならない」は have to / must。"},
+  {"k":"meaning","en":"You must not talk during the test.","c":["テスト中に話さなくてもいいです","テスト中に話したほうがいいです","テスト中に話すかもしれません","テスト中に話してはいけません"],"a":3,"why":"must not = 〜してはいけない(禁止)。"}
+ ]},
+{"id":"s-j2-04","g":"中2","t":"不定詞(名詞・副詞・形容詞的用法)","sub":"to + 動詞で「これから向かう動作」を表す","link":"g10",
+ "pts":["形はいつも <b>to + 動詞の元の形</b>。","名詞的用法「〜すること」:I want <b>to read</b>. / My dream is <b>to travel</b>.","副詞的用法「〜するために」「〜して(気持ちの理由)」:I went there <b>to buy</b> milk. / I'm glad <b>to see</b> you.","形容詞的用法「〜するための・〜すべき」:something <b>to drink</b> / homework <b>to do</b>"],
+ "ex":[{"en":"I want to be a doctor.","ja":"私は医者になりたいです。"},{"en":"She went to the library to study.","ja":"彼女は勉強するために図書館へ行きました。"},{"en":"I have nothing to do today.","ja":"今日はすることが何もありません。"}],
+ "q":[
+  {"k":"fill","s":"I want ____ a new computer.","c":["buy","buying","to buy","bought"],"a":2,"why":"want のあとは to + 元の形。"},
+  {"k":"fill","s":"He went to the station ____ his friend.","c":["meet","to meet","met","meets"],"a":1,"why":"「友だちに会うために」は to meet(副詞的用法)。"},
+  {"k":"fill","s":"Do you want something ____?","c":["drink","drinks","to drink","drank"],"a":2,"why":"「何か飲むもの」は something to drink(形容詞的用法)。"},
+  {"k":"fill","s":"I was happy ____ the news.","c":["to hear","hear","heard","hears"],"a":0,"why":"「その知らせを聞いて」うれしい。感情の理由は to + 元の形。"},
+  {"k":"fill","s":"My dream is ____ around the world.","c":["travel","travels","traveled","to travel"],"a":3,"why":"「旅行すること」は to travel(名詞的用法)。"},
+  {"k":"order","ja":"私は数学を勉強するために早く起きました。","en":"I got up early to study math."},
+  {"k":"order","ja":"東京には訪れるべき場所がたくさんあります。","en":"There are many places to visit in Tokyo."},
+  {"k":"write","ja":"私は将来、先生になりたいです。","model":"I want to be a teacher in the future.","alts":["I want to become a teacher in the future.","In the future, I want to be a teacher."],"keys":[["want to be","want to become","would like to be","would like to become","hope to be","hope to become"],["teacher"]],"why":"「〜になりたい」は want to be ~。"},
+  {"k":"write","ja":"私は本を借りるために図書館へ行きました。","model":"I went to the library to borrow a book.","alts":["I went to the library to borrow some books.","I went to the library to check out a book."],"keys":[["went to the library"],["to borrow","to check out","to get"],["book*"]],"why":"目的「〜するために」は to + 元の形。"},
+  {"k":"meaning","en":"I have a lot of work to do today.","c":["今日は仕事をするのが大好きです","今日は仕事をするためにたくさん来ました","今日はやるべき仕事がたくさんあります","今日は仕事をたくさん終えました"],"a":2,"why":"work to do = やるべき仕事(形容詞的用法)。"}
+ ]},
+{"id":"s-j2-05","g":"中2","t":"動名詞","sub":"-ing で動作を「名詞」に変える","link":"g11",
+ "pts":["動詞の <b>-ing</b> で「〜すること」(名詞のはたらき)。","文の主語にもなります:<b>Swimming</b> is fun.","<b>enjoy・finish・stop</b> のあとは -ing(× enjoy to ~)。","前置詞のあとも -ing:good at <b>cooking</b> / Thank you for <b>coming</b>."],
+ "ex":[{"en":"I enjoy playing the guitar.","ja":"私はギターを弾くのを楽しんでいます。"},{"en":"Reading books is fun.","ja":"本を読むことは楽しいです。"},{"en":"She is good at drawing.","ja":"彼女は絵をかくのが得意です。"}],
+ "q":[
+  {"k":"fill","s":"I enjoyed ____ with you.","c":["talk","to talk","talking","talked"],"a":2,"why":"enjoy のあとは -ing。"},
+  {"k":"fill","s":"He finished ____ the report.","c":["writing","to write","write","wrote"],"a":0,"why":"finish のあとは -ing。"},
+  {"k":"fill","s":"Thank you for ____ me.","c":["help","to help","helped","helping"],"a":3,"why":"前置詞 for のあとは -ing。"},
+  {"k":"fill","s":"____ English is interesting.","c":["Learn","Learning","Learns","Learned"],"a":1,"why":"「英語を学ぶこと」が主語なので Learning。"},
+  {"k":"fill","s":"My sister is good at ____.","c":["cook","cooks","cooking","to cook"],"a":2,"why":"前置詞 at のあとは -ing。"},
+  {"k":"order","ja":"早起きするのは難しいです。","en":"Getting up early is difficult."},
+  {"k":"order","ja":"午後に雨がやみました。","en":"It stopped raining in the afternoon."},
+  {"k":"write","ja":"私は音楽を聴くのが好きです。","model":"I like listening to music.","alts":["I like to listen to music.","I love listening to music.","I enjoy listening to music."],"keys":[["like","love","enjoy"],["listening to","listen to"],["music"]],"why":"like のあとは -ing も to も使えます。"},
+  {"k":"write","ja":"私は昨日、部屋のそうじを終えました。","model":"I finished cleaning my room yesterday.","alts":["I finished cleaning up my room yesterday."],"keys":[["finished cleaning"],["room"]],"why":"finish のあとは -ing なので finished cleaning。"},
+  {"k":"meaning","en":"He stopped smoking last year.","c":["彼は去年たばこをやめました","彼は去年たばこを吸うために立ち止まりました","彼は去年たばこを吸い始めました","彼は去年たばこを吸っていました"],"a":0,"why":"stop -ing = 〜するのをやめる。"}
+ ]},
+{"id":"s-j2-06","g":"中2","t":"接続詞(when・if・because・that)","sub":"文と文をつなぐ「のりしろ」","link":"g19",
+ "pts":["<b>when</b> 〜するとき / <b>if</b> もし〜なら / <b>because</b> 〜なので(理由)。","if や when の中は、未来のことでも<b>現在形</b>:If it <b>rains</b> tomorrow, ~。","<b>that</b> = 「〜ということ」:I think (that) she is right.(that は省略できます)","接続詞で始まるまとまりを文の前に置くときはコンマを入れます。"],
+ "ex":[{"en":"When I got home, my mother was cooking.","ja":"私が帰宅したとき、母は料理をしていました。"},{"en":"If it rains tomorrow, I'll stay home.","ja":"もし明日雨なら、私は家にいます。"},{"en":"I think that she is right.","ja":"私は彼女が正しいと思います。"}],
+ "q":[
+  {"k":"fill","s":"I didn't go out ____ it was very cold.","c":["because","so","that","or"],"a":0,"why":"外出しなかった理由なので because。"},
+  {"k":"fill","s":"____ you are free tomorrow, let's go shopping.","c":["Because","If","That","But"],"a":1,"why":"「もし明日ひまなら」なので If。"},
+  {"k":"fill","s":"I think ____ this book is interesting.","c":["when","if","that","because"],"a":2,"why":"「〜ということ」を思うので that。"},
+  {"k":"fill","s":"If it ____ tomorrow, we'll play soccer.","c":["will be sunny","was sunny","be sunny","is sunny"],"a":3,"why":"if の中は未来のことでも現在形なので is sunny。"},
+  {"k":"fill","s":"____ I was ten, I lived in Hokkaido.","c":["If","That","When","So"],"a":2,"why":"「10歳のとき」なので When。"},
+  {"k":"order","ja":"私は彼が正しいと思います。","en":"I think he is right."},
+  {"k":"order","ja":"疲れていたので早く寝ました。","en":"I went to bed early because I was tired."},
+  {"k":"write","ja":"もし明日雨なら、私は家にいます。","model":"If it rains tomorrow, I'll stay home.","alts":["I'll stay home if it rains tomorrow.","If it's rainy tomorrow, I'll stay at home."],"keys":[["if it rains","if it is rainy","if its rainy","if it is raining","if its raining"],["stay home","stay at home","be home","be at home"]],"why":"if の中は現在形 rains、後ろの文は will で未来。"},
+  {"k":"write","ja":"私が子どものとき、ピアノを習っていました。","model":"When I was a child, I took piano lessons.","alts":["When I was a child, I learned the piano.","I took piano lessons when I was a kid.","When I was little, I learned to play the piano."],"keys":[["when i was a child","when i was a kid","when i was little","when i was young"],["piano"]],"why":"「〜のとき」は when + 主語 + 動詞。"},
+  {"k":"meaning","en":"I know that you are busy.","c":["あなたが忙しいかどうか知りません","あなたが忙しいことは知っています","あなたが忙しいとき私は知っています","忙しいので私は知っています"],"a":1,"why":"know that ~ = 〜ということを知っている。"}
+ ]},
+{"id":"s-j2-07","g":"中2","t":"There is / There are","sub":"「〜がある・いる」と存在を伝える","link":"g22",
+ "pts":["<b>There is + 単数</b> / <b>There are + 複数</b> = 「〜がある・いる」。","場所はうしろに:There is a cat <b>under the chair</b>.","疑問文は <b>Is there ~? / Are there ~?</b>、否定は There isn't / There aren't any ~。過去は was / were。","my bag・the book のような特定のものには使わず、My bag is on the desk. と言います。"],
+ "ex":[{"en":"There is a park near my house.","ja":"私の家の近くに公園があります。"},{"en":"There are thirty students in my class.","ja":"私のクラスには生徒が30人います。"},{"en":"Is there a convenience store around here?","ja":"このあたりにコンビニはありますか?"}],
+ "q":[
+  {"k":"fill","s":"There ____ two books on the desk.","c":["is","are","am","be"],"a":1,"why":"two books は複数なので are。"},
+  {"k":"fill","s":"There ____ a big tree in the garden.","c":["are","be","is","has"],"a":2,"why":"a big tree は単数なので is。"},
+  {"k":"fill","s":"____ there any milk in the fridge?","c":["Is","Are","Do","Does"],"a":0,"why":"milk は数えられない名詞なので単数あつかいで Is there ~?。"},
+  {"k":"fill","s":"There ____ many people at the festival yesterday.","c":["are","was","is","were"],"a":3,"why":"yesterday で過去、many people は複数なので were。"},
+  {"k":"fill","s":"There aren't ____ eggs in the box.","c":["some","a","any","an"],"a":2,"why":"否定文で「1つも〜ない」は any。"},
+  {"k":"order","ja":"この近くに駅はありますか?","en":"Is there a station near here?"},
+  {"k":"order","ja":"私の町には大きな公園が2つあります。","en":"There are two big parks in my town."},
+  {"k":"write","ja":"私の部屋にはベッドが1つあります。","model":"There is a bed in my room.","alts":["There's a bed in my room.","There's one bed in my room."],"keys":[["there is","theres"],["bed"],["my room"]],"why":"a bed は単数なので There is。"},
+  {"k":"write","ja":"冷蔵庫に卵はありますか?","model":"Are there any eggs in the fridge?","alts":["Are there eggs in the fridge?","Are there any eggs in the refrigerator?","Is there an egg in the fridge?"],"keys":[["are there","is there"],["egg*"],["fridge","refrigerator"]],"why":"疑問文は be動詞を there の前に出します。"},
+  {"k":"meaning","en":"There was a lot of snow last winter.","c":["去年の冬は雪が少しも降りませんでした","今年の冬は雪がたくさん降るでしょう","去年の冬は雪で遊びました","去年の冬は雪がたくさん降りました"],"a":3,"why":"There was a lot of snow = 雪がたくさんあった(降った)。"}
+ ]},
+{"id":"s-j2-08","g":"中2","t":"比較(比較級・最上級・as ~ as)","sub":"2つを比べる、いちばんを決める","link":"g16",
+ "pts":["比較級 <b>-er + than</b> = 「〜より…」(tall → taller)。","最上級 <b>the -est + in / of</b> = 「いちばん…」(the tallest)。","長い語は <b>more / the most</b>(more interesting)。good → <b>better → best</b>。","<b>as + 元の形 + as</b> = 「〜と同じくらい…」、<b>not as ~ as</b> = 「〜ほど…ない」。"],
+ "ex":[{"en":"My brother is taller than me.","ja":"兄は私より背が高いです。"},{"en":"This is the most popular song in Japan.","ja":"これは日本でいちばん人気のある歌です。"},{"en":"I'm as old as your sister.","ja":"私はあなたのお姉さんと同い年です。"}],
+ "q":[
+  {"k":"fill","s":"This bag is ____ than that one.","c":["cheap","cheaper","cheapest","more cheap"],"a":1,"why":"than があるので比較級 cheaper。"},
+  {"k":"fill","s":"Mt. Fuji is the ____ mountain in Japan.","c":["higher","high","highest","most high"],"a":2,"why":"the と in Japan があるので最上級 highest。"},
+  {"k":"fill","s":"This book is ____ interesting than that one.","c":["more","most","much","very"],"a":0,"why":"interesting は長い語なので more を付けて比較級に。"},
+  {"k":"fill","s":"Ken runs as ____ as his brother.","c":["faster","fastest","more fast","fast"],"a":3,"why":"as ~ as の間は元の形 fast。"},
+  {"k":"fill","s":"This is the ____ day of my life.","c":["good","better","best","well"],"a":2,"why":"the があり「人生でいちばん」なので good の最上級 best。"},
+  {"k":"order","ja":"私の犬はあなたの犬より小さいです。","en":"My dog is smaller than yours."},
+  {"k":"order","ja":"英語は数学ほど難しくありません。","en":"English is not as difficult as math."},
+  {"k":"write","ja":"私は夏より冬のほうが好きです。","model":"I like winter better than summer.","alts":["I like winter more than summer."],"keys":[["winter"],["better than summer","more than summer"]],"why":"「〜より…が好き」は like A better than B。"},
+  {"k":"write","ja":"この部屋は家の中でいちばん大きいです。","model":"This room is the biggest in the house.","alts":["This is the biggest room in the house.","This room is the largest in the house.","This is the largest room in our house."],"keys":[["biggest","largest"],["house","home"]],"why":"「いちばん大きい」は最上級 the biggest。"},
+  {"k":"meaning","en":"My father is not as tall as I am.","c":["父は私と同じくらい背が高いです","父は私より背が高いです","父は私ほど背が高くありません","父と私はどちらも背が低いです"],"a":2,"why":"not as ~ as = 〜ほど…ない。"}
+ ]},
+{"id":"s-j2-09","g":"中2","t":"受け身(受動態の基本)","sub":"「される側」を主語にする","link":"g09",
+ "pts":["<b>be動詞 + 過去分詞</b> = 「〜される・〜されている」。","「だれによって」は <b>by ~</b>。言わなくても分かるときは省略します。","過去分詞:規則動詞は -ed、不規則は write → <b>written</b>、speak → <b>spoken</b>、make → <b>made</b>。","否定・疑問文は be動詞を使います(Is this made ~?)。"],
+ "ex":[{"en":"English is spoken in many countries.","ja":"英語は多くの国で話されています。"},{"en":"This picture was taken by my father.","ja":"この写真は父が撮りました。"},{"en":"The store is closed on Mondays.","ja":"その店は月曜日は閉まっています。"}],
+ "q":[
+  {"k":"fill","s":"This room ____ every day.","c":["cleans","is cleaned","cleaned","is cleaning"],"a":1,"why":"部屋は「そうじされる」側なので is cleaned。"},
+  {"k":"fill","s":"The letter was ____ by my grandmother.","c":["write","wrote","written","writing"],"a":2,"why":"受け身は be動詞 + 過去分詞。write の過去分詞は written。"},
+  {"k":"fill","s":"These cars are ____ in Japan.","c":["made","make","making","makes"],"a":0,"why":"車は「作られる」側なので are made。"},
+  {"k":"fill","s":"____ this song loved by young people?","c":["Does","Do","Are","Is"],"a":3,"why":"受け身の疑問文は be動詞を前に。this song は単数なので Is。"},
+  {"k":"fill","s":"The window ____ broken yesterday.","c":["is","were","was","did"],"a":2,"why":"yesterday で過去、The window は単数なので was。"},
+  {"k":"order","ja":"この本は多くの人に読まれています。","en":"This book is read by many people."},
+  {"k":"order","ja":"このお寺は300年前に建てられました。","en":"This temple was built 300 years ago."},
+  {"k":"write","ja":"このケーキは私の母によって作られました。","model":"This cake was made by my mother.","alts":["This cake was made by my mom."],"keys":[["was made","is made"],["by my mother","by my mom"]],"why":"be動詞 + made + by ~ の受け身。"},
+  {"k":"write","ja":"フランス語はカナダで話されています。","model":"French is spoken in Canada.","alts":["French is spoken in Canada, too."],"keys":[["is spoken"],["french"],["canada"]],"why":"言語は「話される」側なので is spoken。"},
+  {"k":"meaning","en":"My bike was stolen last night.","c":["昨夜、私の自転車が盗まれました","昨夜、私は自転車を盗みました","昨夜、私の自転車が壊れました","昨夜、私は自転車を見つけました"],"a":0,"why":"was stolen = 盗まれた(受け身)。"}
+ ]},
+{"id":"s-j2-10","g":"中2","t":"SVOO・SVOC(give 人 物、call A B、make A B)","sub":"動詞のうしろに2つ並べる文","link":"g01",
+ "pts":["<b>give / show / tell / buy + 人 + 物</b> = 「人に物を〜する」。","物を先に言うときは前置詞:give it <b>to</b> me / buy a cake <b>for</b> her。","<b>call A B</b> = AをBと呼ぶ、<b>name A B</b> = AをBと名づける。","<b>make A B</b> = AをBにする(B は名詞か形容詞):The news made me <b>happy</b>."],
+ "ex":[{"en":"My father gave me a watch.","ja":"父は私に腕時計をくれました。"},{"en":"We call him Taku.","ja":"私たちは彼をタクと呼びます。"},{"en":"This song makes me happy.","ja":"この歌は私を幸せな気持ちにします。"}],
+ "q":[
+  {"k":"fill","s":"Please show ____ your ticket.","c":["I","my","me","mine"],"a":2,"why":"show + 人 + 物。人の部分は「〜に」の形 me。"},
+  {"k":"fill","s":"The news made her ____.","c":["happily","happy","happiness","to happy"],"a":1,"why":"make A B の B には形容詞 happy が入ります。"},
+  {"k":"fill","s":"I bought a present ____ my sister.","c":["to","at","for","in"],"a":2,"why":"buy は物を先に言うと for + 人。"},
+  {"k":"fill","s":"We ____ our cat Tama.","c":["name","say","tell","speak"],"a":0,"why":"name A B = AをBと名づける。"},
+  {"k":"fill","s":"My uncle ____ me an interesting story.","c":["said","spoke","talked","told"],"a":3,"why":"tell + 人 + 物 の形がとれるのは told。"},
+  {"k":"order","ja":"私の母は私に新しいかばんを買ってくれました。","en":"My mother bought me a new bag."},
+  {"k":"order","ja":"その映画は私を悲しくさせました。","en":"The movie made me sad."},
+  {"k":"write","ja":"私に写真を見せてください。","model":"Please show me the picture.","alts":["Please show me your pictures.","Show me the photo, please."],"keys":[["show me"],["picture*","photo*"]],"why":"show + 人 + 物 で「人に物を見せる」。"},
+  {"k":"write","ja":"彼の言葉は私を幸せにしました。","model":"His words made me happy.","alts":["What he said made me happy."],"keys":[["made me happy"],["his words","what he said"]],"why":"make A B(AをBにする)の過去形 made me happy。"},
+  {"k":"meaning","en":"The teacher gave us a lot of homework.","c":["私たちは先生にたくさんの宿題を出しました","先生は私たちにたくさんの宿題を出しました","先生は私たちの宿題をたくさん見ました","先生は私たちに宿題を出しませんでした"],"a":1,"why":"give + 人 + 物 = 人に物を与える。us に homework を出した。"}
+ ]}
+];
+
+const SCHOOL_B = [
+{"id":"s-j3-01","g":"中3","t":"現在完了(経験・完了・継続)","sub":"過去から「今」までつながる時制","link":"g05",
+ "pts":["<b>have / has + 過去分詞</b>で、過去のできごとが「今」につながっていることを表します。","経験: 「~したことがある」。<span class=\"mk\">ever / never / before / twice</span> とよく使います。","完了: 「もう~した・ちょうど~したところ」。<span class=\"mk\">already / just / yet</span> とよく使います。","継続: 「ずっと~している」。<span class=\"mk\">for + 期間 / since + 始まり</span> と使います。"],
+ "ex":[{"en":"I have visited Osaka three times.","ja":"私は大阪を3回訪れたことがあります。"},{"en":"She has just finished her homework.","ja":"彼女はちょうど宿題を終えたところです。"},{"en":"We have lived here for ten years.","ja":"私たちは10年間ここに住んでいます。"}],
+ "q":[
+  {"k":"fill","s":"I have ____ this movie before.","c":["seen","saw","see","seeing"],"a":0,"why":"have のあとは過去分詞。see の過去分詞は seen。"},
+  {"k":"fill","s":"She ____ lived in Tokyo since 2015.","c":["is","have","has","was"],"a":2,"why":"主語が She(3人称単数)なので has + 過去分詞。"},
+  {"k":"fill","s":"We have known each other ____ ten years.","c":["since","for","from","during"],"a":1,"why":"ten years は「期間」なので for。since は始まりの時点に使います。"},
+  {"k":"fill","s":"I have ____ been to Hokkaido, so I want to go there someday.","c":["already","yet","never","ever"],"a":2,"why":"「いつか行きたい」ので、まだ行ったことがない = never。"},
+  {"k":"fill","s":"I haven't finished my report ____.","c":["already","yet","just","ever"],"a":1,"why":"否定文で「まだ~していない」は文末に yet。"},
+  {"k":"order","ja":"私はちょうど昼食を食べ終えたところです。","en":"I have just finished lunch."},
+  {"k":"order","ja":"彼女は以前にこの本を読んだことがあります。","en":"She has read this book before."},
+  {"k":"write","ja":"私たちはここに5年間住んでいます。","model":"We have lived here for five years.","alts":["We've lived here for five years.","We have been living here for five years."],"keys":[["have lived","have been living"],["here"],["five years"]],"why":"継続は have lived + for + 期間。"},
+  {"k":"write","ja":"あなたは今までに富士山に登ったことがありますか?","model":"Have you ever climbed Mt. Fuji?","alts":["Have you ever climbed Mount Fuji?"],"keys":[["have you"],["climbed"],["fuji"]],"why":"経験をたずねるときは Have you ever + 過去分詞 ~?"},
+  {"k":"meaning","en":"He has already left the office.","c":["彼はもう会社を出ました","彼はまだ会社にいます","彼はもうすぐ会社を出ます","彼は会社を出たことがありません"],"a":0,"why":"has already left = もう出てしまった(完了)。"}
+ ]},
+{"id":"s-j3-02","g":"中3","t":"現在完了進行形","sub":"「ずっと~し続けている」動作","link":"g05",
+ "pts":["<b>have / has been + -ing</b>で「(今まで)ずっと~し続けている」を表します。","動作が今もまだ続いている感じを強く出します。","<span class=\"mk\">know・like</span> などの状態動詞は進行形にせず、have known のように現在完了を使います。","<b>How long have you been -ing?</b> で「どれくらい~しているの?」とたずねます。"],
+ "ex":[{"en":"I have been studying English for two hours.","ja":"私は2時間ずっと英語を勉強しています。"},{"en":"It has been raining since this morning.","ja":"今朝からずっと雨が降っています。"},{"en":"How long have you been waiting?","ja":"どれくらい待っていますか?"}],
+ "q":[
+  {"k":"fill","s":"It has been ____ since last night.","c":["rains","rained","raining","rain"],"a":2,"why":"has been のあとに -ing で「ずっと降り続いている」。"},
+  {"k":"fill","s":"She ____ been working here for three years.","c":["has","have","is","was"],"a":0,"why":"主語が She なので has been + -ing。"},
+  {"k":"fill","s":"How long have you ____ waiting for the bus?","c":["be","been","being","was"],"a":1,"why":"have + been + -ing の形。"},
+  {"k":"fill","s":"I have ____ him since we were children.","c":["been knowing","knew","known","know"],"a":2,"why":"know は状態動詞なので進行形にせず、have known(現在完了)。"},
+  {"k":"fill","s":"They have been playing tennis ____ two o'clock.","c":["for","since","during","at"],"a":1,"why":"two o'clock は始まりの時点なので since。"},
+  {"k":"order","ja":"私は1時間ずっと宿題をしています。","en":"I have been doing my homework for an hour."},
+  {"k":"order","ja":"あなたはどれくらい待っていますか?","en":"How long have you been waiting?"},
+  {"k":"write","ja":"彼は朝からずっとゲームをしています。","model":"He has been playing games since this morning.","alts":["He's been playing video games since this morning."],"keys":[["has been playing","hes been playing","has been gaming","hes been gaming"],["game*","gaming"],["since","all morning"]],"why":"今も続いている動作は has been + -ing。"},
+  {"k":"write","ja":"雨が3日間降り続いています。","model":"It has been raining for three days.","alts":["It's been raining for three days."],"keys":[["has been raining","its been raining"],["three days"]],"why":"天気の it + has been raining + for + 期間。"},
+  {"k":"meaning","en":"I've been looking for my keys all morning.","c":["午前中に鍵を見つけました","午前中ずっと鍵を探しています","朝、鍵をなくすつもりです","毎朝鍵を探します"],"a":1,"why":"have been looking for = ずっと探し続けている。"}
+ ]},
+{"id":"s-j3-03","g":"中3","t":"不定詞の発展(It is ~ for 人 to ~ など)","sub":"to + 動詞の原形をもっと使いこなす","link":"g10",
+ "pts":["<b>It is ~ (for 人) to ...</b>: 「(人にとって)…することは~だ」。It は仮の主語です。","<b>want / ask / tell + 人 + to ...</b>: 「人に…してほしい / …するように頼む・言う」。","<b>how to ...</b>: 「…のしかた」。<span class=\"mk\">what to / where to</span> も同じ形です。"],
+ "ex":[{"en":"It is easy for me to cook rice.","ja":"私にとってご飯を炊くのは簡単です。"},{"en":"I want you to help me.","ja":"あなたに手伝ってほしいです。"},{"en":"Do you know how to use this machine?","ja":"この機械の使い方を知っていますか?"}],
+ "q":[
+  {"k":"fill","s":"It is difficult ____ me to get up early.","c":["of","for","to","with"],"a":1,"why":"「人にとって」は for + 人。"},
+  {"k":"fill","s":"My mother told me ____ my room.","c":["clean","cleaning","to clean","cleaned"],"a":2,"why":"tell + 人 + to ~ で「人に~するように言う」。"},
+  {"k":"fill","s":"I don't know how ____ this app.","c":["use","to use","using","used"],"a":1,"why":"how to + 原形で「~のしかた」。"},
+  {"k":"fill","s":"I want ____ to come to the party.","c":["you","your","yours","to you"],"a":0,"why":"want + 人(目的格)+ to ~。"},
+  {"k":"fill","s":"____ is important to drink enough water.","c":["This","It","That","There"],"a":1,"why":"仮の主語 It を置き、本当の主語 to drink ~ をあとに回します。"},
+  {"k":"order","ja":"私は彼に窓を開けるように頼みました。","en":"I asked him to open the window."},
+  {"k":"order","ja":"このケーキの作り方を教えてください。","en":"Please tell me how to make this cake."},
+  {"k":"write","ja":"英語を話すことは私にとって楽しいです。","model":"It is fun for me to speak English.","alts":["It's fun for me to speak English.","It is interesting for me to speak English."],"keys":[["it is","its"],["fun","enjoyable","interesting"],["to speak english"]],"why":"It is ~ for 人 to ... の形。"},
+  {"k":"write","ja":"私はあなたに私の町に来てほしいです。","model":"I want you to come to my town.","alts":["I would like you to come to my town.","I'd like you to visit my town."],"keys":[["want you to","like you to"],["come","visit"],["town","city"]],"why":"want + 人 + to ~ で「人に~してほしい」。"},
+  {"k":"meaning","en":"She asked me to wait outside.","c":["彼女は外で待ってほしいと私に頼みました","彼女は外で私を待っていました","彼女は私に外で待つかどうか聞きました","彼女は外で待つのが好きです"],"a":0,"why":"ask + 人 + to ~ = 人に~するように頼む。"}
+ ]},
+{"id":"s-j3-04","g":"中3","t":"原形不定詞(let・make・help + 人 + 原形)","sub":"to をつけない「させる」の形","link":"g10",
+ "pts":["<b>let + 人 + 動詞の原形</b>: 「(望みどおり)人に…させてあげる」。","<b>make + 人 + 動詞の原形</b>: 「(無理にでも)人に…させる」。","<b>help + 人 + 動詞の原形</b>: 「人が…するのを手伝う」(to をつけても可)。","to を付けない「原形」がポイントです。"],
+ "ex":[{"en":"My father let me use his car.","ja":"父は私に車を使わせてくれました。"},{"en":"The teacher made us write the report again.","ja":"先生は私たちにレポートを書き直させました。"},{"en":"Can you help me carry this box?","ja":"この箱を運ぶのを手伝ってくれますか?"}],
+ "q":[
+  {"k":"fill","s":"My parents let me ____ to the concert.","c":["go","to go","going","went"],"a":0,"why":"let + 人 + 原形。to はつけません。"},
+  {"k":"fill","s":"The sad movie made her ____.","c":["crying","cried","to cry","cry"],"a":3,"why":"make + 人 + 原形で「人に~させる」。"},
+  {"k":"fill","s":"Let me ____ myself. I'm Ken.","c":["to introduce","introduce","introducing","introduced"],"a":1,"why":"Let me + 原形で「私に~させてください」。"},
+  {"k":"fill","s":"Can you help me ____ the dishes?","c":["doing","did","do","done"],"a":2,"why":"help + 人 + 原形で「人が~するのを手伝う」。"},
+  {"k":"fill","s":"My boss ____ me work late yesterday.","c":["made","told","wanted","asked"],"a":0,"why":"後ろが原形 work なので make。told / wanted / asked なら to work になります。"},
+  {"k":"order","ja":"母は私に犬を飼わせてくれました。","en":"My mother let me have a dog."},
+  {"k":"order","ja":"彼は私が宿題をするのを手伝ってくれました。","en":"He helped me do my homework."},
+  {"k":"write","ja":"私にそのかばんを運ばせてください。","model":"Let me carry the bag.","alts":["Please let me carry that bag.","Let me carry your bag."],"keys":[["let me"],["carry"],["bag"]],"why":"Let me + 原形で「私に~させて」。"},
+  {"k":"write","ja":"私の先生は私たちに教室を掃除させました。","model":"My teacher made us clean the classroom.","alts":["Our teacher made us clean the classroom."],"keys":[["made us","had us"],["clean"],["classroom","class room","room"]],"why":"make + 人 + 原形で「(強制的に)~させる」。"},
+  {"k":"meaning","en":"Let me think about it.","c":["それについて考えてください","それについて考えるのはやめましょう","それについて考えさせてください","それについて考えたことがあります"],"a":2,"why":"Let me + 原形 = 私に~させてください。"}
+ ]},
+{"id":"s-j3-05","g":"中3","t":"間接疑問文","sub":"疑問文を文の中に入れる","link":"g23",
+ "pts":["疑問文を文の中に入れると<b>疑問詞 + 主語 + 動詞</b>の順(ふつうの文の語順)になります。","I know where she <b>lives</b>.(× where does she live)","do / does / did は消え、動詞の形で時制を表します。","Yes / No 疑問文は <b>if / whether</b>(~かどうか)でつなぎます。"],
+ "ex":[{"en":"I don't know where he lives.","ja":"彼がどこに住んでいるか知りません。"},{"en":"Do you know what time it is?","ja":"今何時か知っていますか?"},{"en":"Can you tell me if the store is open?","ja":"その店が開いているかどうか教えてくれますか?"}],
+ "q":[
+  {"k":"fill","s":"Do you know where ____?","c":["does she live","she lives","lives she","did she live"],"a":1,"why":"文の中に入った疑問は「疑問詞 + 主語 + 動詞」の順。"},
+  {"k":"fill","s":"I wonder what ____ for dinner.","c":["should we eat","do we eat","we should eat","we eat should"],"a":2,"why":"what + 主語 + 動詞の順で we should eat。"},
+  {"k":"fill","s":"Can you tell me ____ the train leaves?","c":["when","what","who","which"],"a":0,"why":"「いつ出発するか」なので when。"},
+  {"k":"fill","s":"I'm not sure ____ he will come tomorrow.","c":["what","if","which","who"],"a":1,"why":"「来るかどうか」は if でつなぎます。"},
+  {"k":"fill","s":"Please tell me what time ____.","c":["is it","does it","it does","it is"],"a":3,"why":"what time + 主語 + 動詞で what time it is。"},
+  {"k":"order","ja":"私は彼がなぜ怒っているのかわかりません。","en":"I don't know why he is angry."},
+  {"k":"order","ja":"駅がどこにあるか知っていますか?","en":"Do you know where the station is?"},
+  {"k":"write","ja":"彼女が何歳か知っていますか?","model":"Do you know how old she is?","alts":["Do you know how old she is now?"],"keys":[["know"],["how old she is"]],"why":"how old + 主語 + 動詞の順。"},
+  {"k":"write","ja":"私は彼が明日来るかどうかわかりません。","model":"I don't know if he will come tomorrow.","alts":["I don't know whether he'll come tomorrow.","I'm not sure if he will come tomorrow."],"keys":[["if","whether"],["he will come","he is coming","he comes"],["tomorrow"]],"why":"「~かどうか」は if / whether + 主語 + 動詞。"},
+  {"k":"meaning","en":"I can't remember where I put my phone.","c":["スマホを置く場所がありません","スマホをどこで買ったか忘れました","スマホを置いてきてはいけません","スマホをどこに置いたか思い出せません"],"a":3,"why":"where I put my phone = どこにスマホを置いたか。"}
+ ]},
+{"id":"s-j3-06","g":"中3","t":"分詞の形容詞的用法","sub":"名詞を後ろから説明する -ing と過去分詞","link":"g12",
+ "pts":["<b>-ing(現在分詞)</b>: 「~している」。the boy <b>running</b> in the park","<b>過去分詞</b>: 「~された」。a car <b>made</b> in Japan","1語だけなら名詞の前、2語以上のかたまりなら名詞の<span class=\"mk\">後ろ</span>に置きます。"],
+ "ex":[{"en":"The girl singing on the stage is my sister.","ja":"ステージで歌っている女の子は私の姉です。"},{"en":"This is a book written in English.","ja":"これは英語で書かれた本です。"},{"en":"Look at the sleeping cat.","ja":"眠っているネコを見て。"}],
+ "q":[
+  {"k":"fill","s":"The man ____ a red cap is our coach.","c":["wear","wearing","wore","worn"],"a":1,"why":"「赤い帽子をかぶっている男性」なので -ing。"},
+  {"k":"fill","s":"This is a camera ____ in Japan.","c":["make","making","made","makes"],"a":2,"why":"カメラは「作られた」ので過去分詞 made。"},
+  {"k":"fill","s":"Who is the boy ____ with Emi?","c":["talk","talked","talks","talking"],"a":3,"why":"「エミと話している男の子」なので -ing。"},
+  {"k":"fill","s":"English is a language ____ all over the world.","c":["spoken","speaking","speaks","spoke"],"a":0,"why":"言語は「話される」ので過去分詞 spoken。"},
+  {"k":"fill","s":"I have a friend ____ in Canada.","c":["live","lived","living","lives"],"a":2,"why":"「カナダに住んでいる友だち」なので -ing。"},
+  {"k":"order","ja":"公園で走っている男の子は私の弟です。","en":"The boy running in the park is my brother."},
+  {"k":"order","ja":"これは100年前に建てられた家です。","en":"This is a house built 100 years ago."},
+  {"k":"write","ja":"向こうで寝ているネコを見て。","model":"Look at the cat sleeping over there.","alts":["Look at that cat sleeping over there."],"keys":[["cat"],["sleeping"],["over there","there"]],"why":"sleeping over there が後ろから cat を説明します。"},
+  {"k":"write","ja":"私はフランスで作られたかばんを持っています。","model":"I have a bag made in France.","alts":["I have a French-made bag."],"keys":[["bag"],["made in france","french made"]],"why":"made in France が後ろから bag を説明します。"},
+  {"k":"meaning","en":"The letter written by my grandfather is very old.","c":["祖父は古い手紙を書いています","祖父が書いた手紙はとても古いです","祖父にとても古い手紙を書きました","祖父は手紙を書くのが古いです"],"a":1,"why":"written by my grandfather が letter を説明: 祖父によって書かれた手紙。"}
+ ]},
+{"id":"s-j3-07","g":"中3","t":"関係代名詞(who・which・that)","sub":"名詞に「説明文」をつなぐ","link":"g14",
+ "pts":["<b>who</b>(人)/ <b>which</b>(もの)/ <b>that</b>(人・もの両方)で、名詞のあとに説明の文をつなぎます。","主格: a friend <b>who lives</b> in Osaka(関係代名詞のすぐ後ろに動詞)","目的格: the book (<b>that</b>) I read(後ろに主語 + 動詞)。目的格は<span class=\"mk\">省略できます</span>。"],
+ "ex":[{"en":"I have a friend who lives in Osaka.","ja":"私には大阪に住んでいる友だちがいます。"},{"en":"This is the cake which my mother made.","ja":"これは母が作ったケーキです。"},{"en":"The song I like best is this one.","ja":"私がいちばん好きな歌はこれです。"}],
+ "q":[
+  {"k":"fill","s":"I have a friend ____ lives in London.","c":["who","which","what","where"],"a":0,"why":"先行詞が人(a friend)で、後ろに動詞が続くので who。"},
+  {"k":"fill","s":"This is the bag ____ I bought yesterday.","c":["who","whose","which","where"],"a":2,"why":"先行詞がもの(the bag)なので which。"},
+  {"k":"fill","s":"The man ____ is standing there is my uncle.","c":["whom","which","what","who"],"a":3,"why":"人が先行詞で、後ろが動詞(主格)なので who。whom は目的格です。"},
+  {"k":"fill","s":"The movie ____ last night was exciting.","c":["watched we","we watched","who we watched","we watched it"],"a":1,"why":"目的格の関係代名詞は省略でき、the movie + 主語 + 動詞 になります。it は不要。"},
+  {"k":"fill","s":"I want to live in a house ____ has a big garden.","c":["what","who","whom","which"],"a":3,"why":"先行詞がもの(a house)で、後ろが動詞なので which。"},
+  {"k":"order","ja":"これは私が昨日読んだ本です。","en":"This is the book I read yesterday."},
+  {"k":"order","ja":"私には歌がとても上手な友だちがいます。","en":"I have a friend who sings very well."},
+  {"k":"write","ja":"私には東京に住んでいるおじがいます。","model":"I have an uncle who lives in Tokyo.","alts":["I have an uncle that lives in Tokyo."],"keys":[["uncle"],["who lives","that lives"],["tokyo"]],"why":"人の先行詞 + who + 動詞。"},
+  {"k":"write","ja":"あなたが撮った写真はとてもきれいです。","model":"The pictures you took are very beautiful.","alts":["The photo that you took is very beautiful.","The picture which you took is really nice."],"keys":[["picture*","photo*"],["you took"],["beautiful","pretty","nice","great","lovely"]],"why":"目的格の関係代名詞(省略可)+ you took が写真を説明します。"},
+  {"k":"meaning","en":"The woman who called you is my aunt.","c":["あなたに電話した女性は私のおばです","私のおばはあなたに電話する女性です","あなたが電話した女性は私のおばです","おばがあなたを呼んでいます"],"a":0,"why":"who called you = あなたに電話してきた(who が主語)。"}
+ ]},
+{"id":"s-j3-08","g":"中3","t":"仮定法の基本(If I were ~ / I wish ~)","sub":"現実とちがう「もしも」","link":"g17",
+ "pts":["現実とちがうことは、時制を1つ<span class=\"mk\">過去にずらして</span>表します。","<b>If I were ~, I would ~</b>: 「もし私が~なら、~するのに」(主語が何でも were が基本)。","<b>If + 過去形, 主語 + would / could + 原形</b>","<b>I wish + 過去形</b>: 「~ならいいのに」"],
+ "ex":[{"en":"If I were you, I would take a rest.","ja":"もし私があなたなら、休みをとるのに。"},{"en":"If I had more time, I could travel.","ja":"もっと時間があれば、旅行できるのに。"},{"en":"I wish I could speak French.","ja":"フランス語が話せたらいいのに。"}],
+ "q":[
+  {"k":"fill","s":"If I ____ a bird, I would fly to you.","c":["am","were","be","been"],"a":1,"why":"現実ではありえない仮定なので were。"},
+  {"k":"fill","s":"If I had money, I ____ buy a new guitar.","c":["will","can","have","would"],"a":3,"why":"If + 過去形のときは、後半を would + 原形にします。"},
+  {"k":"fill","s":"I wish I ____ taller.","c":["am","be","were","will be"],"a":2,"why":"I wish のあとは過去形。be動詞は were。"},
+  {"k":"fill","s":"If she ____ here, she would help us.","c":["were","is","be","has"],"a":0,"why":"後半が would なので仮定法。be動詞は were。"},
+  {"k":"fill","s":"I wish I ____ swim.","c":["can","could","will","am"],"a":1,"why":"I wish のあとは過去形。can → could。"},
+  {"k":"order","ja":"もし私があなたなら、その仕事を引き受けるのに。","en":"If I were you, I would take the job."},
+  {"k":"order","ja":"車を持っていればいいのに。","en":"I wish I had a car."},
+  {"k":"write","ja":"もし時間があれば、あなたに会いに行くのに。","model":"If I had time, I would go to see you.","alts":["If I had time, I'd visit you.","If I had the time, I would come and see you."],"keys":[["if i had"],["would","could"],["see you","visit you","meet you"]],"why":"If + 過去形, I would + 原形。"},
+  {"k":"write","ja":"私が英語を上手に話せたらいいのに。","model":"I wish I could speak English well.","alts":["I wish I spoke English well."],"keys":[["i wish"],["could speak","spoke","could talk"],["english"]],"why":"I wish + could + 原形で「~できたらいいのに」。"},
+  {"k":"meaning","en":"If I were rich, I would buy a big house.","c":["お金持ちなので、大きな家を買うつもりです","もしお金持ちなら、大きな家を買うのに(実際はお金持ちではない)","お金持ちになったら、必ず大きな家を買います","以前はお金持ちで、大きな家を買いました"],"a":1,"why":"If I were ~, I would ~ は現実とちがう仮定です。"}
+ ]},
+{"id":"s-j3-09","g":"中3","t":"感嘆文(How ~! / What a ~!)","sub":"「なんて~なんだろう!」と気持ちを込める",
+ "pts":["<b>How + 形容詞 / 副詞 (+ 主語 + 動詞)!</b>: 「なんて~なんだろう!」","<b>What + (a / an) + 形容詞 + 名詞 (+ 主語 + 動詞)!</b>","<span class=\"mk\">名詞があれば What、なければ How</span>と覚えましょう。","後ろの主語 + 動詞はよく省略されます。"],
+ "ex":[{"en":"How beautiful!","ja":"なんて美しいんでしょう!"},{"en":"What a nice day it is!","ja":"なんていい天気なんでしょう!"},{"en":"How fast he runs!","ja":"彼はなんて速く走るんでしょう!"}],
+ "q":[
+  {"k":"fill","s":"____ a cute dog!","c":["How","What","Which","Who"],"a":1,"why":"a cute dog と名詞があるので What。"},
+  {"k":"fill","s":"____ kind you are!","c":["What","Such","Very","How"],"a":3,"why":"kind は形容詞だけで名詞がないので How。"},
+  {"k":"fill","s":"What ____ interesting story!","c":["the","some","an","a"],"a":2,"why":"interesting は母音で始まるので an。"},
+  {"k":"fill","s":"What beautiful flowers ____!","c":["these are","are these","is this","this is"],"a":0,"why":"感嘆文は「主語 + 動詞」の順。複数なので these are。"},
+  {"k":"fill","s":"How ____ she sings!","c":["good","nice","well","better"],"a":2,"why":"動詞 sings を説明するので副詞 well。"},
+  {"k":"order","ja":"これはなんて大きな家なんでしょう!","en":"What a big house this is!"},
+  {"k":"order","ja":"あなたのお兄さんはなんて速く走るのでしょう!","en":"How fast your brother runs!"},
+  {"k":"write","ja":"なんて美しい夕日なんでしょう!","model":"What a beautiful sunset!","alts":["What a beautiful sunset it is!","What a lovely sunset!"],"keys":[["what a"],["beautiful","lovely","pretty","gorgeous","amazing"],["sunset"]],"why":"名詞 sunset があるので What a + 形容詞 + 名詞!"},
+  {"k":"write","ja":"このスープはなんておいしいのでしょう!","model":"How delicious this soup is!","alts":["How good this soup is!","How tasty this soup is!"],"keys":[["how","what"],["delicious","good","tasty"],["soup"]],"why":"形容詞 delicious だけなので How + 形容詞 + 主語 + 動詞!"},
+  {"k":"meaning","en":"How tall that tree is!","c":["あの木の高さはどのくらいですか","あの木はなんて高いのでしょう","あの木はそれほど高くありません","あの木はどうやって高くなったのですか"],"a":1,"why":"How + 形容詞 + 主語 + 動詞! は感嘆文。疑問文なら How tall is that tree? の語順です。"}
+ ]},
+{"id":"s-j3-10","g":"中3","t":"tell 人 that ~ などの文","sub":"「人に~だと伝える」と気持ち + that","link":"g01",
+ "pts":["<b>tell + 人 + that ~</b>: 「人に~だと言う・伝える」。","<span class=\"mk\">show / teach + 人 + that ~</span> も同じ形です。","<b>be + 気持ちの形容詞 + that ~</b>: I'm glad that ~(~でうれしい)/ I'm sure that ~(きっと~だ)","that はよく省略されます。"],
+ "ex":[{"en":"My teacher told me that I did a good job.","ja":"先生は私に、よくやったと言いました。"},{"en":"I'm glad that you came.","ja":"あなたが来てくれてうれしいです。"},{"en":"He showed us that the plan would work.","ja":"彼はその計画がうまくいくことを私たちに示しました。"}],
+ "q":[
+  {"k":"fill","s":"She ____ me that she was busy.","c":["said","spoke","talked","told"],"a":3,"why":"後ろに人(me)+ that が続くのは tell。said は人を直接とりません。"},
+  {"k":"fill","s":"I'm ____ that you passed the test.","c":["glad","hope","think","believe"],"a":0,"why":"I'm のあとは形容詞。glad that ~ で「~でうれしい」。"},
+  {"k":"fill","s":"He told ____ that the meeting was canceled.","c":["to us","us","our","we"],"a":1,"why":"tell + 人(目的格)+ that ~。to は不要。"},
+  {"k":"fill","s":"My mother ____ that I should eat more vegetables.","c":["told","talked","said","spoke"],"a":2,"why":"人がなく、すぐ that が続くので said。"},
+  {"k":"fill","s":"I'm sure ____ he will win the game.","c":["that","what","which","who"],"a":0,"why":"I'm sure that ~ で「きっと~だと思う」。"},
+  {"k":"order","ja":"彼は私にその店は閉まっていると言いました。","en":"He told me that the shop was closed."},
+  {"k":"order","ja":"あなたが来てくれてうれしいです。","en":"I'm glad that you came."},
+  {"k":"write","ja":"私は友だちに明日は忙しいと伝えました。","model":"I told my friend that I would be busy tomorrow.","alts":["I told my friend I'd be busy tomorrow."],"keys":[["told my friend*","told a friend*"],["busy"],["tomorrow"]],"why":"tell + 人 + that ~。過去の文なので will → would。"},
+  {"k":"write","ja":"あなたが試験に合格すると確信しています。","model":"I'm sure that you will pass the exam.","alts":["I am sure you will pass the test.","I'm certain you'll pass the exam."],"keys":[["sure","certain"],["you will pass","you are going to pass","you pass"],["exam","test"]],"why":"I'm sure (that) + 主語 + 動詞。"},
+  {"k":"meaning","en":"The doctor told him that he needed more sleep.","c":["彼は医者にもっと寝たいと言いました","医者はもっと寝る必要がありました","医者は彼に、もっと睡眠が必要だと言いました","医者は彼が寝すぎだと言いました"],"a":2,"why":"told him that ~ = 彼に~だと言った。"}
+ ]},
+{"id":"s-h1-01","g":"高1","t":"5文型の確認","sub":"動詞のあとに何が来るかで文の形が決まる","link":"g01",
+ "pts":["第1文型 <b>SV</b> / 第2文型 <b>SVC</b>(S = C)/ 第3文型 <b>SVO</b>","第4文型 <b>SVOO</b>: give 人 物(人に物を与える)","第5文型 <b>SVOC</b>: O = C の関係。make him happy / call her Meg","C には形容詞か名詞が入り、<span class=\"mk\">副詞は入りません</span>。"],
+ "ex":[{"en":"She looks happy.","ja":"彼女はうれしそうです。(SVC)"},{"en":"He gave me a watch.","ja":"彼は私に腕時計をくれました。(SVOO)"},{"en":"The news made us sad.","ja":"その知らせは私たちを悲しませました。(SVOC)"}],
+ "q":[
+  {"k":"fill","s":"This soup tastes ____.","c":["good","well","nicely","goodly"],"a":0,"why":"taste + C(形容詞)。副詞の well や nicely は入りません。"},
+  {"k":"fill","s":"The song made me ____.","c":["happily","happy","happiness","to happy"],"a":1,"why":"make + O + C。me = happy の関係なので形容詞。"},
+  {"k":"fill","s":"My grandmother told ____ an old story.","c":["to me","for me","me","my"],"a":2,"why":"tell + 人 + 物(SVOO)。人の前に前置詞は不要。"},
+  {"k":"fill","s":"Please keep the door ____.","c":["openly","opens","to open","open"],"a":3,"why":"keep + O + C。door = open(開いている)の関係なので形容詞 open。"},
+  {"k":"fill","s":"He ____ me a cup of coffee.","c":["made","said","explained","talked"],"a":0,"why":"make + 人 + 物で「人に物を作る」(SVOO)。他の動詞はこの形をとりません。"},
+  {"k":"order","ja":"その知らせは彼女を悲しませました。","en":"The news made her sad."},
+  {"k":"order","ja":"父は私に新しい自転車を買ってくれました。","en":"My father bought me a new bike."},
+  {"k":"write","ja":"彼の言葉が私を幸せにしました。","model":"His words made me happy.","alts":["His words made me feel happy."],"keys":[["word*"],["made me"],["happy","glad"]],"why":"make + O + C(SVOC)。"},
+  {"k":"write","ja":"私は彼女に花を何本かあげました。","model":"I gave her some flowers.","alts":["I gave some flowers to her."],"keys":[["gave her","to her"],["flower*"]],"why":"give + 人 + 物(SVOO)、または give + 物 + to + 人。"},
+  {"k":"meaning","en":"Leave me alone.","c":["一緒にいてください","私を置いて行かないで","ひとりにしてください","私はひとりで出かけます"],"a":2,"why":"leave + O + C(alone)= O をひとりの状態にしておく。"}
+ ]},
+{"id":"s-h1-02","g":"高1","t":"時制の注意点(状態動詞・時と条件の副詞節)","sub":"「未来なのに現在形」のルール","link":"g02",
+ "pts":["<b>状態動詞</b>(know・like・have(持っている)・belong など)はふつう進行形にしません。","<b>時・条件の副詞節</b>(when・if・before・until など)の中は、未来のことでも<span class=\"mk\">現在形</span>。","ただし「~かどうか」の if(名詞節)は、未来なら will を使います。"],
+ "ex":[{"en":"I know the answer.","ja":"私はその答えを知っています。"},{"en":"Call me when you get home.","ja":"家に着いたら電話してね。"},{"en":"I'll go out if it stops raining.","ja":"雨がやんだら出かけます。"}],
+ "q":[
+  {"k":"fill","s":"I'll call you when I ____ at the station.","c":["arrive","will arrive","arrived","arriving"],"a":0,"why":"時を表す when の中は未来のことでも現在形。"},
+  {"k":"fill","s":"If it ____ tomorrow, we will stay home.","c":["will rain","rains","rained","raining"],"a":1,"why":"条件の if の中は未来でも現在形。"},
+  {"k":"fill","s":"This bag ____ to my sister.","c":["is belonging","belong","belongs","belonging"],"a":2,"why":"belong は状態動詞なので進行形にしません。主語が3人称単数なので belongs。"},
+  {"k":"fill","s":"I don't know if he ____ tomorrow.","c":["come","will come","came","coming"],"a":1,"why":"この if は「~かどうか」(know の目的語)なので、未来は will を使います。"},
+  {"k":"fill","s":"Let's wait here until the rain ____.","c":["will stop","stop","stopped","stops"],"a":3,"why":"until の中は未来でも現在形。the rain は単数なので stops。"},
+  {"k":"order","ja":"家に着いたら電話してください。","en":"Please call me when you get home."},
+  {"k":"order","ja":"明日晴れたら、ピクニックに行きましょう。","en":"If it's sunny tomorrow, let's go on a picnic."},
+  {"k":"write","ja":"駅に着いたらあなたにメールします。","model":"I'll text you when I get to the station.","alts":["I will email you when I arrive at the station.","I'll send you a message when I get to the station."],"keys":[["when i get","when i arrive","when i reach"],["station"],["text*","email*","e mail*","message*","call*"]],"why":"when の中は現在形(get / arrive)。"},
+  {"k":"write","ja":"私の兄はギターを2本持っています。","model":"My brother has two guitars.","alts":["My older brother has two guitars.","My brother owns two guitars."],"keys":[["has","owns","has got"],["two guitars"]],"why":"「持っている」の have は状態動詞なので進行形にしません。"},
+  {"k":"meaning","en":"I'll tell her when she comes back.","c":["彼女に戻ってくるように言います","彼女が戻ってきたら、彼女に伝えます","彼女が戻ってきたときに伝えました","彼女は戻ってくると言いました"],"a":1,"why":"when she comes back は時の副詞節で「戻ってきたら」。"}
+ ]},
+{"id":"s-h1-03","g":"高1","t":"過去完了・未来完了","sub":"基準の時点を過去・未来にずらした完了形","link":"g06",
+ "pts":["<b>had + 過去分詞</b>: 過去のある時点より前のこと(大過去)や、その時点までの完了・経験・継続。","<b>will have + 過去分詞</b>: 未来のある時点までに完了している・経験している。","<span class=\"mk\">基準の時点</span>(過去か未来か)がどこかを意識しましょう。"],
+ "ex":[{"en":"When I got to the station, the train had already left.","ja":"駅に着いたとき、電車はもう出発していました。"},{"en":"I had never seen snow before I moved to Hokkaido.","ja":"北海道に引っ越すまで、雪を見たことがありませんでした。"},{"en":"I will have finished my homework by six.","ja":"6時までには宿題を終えているでしょう。"}],
+ "q":[
+  {"k":"fill","s":"When I arrived, the movie ____ already started.","c":["has","had","have","was"],"a":1,"why":"到着した(過去)時点より前に始まっていたので had + 過去分詞。"},
+  {"k":"fill","s":"By next April, I ____ lived here for ten years.","c":["will have","had","have","will"],"a":0,"why":"未来の時点(来年の4月)までの継続なので will have + 過去分詞。"},
+  {"k":"fill","s":"She lost the watch her father ____ her.","c":["has given","gives","had given","will give"],"a":2,"why":"なくした(過去)より前にもらっていたので had given。"},
+  {"k":"fill","s":"I ____ never seen such a big fish until then.","c":["have","has","will have","had"],"a":3,"why":"until then(そのときまで)は過去の時点なので過去完了。"},
+  {"k":"fill","s":"The meeting will have ____ by the time you get there.","c":["finish","finished","finishing","to finish"],"a":1,"why":"will have + 過去分詞(未来完了)。"},
+  {"k":"order","ja":"私が着いたとき、電車はもう出発していました。","en":"The train had already left when I arrived."},
+  {"k":"order","ja":"来週までにこの本を読み終えているでしょう。","en":"I will have finished this book by next week."},
+  {"k":"write","ja":"私が家に帰ったとき、妹はもう寝ていました。","model":"When I got home, my sister had already gone to bed.","alts":["My sister had already gone to bed when I got home.","When I came home, my sister had already fallen asleep."],"keys":[["had already","had gone","had fallen"],["sister"],["when i got home","when i came home","when i got back","when i returned"]],"why":"帰宅(過去)より前に寝ていたので had + 過去分詞。"},
+  {"k":"write","ja":"明日の今ごろまでには、私はレポートを書き終えているでしょう。","model":"I will have finished my report by this time tomorrow.","alts":["I'll have finished writing my report by this time tomorrow."],"keys":[["will have finished","will have written","will have completed"],["report"],["by this time tomorrow","by tomorrow"]],"why":"未来の時点までの完了は will have + 過去分詞。"},
+  {"k":"meaning","en":"I had lived in Osaka for five years before I came to Tokyo.","c":["東京に5年間住んでから、大阪に来ました","大阪に5年間住む予定です","東京に来てから5年がたちました","東京に来る前に、大阪に5年間住んでいました"],"a":3,"why":"had lived = 東京に来た(過去)時点までの継続。"}
+ ]},
+{"id":"s-h1-04","g":"高1","t":"助動詞 + have + 過去分詞","sub":"過去のことを「今」推測する・後悔する","link":"g08",
+ "pts":["<b>must have + 過去分詞</b>: ~したにちがいない","<b>may / might have + 過去分詞</b>: ~したかもしれない","<b>can't have + 過去分詞</b>: ~したはずがない","<b>should have + 過去分詞</b>: ~すべきだったのに(実際はしなかった)"],
+ "ex":[{"en":"He must have missed the bus.","ja":"彼はバスに乗り遅れたにちがいありません。"},{"en":"I may have left my umbrella on the train.","ja":"電車に傘を忘れたかもしれません。"},{"en":"You should have told me earlier.","ja":"もっと早く言ってくれればよかったのに。"}],
+ "q":[
+  {"k":"fill","s":"The ground is wet. It ____ rained last night.","c":["must have","should have","can't have","wouldn't have"],"a":0,"why":"地面がぬれている → 雨が降ったにちがいない = must have。"},
+  {"k":"fill","s":"I failed the test. I ____ studied harder.","c":["must have","should have","can't have","may have"],"a":1,"why":"不合格だった後悔なので「もっと勉強すべきだった」= should have。"},
+  {"k":"fill","s":"She ____ said that. She is always kind to everyone.","c":["must have","should have","can't have","will have"],"a":2,"why":"いつも親切な人なので「そんなことを言ったはずがない」= can't have。"},
+  {"k":"fill","s":"I can't find my key. I ____ dropped it somewhere, but I'm not sure.","c":["must have","should have","can't have","might have"],"a":3,"why":"「確かではない」ので「~したかもしれない」= might have。"},
+  {"k":"fill","s":"You look tired. You must have ____ late last night.","c":["stay up","stayed up","staying up","to stay up"],"a":1,"why":"must have のあとは過去分詞。"},
+  {"k":"order","ja":"彼は電車に乗り遅れたにちがいありません。","en":"He must have missed the train."},
+  {"k":"order","ja":"私たちはもっと早く出発すべきでした。","en":"We should have left earlier."},
+  {"k":"write","ja":"彼女は家に傘を忘れたのかもしれません。","model":"She may have left her umbrella at home.","alts":["She might have left her umbrella at home.","She may have forgotten her umbrella at home."],"keys":[["may have","might have"],["left","forgotten","forgot"],["umbrella"]],"why":"過去の推測「~したかもしれない」は may / might have + 過去分詞。"},
+  {"k":"write","ja":"あなたは私に本当のことを言うべきでした。","model":"You should have told me the truth.","alts":["You should've told me the truth."],"keys":[["should have","ought to have"],["told","said"],["truth"]],"why":"「~すべきだったのに」は should have + 過去分詞。"},
+  {"k":"meaning","en":"He can't have finished the work so quickly.","c":["彼はそんなに早く仕事を終えられません","彼がそんなに早く仕事を終えたはずがありません","彼は仕事を早く終えたにちがいありません","彼は仕事を早く終えるべきでした"],"a":1,"why":"can't have + 過去分詞 = ~したはずがない(過去の推測)。"}
+ ]},
+{"id":"s-h1-05","g":"高1","t":"受動態の発展","sub":"助動詞・完了形の受け身と by 以外の前置詞","link":"g09",
+ "pts":["<b>助動詞 + be + 過去分詞</b>: can be seen(見られる・見ることができる)","<b>have / has been + 過去分詞</b>: 完了形の受け身(もう~された)","<b>by 以外の前置詞</b>: be interested <span class=\"mk\">in</span> / be surprised <span class=\"mk\">at</span> / be known <span class=\"mk\">to</span>"],
+ "ex":[{"en":"The stars can be seen from here.","ja":"ここから星が見えます。"},{"en":"The room has already been cleaned.","ja":"その部屋はもう掃除されています。"},{"en":"This song is known to everyone.","ja":"この歌はみんなに知られています。"}],
+ "q":[
+  {"k":"fill","s":"This work must ____ by Friday.","c":["finish","be finished","finished","be finishing"],"a":1,"why":"仕事は「終えられる」側なので 助動詞 + be + 過去分詞。"},
+  {"k":"fill","s":"The bridge has ____ repaired.","c":["be","being","was","been"],"a":3,"why":"完了形の受け身は has been + 過去分詞。"},
+  {"k":"fill","s":"This singer is known ____ everyone in this town.","c":["at","to","with","of"],"a":1,"why":"「~に知られている」は be known to。"},
+  {"k":"fill","s":"I'm interested ____ Japanese history.","c":["at","with","on","in"],"a":3,"why":"「~に興味がある」は be interested in。"},
+  {"k":"fill","s":"We were surprised ____ the news.","c":["at","to","of","on"],"a":0,"why":"「~に驚く」は be surprised at。"},
+  {"k":"order","ja":"その部屋はもう掃除されています。","en":"The room has already been cleaned."},
+  {"k":"order","ja":"この本は多くの人に読まれるでしょう。","en":"This book will be read by many people."},
+  {"k":"write","ja":"その星はここから見ることができます。","model":"The star can be seen from here.","alts":["That star can be seen from here."],"keys":[["can be seen"],["star*"],["from here","here"]],"why":"助動詞の受け身は can be + 過去分詞。"},
+  {"k":"write","ja":"彼女はその映画に興味があります。","model":"She is interested in the movie.","alts":["She's interested in that movie.","She is interested in the film."],"keys":[["interested in"],["movie","film"]],"why":"be interested in ~ で「~に興味がある」。"},
+  {"k":"meaning","en":"The letter has just been sent.","c":["その手紙をちょうど送るところです","その手紙はまだ送られていません","その手紙はちょうど送られたところです","その手紙はもうすぐ届きます"],"a":2,"why":"has just been sent = ちょうど送られたところ(完了形の受け身)。"}
+ ]},
+{"id":"s-h1-06","g":"高1","t":"不定詞の発展(意味上の主語・too ~ to・enough to・完了不定詞)","sub":"to 不定詞の細かい使い方","link":"g10",
+ "pts":["<b>意味上の主語</b>: for + 人 + to ~。人の性格を表す形容詞(kind など)なら <span class=\"mk\">of + 人</span>。","<b>too ~ to ...</b>: ~すぎて…できない","<b>~ enough to ...</b>: …できるほど~(enough は形容詞のあと)","<b>to have + 過去分詞</b>(完了不定詞): 述語動詞より前のこと。He seems to have been sick."],
+ "ex":[{"en":"It's very kind of you to help me.","ja":"手伝ってくれるなんて、とても親切ですね。"},{"en":"This box is too heavy to carry.","ja":"この箱は重すぎて運べません。"},{"en":"She is old enough to drive.","ja":"彼女は運転できる年齢です。"}],
+ "q":[
+  {"k":"fill","s":"It's kind ____ you to say so.","c":["for","of","to","with"],"a":1,"why":"kind は人の性格を表すので of + 人。"},
+  {"k":"fill","s":"This tea is ____ hot to drink.","c":["very","so","too","enough"],"a":2,"why":"too ~ to ... で「~すぎて…できない」。"},
+  {"k":"fill","s":"He is tall ____ to reach the top shelf.","c":["enough","too","so","very"],"a":0,"why":"形容詞 + enough to ... で「…できるほど~」。"},
+  {"k":"fill","s":"She seems ____ sick last week.","c":["to be","to have been","being","to been"],"a":1,"why":"先週(過去)のことを今「~だったようだ」と言うので完了不定詞。"},
+  {"k":"fill","s":"The question was easy enough for me ____.","c":["answer","answering","answered","to answer"],"a":3,"why":"enough for 人 to ~ の形。"},
+  {"k":"order","ja":"このかばんは重すぎて運べません。","en":"This bag is too heavy to carry."},
+  {"k":"order","ja":"手伝ってくれるなんて、あなたは親切ですね。","en":"It is kind of you to help me."},
+  {"k":"write","ja":"私は疲れすぎて勉強できません。","model":"I'm too tired to study.","alts":["I am too tired to study."],"keys":[["too tired to"],["study"]],"why":"too ~ to ... で「~すぎて…できない」。"},
+  {"k":"write","ja":"彼女は一人で旅行できる年齢です。","model":"She is old enough to travel alone.","alts":["She's old enough to travel by herself."],"keys":[["old enough to"],["travel"],["alone","by herself","on her own"]],"why":"形容詞 + enough to ... の語順。"},
+  {"k":"meaning","en":"He seems to have lost his wallet.","c":["彼は財布をなくしそうです","彼は財布をなくしたようです","彼は財布をなくしたことがありません","彼は財布を探しているようです"],"a":1,"why":"seems to have lost = (以前に)なくしたようだ。"}
+ ]},
+{"id":"s-h1-07","g":"高1","t":"動名詞の発展","sub":"意味上の主語・前置詞 + -ing","link":"g11",
+ "pts":["<b>意味上の主語</b>: 所有格か目的格を -ing の前に置きます。Do you mind <b>my</b> opening the window?","<b>前置詞 + -ing</b>: 前置詞の後ろは動名詞。without saying goodbye","<b>look forward to -ing</b> の to は前置詞なので -ing。<span class=\"mk\">be used to -ing</span>(~に慣れている)も同じです。"],
+ "ex":[{"en":"I'm looking forward to seeing you.","ja":"お会いできるのを楽しみにしています。"},{"en":"He left without saying anything.","ja":"彼は何も言わずに出ていきました。"},{"en":"Do you mind my sitting here?","ja":"ここに座ってもかまいませんか?"}],
+ "q":[
+  {"k":"fill","s":"I'm looking forward to ____ you again.","c":["seeing","see","saw","seen"],"a":0,"why":"look forward to の to は前置詞なので -ing。"},
+  {"k":"fill","s":"She is good at ____ pictures.","c":["draw","drew","drawing","to draw"],"a":2,"why":"前置詞 at のあとは動名詞。"},
+  {"k":"fill","s":"He went out without ____ a word.","c":["say","to say","said","saying"],"a":3,"why":"前置詞 without のあとは動名詞。"},
+  {"k":"fill","s":"I'm used to ____ up early.","c":["get","getting","got","be got"],"a":1,"why":"be used to -ing で「~に慣れている」。この to は前置詞。"},
+  {"k":"fill","s":"Do you mind ____ opening the window?","c":["mine","I","myself","my"],"a":3,"why":"動名詞の意味上の主語は所有格(または目的格)。"},
+  {"k":"order","ja":"またお会いできるのを楽しみにしています。","en":"I'm looking forward to seeing you again."},
+  {"k":"order","ja":"彼はさよならを言わずに出ていきました。","en":"He left without saying goodbye."},
+  {"k":"write","ja":"私は朝早く起きることに慣れています。","model":"I'm used to getting up early.","alts":["I am used to waking up early.","I'm accustomed to getting up early."],"keys":[["used to getting","used to waking","accustomed to getting","accustomed to waking"],["early"]],"why":"be used to -ing で「~に慣れている」。"},
+  {"k":"write","ja":"週末にあなたに会えるのを楽しみにしています。","model":"I'm looking forward to seeing you on the weekend.","alts":["I am looking forward to meeting you this weekend.","I look forward to seeing you on the weekend."],"keys":[["forward to seeing","forward to meeting"],["weekend"]],"why":"look forward to + -ing。"},
+  {"k":"meaning","en":"Thank you for inviting me.","c":["私を招待してください","あなたを招待できてうれしいです","招待してくれてありがとう","招待するのを忘れていました"],"a":2,"why":"for + -ing で「~してくれたことに対して」。"}
+ ]},
+{"id":"s-h1-08","g":"高1","t":"分詞の発展(知覚動詞・have / get + O + 過去分詞)","sub":"O が「する」のか「される」のか","link":"g12",
+ "pts":["<b>知覚動詞 + O + -ing</b>: O が~しているのを見る・聞く(see / hear / feel)","<b>知覚動詞 + O + 過去分詞</b>: O が~されるのを見る・聞く","<b>have / get + O + 過去分詞</b>: O を~してもらう・O を~される","O と分詞が「する」関係か「される」関係かで形が決まります。"],
+ "ex":[{"en":"I saw a man running across the street.","ja":"男性が通りを走って渡っているのを見ました。"},{"en":"I heard my name called.","ja":"自分の名前が呼ばれるのが聞こえました。"},{"en":"I had my hair cut yesterday.","ja":"昨日、髪を切ってもらいました。"}],
+ "q":[
+  {"k":"fill","s":"I heard someone ____ my name.","c":["calling","called","to call","calls"],"a":0,"why":"someone が「呼んでいる」ので hear + O + -ing。"},
+  {"k":"fill","s":"I had my bike ____ at the shop.","c":["repair","repairing","repaired","to repair"],"a":2,"why":"自転車は「修理される」側なので have + O + 過去分詞。"},
+  {"k":"fill","s":"She got her phone ____ on the train.","c":["steal","stolen","stealing","stole"],"a":1,"why":"電話は「盗まれる」側なので get + O + 過去分詞。"},
+  {"k":"fill","s":"I heard my name ____ in the waiting room.","c":["calling","to call","called","calls"],"a":2,"why":"名前は「呼ばれる」側なので過去分詞。"},
+  {"k":"fill","s":"Where did you get your hair ____?","c":["cutting","to cut","cuts","cut"],"a":3,"why":"髪は「切られる」側。cut の過去分詞は cut。"},
+  {"k":"order","ja":"私は彼女が歌を歌っているのを聞きました。","en":"I heard her singing a song."},
+  {"k":"order","ja":"私は昨日、髪を切ってもらいました。","en":"I had my hair cut yesterday."},
+  {"k":"write","ja":"私は男の子が川で泳いでいるのを見ました。","model":"I saw a boy swimming in the river.","alts":["I saw a boy swim in the river."],"keys":[["saw","watched"],["boy"],["swimming","swim"]],"why":"see + O + -ing で「O が~しているのを見る」。"},
+  {"k":"write","ja":"私はパソコンを修理してもらいました。","model":"I had my computer repaired.","alts":["I got my computer fixed.","I had my PC repaired."],"keys":[["had my","got my"],["computer","pc","laptop"],["repaired","fixed"]],"why":"have / get + O + 過去分詞で「O を~してもらう」。"},
+  {"k":"meaning","en":"I had my wallet stolen on the bus.","c":["バスで財布を盗みました","バスで財布を盗まれました","バスで財布を見つけてもらいました","バスに財布を置いてきました"],"a":1,"why":"have + O + 過去分詞は「O を~される」(被害)の意味にもなります。"}
+ ]},
+{"id":"s-h1-09","g":"高1","t":"関係代名詞の発展(whose・what・前置詞 + 関係代名詞・非制限用法)","sub":"関係代名詞をもう一段深く","link":"g14",
+ "pts":["<b>whose</b>: 「その~が」。a friend <b>whose</b> father is a doctor","<b>what</b> = the thing(s) which。「~すること・もの」。先行詞はつけません。","<b>前置詞 + which / whom</b>: the house <b>in which</b> he lives","<b>非制限用法</b>(, which / , who): 補足説明。この形では <span class=\"mk\">that は使えません</span>。"],
+ "ex":[{"en":"I have a friend whose father is a doctor.","ja":"私には父親が医者の友だちがいます。"},{"en":"What she said surprised me.","ja":"彼女が言ったことに私は驚きました。"},{"en":"My uncle, who lives in Kobe, is a chef.","ja":"私のおじは神戸に住んでいて、料理人です。"}],
+ "q":[
+  {"k":"fill","s":"I have a friend ____ mother is a nurse.","c":["who","whose","which","that"],"a":1,"why":"「その友だちの母親が」なので所有格 whose。"},
+  {"k":"fill","s":"____ he said was true.","c":["What","That","Which","Who"],"a":0,"why":"先行詞がなく「彼が言ったこと」なので what。"},
+  {"k":"fill","s":"This is the house in ____ my grandfather was born.","c":["that","what","which","where"],"a":2,"why":"前置詞のあとの関係代名詞は which。in that とは言いません。"},
+  {"k":"fill","s":"I met Mr. Sato, ____ is a famous writer.","c":["that","what","whom","who"],"a":3,"why":"コンマのあとの補足説明(非制限用法)で、人・主格なので who。that は使えません。"},
+  {"k":"fill","s":"Show me ____ you have in your bag.","c":["which","that","what","who"],"a":2,"why":"先行詞がなく「かばんに入っているもの」なので what。"},
+  {"k":"order","ja":"これが私がほしかったものです。","en":"This is what I wanted."},
+  {"k":"order","ja":"私には父親が医者の友だちがいます。","en":"I have a friend whose father is a doctor."},
+  {"k":"write","ja":"あなたが言ったことは正しいです。","model":"What you said is right.","alts":["What you said is true.","What you said is correct."],"keys":[["what you said"],["right","true","correct"]],"why":"what = 「~すること・もの」。"},
+  {"k":"write","ja":"私は屋根が赤い家に住んでいます。","model":"I live in a house whose roof is red.","alts":["I live in a house whose roof is painted red."],"keys":[["whose roof"],["red"],["house"]],"why":"「その家の屋根が」なので whose roof。"},
+  {"k":"meaning","en":"He said nothing, which made her angry.","c":["彼は彼女を怒らせたことについて何も言いませんでした","彼女が怒ったので、彼は何も言いませんでした","彼は何も言わなかったので、怒っていました","彼が何も言わなかったことが、彼女を怒らせました"],"a":3,"why":", which は前の内容全体(何も言わなかったこと)を受けて説明を加えます。"}
+ ]},
+{"id":"s-h1-10","g":"高1","t":"比較の発展(倍数・the 比較級, the 比較級・最上級の言い換え)","sub":"比べ方のバリエーション","link":"g16",
+ "pts":["<b>倍数表現</b>: twice / three times + <b>as ~ as</b>(~の2倍・3倍…)","<b>The 比較級 ~, the 比較級 …</b>: ~すればするほど、ますます…","<b>最上級の言い換え</b>: No other + 単数名詞 + is as ~ as A / A is 比較級 than <span class=\"mk\">any other + 単数名詞</span>"],
+ "ex":[{"en":"This room is twice as large as mine.","ja":"この部屋は私の部屋の2倍の広さです。"},{"en":"The more you practice, the better you get.","ja":"練習すればするほど上手になります。"},{"en":"No other student in my class is as tall as Ken.","ja":"クラスでケンほど背の高い生徒はいません。"}],
+ "q":[
+  {"k":"fill","s":"This bridge is three times as ____ as that one.","c":["long","longer","longest","length"],"a":0,"why":"倍数 + as + 原級 + as。"},
+  {"k":"fill","s":"The ____ you read, the more you learn.","c":["much","more","most","many"],"a":1,"why":"The 比較級 ~, the 比較級 … の形。"},
+  {"k":"fill","s":"The sooner, the ____.","c":["good","best","better","well"],"a":2,"why":"The 比較級, the 比較級。good の比較級は better。"},
+  {"k":"fill","s":"He is taller than any other ____ in his class.","c":["students","student","boys","the student"],"a":1,"why":"any other のあとは単数名詞。"},
+  {"k":"fill","s":"No other student in our class is ____ Ken.","c":["larger","the largest","largest than","as tall as"],"a":3,"why":"No other ~ is as 原級 as A で最上級の意味。"},
+  {"k":"order","ja":"彼は年をとるにつれて、ますます賢くなりました。","en":"The older he got, the wiser he became."},
+  {"k":"order","ja":"私の部屋はあなたの部屋の2倍の広さです。","en":"My room is twice as large as yours."},
+  {"k":"write","ja":"練習すればするほど、上手になります。","model":"The more you practice, the better you get.","alts":["The more you practice, the better you will become.","The more you practise, the better you'll be."],"keys":[["the more"],["the better"],["practice*","practise*","train*"]],"why":"The 比較級 ~, the 比較級 …"},
+  {"k":"write","ja":"この箱はあの箱の3倍の重さです。","model":"This box is three times as heavy as that one.","alts":["This box is three times heavier than that one.","This box is three times as heavy as that box."],"keys":[["three times"],["as heavy as","heavier than"]],"why":"倍数 + as + 原級 + as。"},
+  {"k":"meaning","en":"No other boy on the team runs as fast as Taro.","c":["チームでタロウほど速く走る男の子はいません","タロウはチームでいちばん遅いです","チームの男の子はみんなタロウと同じ速さで走ります","タロウ以外に男の子はチームにいません"],"a":0,"why":"No other ~ as fast as A = A がいちばん速い。"}
+ ]}
+];
+
+const SCHOOL_C = [
+{"id":"s-h2-01","g":"高2","t":"分詞構文","sub":"-ing のカタマリで「〜して・〜なので」を足す",
+ "pts":["<b>-ing で始まるカタマリ</b>が、文に「〜して・〜なので・〜しながら」という情報を足します。接続詞と主語を省いた形です。","主語は主節と同じなので書きません。<span class=\"mk\">Walking</span> home, I met a friend. = 歩いて帰る途中で友だちに会った。","「〜される」意味なら<b>過去分詞</b>から始めます。<span class=\"mk\">Seen</span> from above, 〜 = 上から見ると","先に終わったことは <b>Having + 過去分詞</b>、否定は <b>Not</b> を前に置きます。"],
+ "ex":[{"en":"Walking along the beach, we found a small café.","ja":"浜辺を歩いていると、小さなカフェを見つけました。"},{"en":"Written in easy English, this book is good for beginners.","ja":"やさしい英語で書かれているので、この本は初心者に向いています。"},{"en":"Having finished my homework, I watched a movie.","ja":"宿題を終えてから、映画を見ました。"}],
+ "link":"g13",
+ "q":[
+  {"k":"fill","s":"____ tired, I went to bed early.","c":["Feeling","Felt","To feel","Feel"],"a":0,"why":"「疲れを感じたので」。主語 I が感じる側なので能動の Feeling。"},
+  {"k":"fill","s":"____ from the hill, the town looks like a toy.","c":["Seeing","Seen","Having seen","To see"],"a":1,"why":"町は「見られる」側なので過去分詞 Seen。"},
+  {"k":"fill","s":"____ my report, I left the office.","c":["Finish","Finished","Having finished","Being finished"],"a":2,"why":"報告書を書き終えたのが先なので Having + 過去分詞。"},
+  {"k":"fill","s":"____ knowing what to say, she stayed quiet.","c":["No","Don't","Didn't","Not"],"a":3,"why":"分詞構文の否定は Not を -ing の前に置きます。"},
+  {"k":"fill","s":"The weather ____ nice, we went hiking.","c":["is","being","been","to be"],"a":1,"why":"主語が主節(we)と違うので The weather を残した独立分詞構文。be は being に。"},
+  {"k":"order","ja":"音楽を聞きながら、彼は夕食を作りました。","en":"Listening to music, he cooked dinner."},
+  {"k":"order","ja":"宇宙から見ると、地球は青く見えます。","en":"Seen from space, Earth looks blue."},
+  {"k":"write","ja":"駅を出たとき、私は先生に会いました。(分詞構文で)","model":"Leaving the station, I met my teacher.","alts":["Coming out of the station, I met my teacher."],"keys":[["leaving","walking out of","coming out of","getting out of","having left"],["station"],["met","saw","ran into","bumped into"]],"why":"When I left 〜 を Leaving 〜 にまとめます。"},
+  {"k":"write","ja":"疲れていたので、彼女は早く寝ました。(分詞構文で)","model":"Feeling tired, she went to bed early.","alts":["Being tired, she went to bed early."],"keys":[["feeling","being"],["tired","exhausted","sleepy"],["went to bed","went to sleep","slept"]],"why":"Because she felt tired を Feeling tired に。"},
+  {"k":"meaning","en":"Having lost my key, I couldn't get into my house.","c":["鍵をなくす前に、家に入りました","家に入れなかったので、鍵をなくしました","鍵をなくしていたので、家に入れませんでした","鍵を見つけたので、家に入れました"],"a":2,"why":"Having lost = 先に鍵をなくしていたので(理由)。"}
+ ]},
+{"id":"s-h2-02","g":"高2","t":"関係副詞(where・when・why・how)","sub":"場所・時・理由・方法を後ろから説明する",
+ "pts":["<b>where</b> = 場所、<b>when</b> = 時、<b>why</b> = 理由(the reason why)を、名詞の後ろから説明します。","関係副詞の後ろは<b>完全な文</b>。動詞の目的語が欠けていれば which / that を使います。","方法は <span class=\"mk\">the way</span> か <span class=\"mk\">how</span> のどちらか一方だけ。the way how とは言いません。"],
+ "ex":[{"en":"This is the town where I grew up.","ja":"ここは私が育った町です。"},{"en":"I remember the day when we first met.","ja":"私たちが初めて会った日を覚えています。"},{"en":"That's why I was late.","ja":"そういうわけで私は遅れました。"}],
+ "link":"g15",
+ "q":[
+  {"k":"fill","s":"This is the restaurant ____ we had our first date.","c":["which","where","when","why"],"a":1,"why":"レストラン(場所)で「初デートをした」。後ろが完全な文なので where。"},
+  {"k":"fill","s":"Do you remember the day ____ you started this job?","c":["when","where","which","what"],"a":0,"why":"the day(時)を説明するので when。"},
+  {"k":"fill","s":"Tell me the reason ____ you were absent.","c":["where","how","why","what"],"a":2,"why":"the reason(理由)の後ろは why。"},
+  {"k":"fill","s":"I like the way ____ she talks to children.","c":["how","which","where","that"],"a":3,"why":"the way how とは言いません。the way that か、the way だけにします。"},
+  {"k":"fill","s":"The museum ____ we visited last week is closed today.","c":["where","which","when","why"],"a":1,"why":"visited の目的語が欠けているので、関係副詞ではなく関係代名詞 which。"},
+  {"k":"order","ja":"あれは私がテニスをする公園です。","en":"That is the park where I play tennis."},
+  {"k":"order","ja":"夏は私がいちばん幸せを感じる季節です。","en":"Summer is the season when I feel happiest."},
+  {"k":"write","ja":"ここは私が生まれた町です。","model":"This is the town where I was born.","alts":["This is the city where I was born."],"keys":[["where","in which"],["town","city"],["was born"]],"why":"場所(town)を where 〜 で後ろから説明します。"},
+  {"k":"write","ja":"彼が怒っている理由がわかりません。","model":"I don't know the reason why he is angry.","alts":["I don't know why he's angry."],"keys":[["why"],["do not know","can not understand","do not understand","have no idea"],["angry","mad","upset"]],"why":"理由は the reason why 〜。the reason は省略しても OK。"},
+  {"k":"meaning","en":"Spring is the time when many people start new jobs.","c":["春になると多くの人が仕事をやめます","多くの人が春になる前に仕事を始めます","春は多くの人が休みをとる時期です","春は多くの人が新しい仕事を始める時期です"],"a":3,"why":"the time when 〜 = 〜する時期。"}
+ ]},
+{"id":"s-h2-03","g":"高2","t":"複合関係詞(whoever・whatever・however など)","sub":"「だれでも・何でも・どんなに〜でも」",
+ "pts":["<b>whoever</b> = 〜する人はだれでも、<b>whatever</b> = 〜するものは何でも。","<b>whenever</b> = 〜するときはいつでも、<b>wherever</b> = 〜するところはどこでも。","<span class=\"mk\">however + 形容詞</span> = どんなに〜でも。However busy he is = どんなに忙しくても","「〜しても」の意味は <b>no matter + 疑問詞</b> で言いかえられます。"],
+ "ex":[{"en":"You can invite whoever you like.","ja":"好きな人をだれでも招待していいですよ。"},{"en":"Whatever happens, I'll be on your side.","ja":"何が起きても、私はあなたの味方です。"},{"en":"However busy she is, she calls her mother every day.","ja":"どんなに忙しくても、彼女は毎日母親に電話します。"}],
+ "link":"g15",
+ "q":[
+  {"k":"fill","s":"Take ____ you need from the fridge.","c":["whatever","whenever","however","wherever"],"a":0,"why":"take の目的語になる「必要なものは何でも」なので whatever。"},
+  {"k":"fill","s":"____ calls, tell them I'm out.","c":["Whatever","Whoever","Whenever","However"],"a":1,"why":"電話をかけてくる「人」はだれでも、なので Whoever。"},
+  {"k":"fill","s":"____ hard it is, I won't give up.","c":["Whatever","Whoever","However","Whenever"],"a":2,"why":"However + 形容詞 = どんなに〜でも。"},
+  {"k":"fill","s":"You can visit us ____ you are free.","c":["whatever","whoever","however","whenever"],"a":3,"why":"「ひまなときはいつでも」なので whenever。"},
+  {"k":"fill","s":"My dog follows me ____ I go.","c":["whichever","wherever","whatever","whoever"],"a":1,"why":"「どこへ行っても」なので wherever。"},
+  {"k":"order","ja":"何が起きても、私はあなたを助けます。","en":"Whatever happens, I will help you."},
+  {"k":"order","ja":"助けが必要なときはいつでも電話してください。","en":"Call me whenever you need help."},
+  {"k":"write","ja":"どんなに忙しくても、彼は毎朝運動します。","model":"However busy he is, he exercises every morning.","alts":["No matter how busy he is, he works out every morning."],"keys":[["however busy","no matter how busy"],["exercise*","works out","work out","goes to the gym","trains"],["every morning","each morning"]],"why":"However busy he is = No matter how busy he is。"},
+  {"k":"write","ja":"好きな人をだれでも招待していいですよ。","model":"You can invite whoever you like.","alts":["You can invite anyone you want."],"keys":[["whoever","anyone","anybody"],["invite*","bring"],["like","want"]],"why":"whoever = anyone who。"},
+  {"k":"meaning","en":"No matter what you say, I won't change my mind.","c":["あなたが何か言えば、考えを変えます","あなたが何と言っても、私は考えを変えません","あなたが何も言わないなら、考えを変えません","何を言うべきか、私にはわかりません"],"a":1,"why":"No matter what = 何を〜しても(= Whatever)。"}
+ ]},
+{"id":"s-h2-04","g":"高2","t":"仮定法過去完了と混合仮定法","sub":"過去の「もし〜だったら」",
+ "pts":["過去の事実と反対: <b>If + had + 過去分詞, would have + 過去分詞</b> = あのとき〜だったら、〜しただろうに","would の代わりに could(〜できたのに)、might(〜したかもしれない)も使えます。","<b>混合仮定法</b>: If + had + 過去分詞, <span class=\"mk\">would + 動詞の原形</span>(+ now) = あのとき〜だったら、今は〜だろうに","If を省くと語順が変わります: Had I known = If I had known"],
+ "ex":[{"en":"If I had left earlier, I would have caught the train.","ja":"もっと早く出ていたら、電車に間に合ったのに。"},{"en":"If she had studied harder, she would have passed the test.","ja":"もっと勉強していたら、彼女はテストに受かったでしょう。"},{"en":"If I had taken that job, I would be living in Osaka now.","ja":"あの仕事を引き受けていたら、今ごろ大阪に住んでいるでしょう。"}],
+ "link":"g17",
+ "q":[
+  {"k":"fill","s":"If I ____ the news, I would have called you.","c":["heard","had heard","have heard","would hear"],"a":1,"why":"主節が would have called(過去の反対)なので、if 節は had + 過去分詞。"},
+  {"k":"fill","s":"If we had left earlier, we ____ the bus.","c":["would catch","will catch","would have caught","had caught"],"a":2,"why":"過去の事実の反対なので would have + 過去分詞。"},
+  {"k":"fill","s":"If he had taken the medicine, he ____ better now.","c":["would feel","would have felt","will feel","felt"],"a":0,"why":"now があるので、結果は今のこと。混合仮定法で would + 原形。"},
+  {"k":"fill","s":"If it ____ rained yesterday, we could have played soccer.","c":["didn't","wouldn't","haven't","hadn't"],"a":3,"why":"昨日のことの反対なので had not + 過去分詞。"},
+  {"k":"fill","s":"____ I known about the party, I would have gone.","c":["Had","If","Have","Did"],"a":0,"why":"If I had known の If を省くと Had I known の語順になります。"},
+  {"k":"order","ja":"知っていたら、手伝ったのに。","en":"If I had known, I would have helped."},
+  {"k":"order","ja":"もし来ていたら、あなたも楽しめたでしょう。","en":"If you had come, you would have enjoyed it."},
+  {"k":"write","ja":"もっと早く起きていたら、電車に間に合ったのに。","model":"If I had gotten up earlier, I would have caught the train.","alts":["If I had woken up earlier, I could have caught the train."],"keys":[["if i had","had i"],["would have","could have"],["train"]],"why":"If + had + 過去分詞, would / could have + 過去分詞。"},
+  {"k":"write","ja":"もし彼女が助けてくれなかったら、私は今ここにいないでしょう。","model":"If she hadn't helped me, I wouldn't be here now.","alts":["If she had not helped me, I would not be here now."],"keys":[["had not helped","had not saved"],["would not be","could not be"],["here"]],"why":"過去の仮定+今の結果なので混合仮定法。would not be 〜 now。"},
+  {"k":"meaning","en":"If I had saved more money, I could have bought that car.","c":["お金を貯めたので、あの車を買えました","お金を貯めれば、あの車を買えるでしょう","もっとお金を貯めていたら、あの車を買えたのに","あの車を買ったので、お金が貯まりませんでした"],"a":2,"why":"had saved / could have bought = 過去の事実の反対(実際は買えなかった)。"}
+ ]},
+{"id":"s-h2-05","g":"高2","t":"仮定法を使った表現(without・as if・It's time・I wish の過去完了)","sub":"if を使わない仮定の言い方",
+ "pts":["<b>Without 〜 / But for 〜</b> = 〜がなければ(なかったら)。If it were not for 〜 と同じ意味。","<b>as if + 過去形</b> = まるで〜であるかのように(過去完了なら「〜だったかのように」)。","<span class=\"mk\">It's time + 過去形</span> = もう〜する時間だ(まだしていない)。","<b>I wish + had + 過去分詞</b> = あのとき〜だったらよかったのに。"],
+ "ex":[{"en":"He talks as if he knew everything.","ja":"彼はまるで何でも知っているかのように話します。"},{"en":"It's time you went to bed.","ja":"もう寝る時間ですよ。"},{"en":"I wish I had studied harder in high school.","ja":"高校でもっと勉強しておけばよかったです。"}],
+ "link":"g17",
+ "q":[
+  {"k":"fill","s":"____ water, no plants could live.","c":["With","Unless","If","Without"],"a":3,"why":"「水がなければ」= Without water。"},
+  {"k":"fill","s":"She talks as if she ____ my boss.","c":["were","be","being","to be"],"a":0,"why":"as if + 過去形。be動詞は were を使います。"},
+  {"k":"fill","s":"It's time you ____ to bed.","c":["gone","going","went","to go"],"a":2,"why":"It's time + 主語 + 過去形 = もう〜する時間だ。"},
+  {"k":"fill","s":"I wish I ____ harder when I was young.","c":["had studied","study","have studied","will study"],"a":0,"why":"過去への後悔なので I wish + had + 過去分詞。"},
+  {"k":"fill","s":"But ____ your advice, I would have failed.","c":["by","of","for","to"],"a":2,"why":"But for 〜 = 〜がなかったら。"},
+  {"k":"order","ja":"彼はまるでお金持ちであるかのようにふるまいます。","en":"He acts as if he were rich."},
+  {"k":"order","ja":"あのギターを買っておけばよかったです。","en":"I wish I had bought that guitar."},
+  {"k":"write","ja":"あなたの助けがなければ、私はこの仕事を終えられないでしょう。","model":"Without your help, I couldn't finish this job.","alts":["If it weren't for your help, I couldn't finish this job."],"keys":[["without","but for","if it were not for","if it was not for"],["help"],["could not","would not","would never","could never"]],"why":"Without 〜 = If it were not for 〜。主節は could not + 原形。"},
+  {"k":"write","ja":"あなたはもう家に帰る時間ですよ。(It's time を使って)","model":"It's time you went home.","alts":["It's about time you went home."],"keys":[["time"],["you went","you left","you headed","you got"],["home"]],"why":"It's time + 主語 + 過去形。"},
+  {"k":"meaning","en":"She looked as if she had seen a ghost.","c":["彼女は幽霊を見たことがあると言いました","彼女はまるで幽霊を見たかのような顔をしていました","彼女は幽霊を見たいと思っていました","彼女は幽霊のように見えました"],"a":1,"why":"as if + had + 過去分詞 = まるで〜したかのように。"}
+ ]},
+{"id":"s-h2-06","g":"高2","t":"話法と時制の一致","sub":"人の言葉を伝えるときは時制もずらす",
+ "pts":["主節が過去なら、that 節の時制も<b>1つ過去へずらす</b>(時制の一致)。is → was、will → would","said \"I am tired.\" → <span class=\"mk\">said (that) he was tired</span>。say to 人 は tell 人 に。","疑問文は <b>asked if / whether 〜</b>、疑問詞は asked where 〜 の語順(主語+動詞)。","命令は <b>told 人 to 〜</b>。today → that day、here → there など言葉も変わります。"],
+ "ex":[{"en":"She said that she was tired.","ja":"彼女は疲れていると言いました。"},{"en":"He asked me if I liked coffee.","ja":"彼は私にコーヒーが好きかとたずねました。"},{"en":"My boss told me to call the client.","ja":"上司は私にその顧客に電話するように言いました。"}],
+ "q":[
+  {"k":"fill","s":"She said she ____ busy the day before.","c":["is","was","be","will be"],"a":1,"why":"said(過去)に合わせて was。the day before も過去の話のしるし。"},
+  {"k":"fill","s":"He asked me ____ I could help him.","c":["that","what","because","if"],"a":3,"why":"Yes / No でたずねる文を伝えるときは asked if 〜。"},
+  {"k":"fill","s":"My mother told me ____ my room.","c":["clean","cleaning","to clean","cleaned"],"a":2,"why":"命令を伝えるときは told 人 to + 原形。"},
+  {"k":"fill","s":"I thought he ____ come, but he didn't.","c":["would","will","can","shall"],"a":0,"why":"thought(過去)に合わせて will → would。"},
+  {"k":"fill","s":"She ____ me that she had lost her bag.","c":["said","told","spoke","talked"],"a":1,"why":"直後に人(me)が来るのは tell。say なら said to me。"},
+  {"k":"order","ja":"彼はおなかがすいていると言いました。","en":"He said that he was hungry."},
+  {"k":"order","ja":"彼女は私にどこに住んでいるのかとたずねました。","en":"She asked me where I lived."},
+  {"k":"write","ja":"先生は私たちに静かにするように言いました。","model":"The teacher told us to be quiet.","alts":["Our teacher told us to be quiet."],"keys":[["told us to","asked us to"],["be quiet","keep quiet","stay quiet","be silent","stop talking"]],"why":"命令を伝えるので told 人 to 〜。"},
+  {"k":"write","ja":"彼は疲れていると言いました。","model":"He said that he was tired.","alts":["He said he was tired."],"keys":[["said","told me","told us"],["was tired","felt tired","was exhausted"]],"why":"said に合わせて is → was。"},
+  {"k":"meaning","en":"She told me that she would be late.","c":["彼女は遅れたと私に言いました","彼女は遅れると私に言いました","彼女は遅れないでと私に言いました","彼女は私が遅れるだろうと言いました"],"a":1,"why":"would は will が時制の一致で過去になった形(これから遅れる)。"}
+ ]},
+{"id":"s-h2-07","g":"高2","t":"無生物主語と名詞構文","sub":"モノが主語の文を自然な日本語で読む",
+ "pts":["モノ・コトが主語になる英語らしい文。<span class=\"mk\">This bus will take you to 〜</span> = このバスに乗れば〜に行けます","よく使う動詞: <b>take / bring</b>(連れて行く)、<b>make</b>(〜させる)、<b>keep 人 from -ing</b>(〜できなくする)、<b>remind</b>(思い出させる)。","訳すときは主語を「〜すると・〜のせいで・〜のおかげで」にすると自然です。","<b>名詞構文</b>: His quick reply = 彼がすぐ返事したこと。名詞の中に文が入っています。"],
+ "ex":[{"en":"This bus will take you to the airport.","ja":"このバスに乗れば空港に行けます。"},{"en":"The heavy rain kept us from going out.","ja":"大雨のせいで、私たちは出かけられませんでした。"},{"en":"A short walk will make you feel better.","ja":"少し散歩すれば気分がよくなりますよ。"}],
+ "link":"g01",
+ "q":[
+  {"k":"fill","s":"This road will ____ you to the station.","c":["go","take","arrive","reach"],"a":1,"why":"take 人 to 場所 = 人を〜へ連れて行く(この道を行けば市役所に着く)。"},
+  {"k":"fill","s":"The snow ____ us from leaving the house.","c":["kept","made","let","had"],"a":0,"why":"keep 人 from -ing = 人が〜できないようにする。"},
+  {"k":"fill","s":"What ____ you come to Japan?","c":["did","made","got","took"],"a":1,"why":"make 人 + 原形 = 人に〜させる。何があなたを日本に来させたのか → なぜ日本に来たのか。"},
+  {"k":"fill","s":"This photo ____ me of my school days.","c":["remembers","recalls","reminds","memorizes"],"a":2,"why":"remind 人 of 〜 = 人に〜を思い出させる。"},
+  {"k":"fill","s":"The news ____ her very happy.","c":["felt","became","took","made"],"a":3,"why":"make 人 + 形容詞 = 人を〜にする。"},
+  {"k":"order","ja":"この薬を飲めば気分がよくなるでしょう。","en":"This medicine will make you feel better."},
+  {"k":"order","ja":"10分歩くと、私たちは湖に着きました。","en":"A ten-minute walk brought us to the lake."},
+  {"k":"write","ja":"この写真を見ると、私は祖母を思い出します。(This photo を主語に)","model":"This photo reminds me of my grandmother.","alts":["This picture reminds me of my grandma."],"keys":[["remind*"],["grandmother","grandma"]],"why":"モノ + remind 人 of 〜。"},
+  {"k":"write","ja":"大雨のせいで、私たちは出かけられませんでした。(The heavy rain を主語に)","model":"The heavy rain kept us from going out.","alts":["The heavy rain prevented us from going out."],"keys":[["rain"],["kept us from","stopped us from","prevented us from","kept us inside","kept us at home","kept us home"]],"why":"モノ + keep / prevent 人 from -ing。"},
+  {"k":"meaning","en":"His sudden visit surprised us.","c":["私たちは突然彼を訪ねて驚かせました","彼は私たちの訪問に驚きました","彼が突然訪ねてきたので、私たちは驚きました","彼はゆっくり訪ねてきました"],"a":2,"why":"His sudden visit = 彼が突然訪ねてきたこと(名詞構文)。"}
+ ]},
+{"id":"s-h2-08","g":"高2","t":"接続詞の発展(as long as・unless・whether・in case)","sub":"条件・備えを表す接続詞",
+ "pts":["<b>as long as</b> = 〜する限り・〜しさえすれば(条件)。","<b>unless</b> = 〜しない限り(= if 〜 not)。","<b>whether A or B</b> = AであろうとBであろうと / 〜かどうか。","<span class=\"mk\">in case</span> = 〜するといけないから・〜する場合に備えて。後ろは未来のことでも現在形。"],
+ "ex":[{"en":"You can stay here as long as you're quiet.","ja":"静かにしているなら、ここにいてもいいですよ。"},{"en":"I'll go unless it rains.","ja":"雨が降らない限り、私は行きます。"},{"en":"Take an umbrella in case it rains.","ja":"雨が降るといけないので、傘を持っていきなさい。"}],
+ "link":"g19",
+ "q":[
+  {"k":"fill","s":"I'll be there at six ____ the train is late.","c":["unless","so","as long as","whether"],"a":0,"why":"「電車が遅れない限り」6時に着く。unless = 〜しない限り。"},
+  {"k":"fill","s":"You can borrow my bike ____ you bring it back by Friday.","c":["unless","as long as","whether","in case"],"a":1,"why":"「金曜までに返すなら」という条件なので as long as。"},
+  {"k":"fill","s":"I don't know ____ she will come or not.","c":["unless","that","whether","in case"],"a":2,"why":"〜 or not と組んで「〜かどうか」は whether。"},
+  {"k":"fill","s":"Take your umbrella ____ it rains.","c":["unless","whether","as long as","in case"],"a":3,"why":"「雨が降るといけないから」= in case。"},
+  {"k":"fill","s":"____ you like it or not, you have to go.","c":["Unless","Whether","Although","In case"],"a":1,"why":"Whether A or not = Aであろうとなかろうと。"},
+  {"k":"order","ja":"急がないと、バスに乗り遅れますよ。","en":"Unless you hurry, you'll miss the bus."},
+  {"k":"order","ja":"忘れるといけないので、書きとめておきなさい。","en":"Write it down in case you forget."},
+  {"k":"write","ja":"雨が降らない限り、私たちは明日テニスをします。","model":"Unless it rains, we'll play tennis tomorrow.","alts":["We will play tennis tomorrow unless it rains."],"keys":[["unless it rains","unless it is rainy","if it does not rain"],["play tennis","play some tennis"],["tomorrow"]],"why":"unless の後ろは未来のことでも現在形(rains)。"},
+  {"k":"write","ja":"雨が降るといけないので、傘を持っていきなさい。","model":"Take an umbrella in case it rains.","alts":["Take your umbrella in case it rains."],"keys":[["in case"],["umbrella"]],"why":"in case + 現在形 = 〜するといけないから。"},
+  {"k":"meaning","en":"You can use my car as long as you drive carefully.","c":["気をつけて運転しても、私の車は使えません","私の車は長い距離を運転できます","慎重に運転しないなら、車を使っていいです","気をつけて運転するなら、私の車を使っていいですよ"],"a":3,"why":"as long as = 〜しさえすれば(条件)。long(長い)の意味ではありません。"}
+ ]},
+{"id":"s-h3-01","g":"高3","t":"倒置","sub":"否定語が前に出ると疑問文の語順になる",
+ "pts":["否定の言葉(Never・Little・Hardly など)が文頭に来ると、後ろは<b>疑問文の語順</b>。<span class=\"mk\">Never have I seen</span> 〜","<b>Not only + 疑問文の語順, but also 〜</b> = 〜だけでなく…も","「私も」は <b>So + 動詞 + 主語</b>、否定なら <b>Neither + 動詞 + 主語</b>。","Hardly had I 〜 when … / No sooner had I 〜 than … = 〜するとすぐに…"],
+ "ex":[{"en":"Never have I seen such a beautiful sunset.","ja":"こんなに美しい夕日は見たことがありません。"},{"en":"Not only did she sing, but she also played the guitar.","ja":"彼女は歌っただけでなく、ギターも弾きました。"},{"en":"I like cats. — So do I.","ja":"私はネコが好きです。— 私もです。"}],
+ "link":"g24",
+ "q":[
+  {"k":"fill","s":"Never ____ such a funny movie.","c":["I have seen","have I seen","I saw","did I saw"],"a":1,"why":"Never が文頭なので疑問文の語順 have I seen。"},
+  {"k":"fill","s":"I don't like spicy food. — Neither ____ I.","c":["am","do","don't","did"],"a":1,"why":"一般動詞 like の否定に「私も」と答えるので Neither do I。"},
+  {"k":"fill","s":"Little ____ that he was watching us.","c":["we knew","we did know","did we know","knew we"],"a":2,"why":"否定の Little が文頭なので did we know の語順。"},
+  {"k":"fill","s":"Not only ____ late, but he also forgot his notebook.","c":["he was","he did","did he","was he"],"a":3,"why":"Not only が文頭なので was he の語順(be動詞の文)。"},
+  {"k":"fill","s":"Hardly ____ home when it started to rain.","c":["had I gotten","I had gotten","I got","I have gotten"],"a":0,"why":"Hardly had + 主語 + 過去分詞 + when 〜 = 〜するとすぐに。"},
+  {"k":"order","ja":"こんなに幸せに感じたことは一度もありません。","en":"Never have I felt so happy."},
+  {"k":"order","ja":"ほら、私たちのバスが来ました。","en":"Here comes our bus."},
+  {"k":"write","ja":"彼は日本語を話すだけでなく、中国語も話します。(Not only で始めて)","model":"Not only does he speak Japanese, but he also speaks Chinese.","alts":["Not only does he speak Japanese, but also Chinese."],"keys":[["not only does he speak","not only can he speak"],["japanese"],["chinese"]],"why":"Not only が文頭なので does he speak の語順。"},
+  {"k":"write","ja":"こんなに美しい景色は一度も見たことがありません。(Never で始めて)","model":"Never have I seen such a beautiful view.","alts":["Never have I seen such beautiful scenery."],"keys":[["never have i seen","never have i ever seen","never before have i seen"],["beautiful","amazing","wonderful","lovely"],["view","scenery","sight","landscape"]],"why":"Never が文頭なので have I seen。"},
+  {"k":"meaning","en":"No sooner had I left home than it began to snow.","c":["家を出る前に雪がやみました","家を出たとたんに雪が降り始めました","雪がやむまで家を出ませんでした","雪が降ったので家を出ませんでした"],"a":1,"why":"No sooner A than B = AするとすぐにB。"}
+ ]},
+{"id":"s-h3-02","g":"高3","t":"強調構文(It is ~ that)","sub":"「〜なのは○○だ」とスポットライトを当てる",
+ "pts":["<b>It is A that 〜</b> = 〜なのは A だ。A にスポットライトを当てる形です。","A には主語・目的語・時や場所の言葉が入ります。人なら that の代わりに <b>who</b> も可。","It is と that を取ると<b>元の文に戻る</b>のが強調構文の目印。","疑問詞を強調: <span class=\"mk\">What is it that</span> 〜? / It was not until 〜 that … = 〜して初めて…"],
+ "ex":[{"en":"It was my sister who broke the cup.","ja":"カップを割ったのは私の姉でした。"},{"en":"It is in summer that this town gets busy.","ja":"この町がにぎわうのは夏です。"},{"en":"It was yesterday that I met him.","ja":"私が彼に会ったのは昨日でした。"}],
+ "link":"g24",
+ "q":[
+  {"k":"fill","s":"It was my brother ____ found the key.","c":["who","which","what","where"],"a":0,"why":"強調されるのが人(my brother)なので who(that も可)。"},
+  {"k":"fill","s":"It was in this park ____ we first met.","c":["which","that","what","when"],"a":1,"why":"場所(in this park)を強調する It was 〜 that。"},
+  {"k":"fill","s":"It is not money ____ makes people happy.","c":["what","when","that","where"],"a":2,"why":"It is not money that 〜 = 人を幸せにするのはお金ではない。"},
+  {"k":"fill","s":"____ was last Sunday that I saw the movie.","c":["This","That","There","It"],"a":3,"why":"強調構文はいつも It is / It was で始めます。"},
+  {"k":"fill","s":"What was it ____ you wanted to tell me?","c":["that","what","who","whether"],"a":0,"why":"疑問詞を強調する形 What is it that 〜?"},
+  {"k":"order","ja":"私に電話してきたのは母でした。","en":"It was my mother who called me."},
+  {"k":"order","ja":"私がいちばん好きなのはこの歌です。","en":"It is this song that I like best."},
+  {"k":"write","ja":"このケーキを作ったのは私の父です。(It で始めて)","model":"It was my father who made this cake.","alts":["It was my dad that baked this cake."],"keys":[["it was","it is"],["father","dad"],["who made","that made","who baked","that baked"]],"why":"It was + 人 + who 〜。"},
+  {"k":"write","ja":"私が東京に引っ越したのは2010年でした。(It で始めて)","model":"It was in 2010 that I moved to Tokyo.","alts":["It was 2010 that I moved to Tokyo."],"keys":[["it was"],["2010","twenty ten","two thousand ten"],["that i moved"]],"why":"時(in 2010)を It was 〜 that で強調します。"},
+  {"k":"meaning","en":"It was not until I got home that I noticed my mistake.","c":["家に帰る前に、まちがいに気づきました","家に帰らなかったので、まちがいに気づきませんでした","家に帰って初めて、自分のまちがいに気づきました","家に帰ってもまちがいに気づきませんでした"],"a":2,"why":"It was not until A that B = AしてはじめてB。"}
+ ]},
+{"id":"s-h3-03","g":"高3","t":"省略と挿入","sub":"言わなくてもわかる部分は省き、ひと言をはさむ",
+ "pts":["時・条件の節では <b>主語 + be動詞</b> を省けます。When (I was) young / <span class=\"mk\">if necessary</span> / if possible","くり返しになる動詞は省略: I wanted to go, but I couldn't (go). / I'd love to (come).","<b>挿入</b>: , I think, / , however, などはカッコに入れて読みます。","関係詞の中にも入ります: the man <b>who I think</b> can help you"],
+ "ex":[{"en":"When young, he lived in Hokkaido.","ja":"若いころ、彼は北海道に住んでいました。"},{"en":"Call me if necessary.","ja":"必要なら電話してください。"},{"en":"This is the man who I think can help you.","ja":"こちらが、あなたを助けてくれると私が思う人です。"}],
+ "link":"g24",
+ "q":[
+  {"k":"fill","s":"While ____ in London, I visited many museums.","c":["staying","stayed","stay","to stay"],"a":0,"why":"While (I was) staying の I was を省いた形。"},
+  {"k":"fill","s":"Please fix the errors, if ____.","c":["some","any","none","much"],"a":1,"why":"if any = もしあれば。"},
+  {"k":"fill","s":"Would you like to come with us? — Yes, I'd love ____.","c":["for","of","to","so"],"a":2,"why":"I'd love to (come) の come を省き、to だけ残します。"},
+  {"k":"fill","s":"She is the person who ____ will win the prize.","c":["think I","do I think","I think she","I think"],"a":3,"why":"who will win の間に I think が挿入された形。"},
+  {"k":"fill","s":"When ____, I often played in this river.","c":["a child","child","childhood","children"],"a":0,"why":"When (I was) a child の I was を省いた形。"},
+  {"k":"order","ja":"必要なら電話してください。","en":"Call me if necessary."},
+  {"k":"order","ja":"その計画は、私が思うに、うまくいくでしょう。","en":"The plan, I think, will work."},
+  {"k":"write","ja":"できれば、明日までにその報告書を送ってください。","model":"Please send the report by tomorrow if possible.","alts":["If possible, please send me the report by tomorrow."],"keys":[["if possible","if you can"],["send"],["by tomorrow"]],"why":"if (it is) possible の省略形。"},
+  {"k":"write","ja":"私は行きたかったけれど、行けませんでした。","model":"I wanted to go, but I couldn't.","alts":["I wanted to go, but I wasn't able to."],"keys":[["wanted to"],["could not","was not able to"]],"why":"くり返しの go は省いて couldn't だけで OK。"},
+  {"k":"meaning","en":"If asked, I will explain the plan.","c":["計画を説明するように頼みます","計画についてたずねるつもりです","説明されても、計画がわかりません","たずねられたら、その計画を説明します"],"a":3,"why":"If (I am) asked = たずねられたら。"}
+ ]},
+{"id":"s-h3-04","g":"高3","t":"否定の表現(部分否定・二重否定・no longer など)","sub":"「全部ではない」「もう〜ない」を正しく読む",
+ "pts":["<b>部分否定</b>: not all / not always / not necessarily = すべて(いつも・必ず)〜というわけではない","<b>全体否定</b>: none / never / not 〜 at all = まったく〜ない","<b>二重否定</b>: <span class=\"mk\">never 〜 without -ing</span> = 〜すれば必ず…する","<b>no longer</b> = もはや〜ない。<b>far from</b> 〜 = 決して〜ではない"],
+ "ex":[{"en":"Not all students like math.","ja":"すべての生徒が数学を好きなわけではありません。"},{"en":"I never see this photo without thinking of my grandfather.","ja":"この写真を見ると、必ず祖父のことを思い出します。"},{"en":"He no longer works here.","ja":"彼はもうここでは働いていません。"}],
+ "q":[
+  {"k":"fill","s":"Rich people are not ____ happy.","c":["no","always","never","none"],"a":1,"why":"not always = いつも〜とは限らない(部分否定)。"},
+  {"k":"fill","s":"She ____ lives in this town. She moved to Osaka last year.","c":["not longer","any longer","no longer","no more than"],"a":2,"why":"no longer = もはや〜ない。"},
+  {"k":"fill","s":"We never meet ____ talking about music.","c":["with","by","for","without"],"a":3,"why":"never A without B = Aすると必ずBする(二重否定)。"},
+  {"k":"fill","s":"____ of my friends came to the party, so I was sad.","c":["None","No","Nothing","Not"],"a":0,"why":"None of 〜 = 〜のだれも…ない。"},
+  {"k":"fill","s":"That's not ____ true. It depends on the situation.","c":["hardly","necessarily","never","rarely"],"a":1,"why":"not necessarily = 必ずしも〜ではない(部分否定)。"},
+  {"k":"order","ja":"全員がその計画に賛成しているわけではありません。","en":"Not everyone agrees with the plan."},
+  {"k":"order","ja":"私はもう彼を待てません。","en":"I can no longer wait for him."},
+  {"k":"write","ja":"すべての生徒がその問題を解けたわけではありません。","model":"Not all the students could solve the problem.","alts":["Not every student was able to solve the problem."],"keys":[["not all","not every"],["student*"],["solve*","answer*"]],"why":"部分否定は not all / not every。"},
+  {"k":"write","ja":"彼はもうここには住んでいません。","model":"He no longer lives here.","alts":["He doesn't live here anymore."],"keys":[["no longer","anymore","any longer"],["live*"],["here"]],"why":"no longer = not 〜 anymore。"},
+  {"k":"meaning","en":"This book is far from easy.","c":["この本はとてもやさしいです","この本は遠くで買いました","この本は決してやさしくありません","この本はまあまあやさしいです"],"a":2,"why":"far from 〜 = 〜からほど遠い → 決して〜ではない。"}
+ ]},
+{"id":"s-h3-05","g":"高3","t":"同格の that","sub":"「〜という」名詞の中身を that で説明する",
+ "pts":["<b>名詞 + that + 完全な文</b> = 「〜という」名詞。The fact that he lied = 彼がうそをついたという事実","よく使う名詞: fact / news / idea / hope / chance / rumor / belief など。","関係代名詞の that は後ろに<b>欠け</b>がある。同格の that は後ろが<span class=\"mk\">完全な文</span>。","「〜かどうかという」なら <b>whether</b> も使えます。"],
+ "ex":[{"en":"I heard the news that she got married.","ja":"彼女が結婚したという知らせを聞きました。"},{"en":"The fact that he lied surprised everyone.","ja":"彼がうそをついたという事実に、みんな驚きました。"},{"en":"There is a chance that it will snow tonight.","ja":"今夜は雪が降る可能性があります。"}],
+ "link":"g14",
+ "q":[
+  {"k":"fill","s":"I was surprised by the news ____ our team had won.","c":["that","which","what","when"],"a":0,"why":"後ろが完全な文なので「〜という知らせ」の同格 that。"},
+  {"k":"fill","s":"The idea ____ we should work from home is popular.","c":["which","that","what","whose"],"a":1,"why":"we should work from home は完全な文なので同格の that。"},
+  {"k":"fill","s":"I agree with the opinion ____ students need more sleep.","c":["what","which","that","who"],"a":2,"why":"「〜という意見」。後ろが完全な文なので that。"},
+  {"k":"fill","s":"The fact ____ she passed the exam made her parents happy.","c":["what","which","whose","that"],"a":3,"why":"The fact that 〜 = 〜という事実。"},
+  {"k":"fill","s":"There is some doubt ____ he will come.","c":["whether","what","which","who"],"a":0,"why":"doubt whether 〜 = 〜かどうかという疑い。"},
+  {"k":"order","ja":"早めに始めるという考えが気に入っています。","en":"I like the idea that we start early."},
+  {"k":"order","ja":"彼が勝ったという知らせに、私たちは驚きました。","en":"The news that he won surprised us."},
+  {"k":"write","ja":"彼が会社をやめるといううわさを聞きました。","model":"I heard a rumor that he is leaving the company.","alts":["I heard the rumor that he would quit the company."],"keys":[["rumor that","rumors that"],["quit*","leav*","resign*"],["company","job","firm"]],"why":"a rumor that 〜 = 〜といううわさ。"},
+  {"k":"write","ja":"彼女がうそをついたという事実は変わりません。","model":"The fact that she lied will not change.","alts":["The fact that she lied doesn't change."],"keys":[["fact that"],["lied","told a lie","was lying"],["change*","remain*"]],"why":"The fact that 〜 = 〜という事実。"},
+  {"k":"meaning","en":"We lost hope that the train would come on time.","c":["電車が時間どおりに来たので安心しました","電車が時間どおりに来るという望みを失いました","電車に乗る望みがかないました","電車が遅れるといううわさを聞きました"],"a":1,"why":"hope that 〜 = 〜という望み。lost hope = 望みを失った。"}
+ ]},
+{"id":"s-h3-06","g":"高3","t":"重要な動詞の語法","sub":"動詞ごとの決まった形をおぼえる",
+ "pts":["<b>suggest / demand / insist / recommend + that + 主語 + 動詞の原形</b>(should が省かれた形)。主語が he でも原形。","<span class=\"mk\">remind A of B</span> = AにBを思い出させる","<b>prevent / keep / stop A from -ing</b> = Aが〜するのをさまたげる","<b>provide A with B</b> = AにBを与える、<b>rob A of B</b> = AからBを奪う"],
+ "ex":[{"en":"The doctor suggested that he rest for a week.","ja":"医者は彼に1週間休むようにすすめました。"},{"en":"This song reminds me of my school days.","ja":"この歌を聞くと、学生時代を思い出します。"},{"en":"The rain prevented us from playing baseball.","ja":"雨のせいで、私たちは野球ができませんでした。"}],
+ "link":"g01",
+ "q":[
+  {"k":"fill","s":"My boss suggested that I ____ a break.","c":["takes","take","taking","to take"],"a":1,"why":"suggest that + 主語 + 動詞の原形。"},
+  {"k":"fill","s":"The customer demanded that the manager ____ to her.","c":["speaking","to speak","speak","speaks"],"a":2,"why":"demand that + 主語 + 原形。主語が3人称単数でも speak。"},
+  {"k":"fill","s":"This picture reminds me ____ my trip to Hawaii.","c":["from","with","for","of"],"a":3,"why":"remind A of B = AにBを思い出させる。"},
+  {"k":"fill","s":"The noise kept me ____ sleeping.","c":["from","of","with","to"],"a":0,"why":"keep A from -ing = Aが〜できないようにする。"},
+  {"k":"fill","s":"The school provides students ____ free lunch.","c":["for","with","of","to"],"a":1,"why":"provide A with B = AにBを与える。"},
+  {"k":"order","ja":"ホテルは私たちにタオルを用意してくれました。","en":"The hotel provided us with towels."},
+  {"k":"order","ja":"彼は私たちが早く出発することを提案しました。","en":"He suggested that we leave early."},
+  {"k":"write","ja":"医者は私に、もっと野菜を食べるようにすすめました。(suggest を使って)","model":"The doctor suggested that I eat more vegetables.","alts":["The doctor recommended that I eat more vegetables."],"keys":[["suggested that i eat","suggested that i should eat","suggested i eat","recommended that i eat","recommended that i should eat","recommended i eat"],["more"],["vegetables","veggies"]],"why":"suggest that + 主語 + 原形(eat)。"},
+  {"k":"write","ja":"騒音のせいで、私は勉強に集中できませんでした。(The noise を主語に)","model":"The noise kept me from concentrating on my studies.","alts":["The noise prevented me from focusing on my studies."],"keys":[["kept me from","prevented me from","stopped me from"],["concentrat*","focus*","studying"]],"why":"keep / prevent A from -ing。"},
+  {"k":"meaning","en":"The thief robbed her of her bag.","c":["どろぼうは彼女にバッグを返しました","彼女はどろぼうのバッグを奪いました","どろぼうは彼女からバッグを奪いました","どろぼうはバッグを彼女に売りました"],"a":2,"why":"rob A of B = AからBを奪う。"}
+ ]},
+{"id":"s-h3-07","g":"高3","t":"前置詞・群前置詞の重要表現","sub":"2〜3語で1つの前置詞になる表現",
+ "pts":["<b>because of / due to</b> = 〜のために(原因)、<b>thanks to</b> = 〜のおかげで","<b>despite / in spite of</b> = 〜にもかかわらず。<span class=\"mk\">despite of</span> とは言いません。","<b>instead of</b> = 〜の代わりに、<b>in addition to</b> = 〜に加えて","<b>according to</b> = 〜によると。後ろは名詞(文なら接続詞を使う)。"],
+ "ex":[{"en":"The game was canceled because of the rain.","ja":"雨のため、試合は中止になりました。"},{"en":"Despite the cold, we went swimming.","ja":"寒かったにもかかわらず、私たちは泳ぎに行きました。"},{"en":"According to the weather report, it will snow tomorrow.","ja":"天気予報によると、明日は雪が降ります。"}],
+ "link":"g18",
+ "q":[
+  {"k":"fill","s":"____ the heavy traffic, we arrived on time.","c":["Despite","Because of","Thanks to","Instead of"],"a":0,"why":"渋滞なのに時間どおり着いた → 〜にもかかわらず = Despite。"},
+  {"k":"fill","s":"____ the news, the train will be delayed.","c":["Instead of","According to","In spite of","Despite"],"a":1,"why":"情報の出どころを言うときは According to(〜によると)。"},
+  {"k":"fill","s":"I'll have tea ____ coffee today.","c":["because of","according to","instead of","thanks to"],"a":2,"why":"コーヒーの代わりに紅茶 = instead of。"},
+  {"k":"fill","s":"The flight was canceled ____ the storm.","c":["despite","instead of","in addition to","due to"],"a":3,"why":"欠航の原因は嵐 = due to(〜のために)。"},
+  {"k":"fill","s":"In spite ____ the rain, they played soccer.","c":["for","of","with","from"],"a":1,"why":"in spite of = 〜にもかかわらず。"},
+  {"k":"order","ja":"嵐のせいで、私たちは家にいました。","en":"We stayed home because of the storm."},
+  {"k":"order","ja":"英語に加えて、彼女はスペイン語を話します。","en":"In addition to English, she speaks Spanish."},
+  {"k":"write","ja":"雨にもかかわらず、彼らは試合を続けました。","model":"Despite the rain, they continued the game.","alts":["In spite of the rain, they kept playing the game."],"keys":[["despite","in spite of","even though it"],["rain*"],["continu*","kept playing","went on","carried on","played"]],"why":"despite / in spite of + 名詞。"},
+  {"k":"write","ja":"天気予報によると、明日は雪が降ります。","model":"According to the weather forecast, it will snow tomorrow.","alts":["According to the weather report, it's going to snow tomorrow."],"keys":[["according to"],["snow*"],["tomorrow"]],"why":"according to + 名詞 = 〜によると。"},
+  {"k":"meaning","en":"Thanks to your advice, I passed the interview.","c":["あなたのアドバイスのおかげで、面接に合格しました","あなたのアドバイスにもかかわらず、面接に落ちました","面接に合格したので、あなたにアドバイスしました","あなたのアドバイスの代わりに、面接を受けました"],"a":0,"why":"thanks to 〜 = 〜のおかげで。"}
+ ]},
+{"id":"s-h3-08","g":"高3","t":"長い文の構造をつかむ(長い主語、SVOC の見抜き、挿入句)","sub":"まず本当の動詞を探す",
+ "pts":["長い文は<b>まず本当の動詞(V)を探す</b>。その前までが主語のカタマリです。","関係詞・分詞・前置詞句が名詞を<b>後ろから説明</b>して主語が長くなります。The man <span class=\"mk\">standing by the door</span> is 〜","<b>find / make / keep + O + C</b> は「O が C だ」の関係。C には形容詞が来ます。","コンマではさまれた挿入句はカッコに入れて、いったん飛ばして読みます。"],
+ "ex":[{"en":"The book that I bought yesterday is very interesting.","ja":"私が昨日買った本はとてもおもしろいです。"},{"en":"People living in big cities often feel stressed.","ja":"大都市に住む人は、よくストレスを感じます。"},{"en":"I found the movie boring.","ja":"その映画はたいくつだと思いました。"}],
+ "link":"g01",
+ "q":[
+  {"k":"fill","s":"The students who live near the school ____ to school.","c":["walk","walks","walking","to walk"],"a":0,"why":"主語は The students(複数)。who 〜 school は説明なので walk。"},
+  {"k":"fill","s":"The box on the shelves ____ heavy.","c":["are","is","be","being"],"a":1,"why":"主語は The box(単数)。on the shelves は説明なので is。"},
+  {"k":"fill","s":"What he told me ____ true.","c":["were","are","was","being"],"a":2,"why":"What he told me(彼が私に言ったこと)が1つの主語なので was。"},
+  {"k":"fill","s":"The news made everyone ____.","c":["happily","happiness","to happy","happy"],"a":3,"why":"make + O + C。C は形容詞 happy。"},
+  {"k":"fill","s":"Learning a new language ____ a lot of time.","c":["take","takes","taking","to take"],"a":1,"why":"動名詞のカタマリが主語なので3人称単数 takes。"},
+  {"k":"order","ja":"ドアのそばに立っている男性は私のおじです。","en":"The man standing by the door is my uncle."},
+  {"k":"order","ja":"窓を開けたままにしておいてください。","en":"Please keep the window open."},
+  {"k":"write","ja":"私が昨日会った女性は医者です。","model":"The woman I met yesterday is a doctor.","alts":["The woman who I met yesterday is a doctor."],"keys":[["woman i met","woman that i met","woman who i met","woman whom i met","lady i met"],["yesterday"],["is a doctor"]],"why":"The woman (who) I met yesterday までが長い主語、動詞は is。"},
+  {"k":"write","ja":"その知らせを聞いて、私たちは悲しくなりました。(The news を主語に)","model":"The news made us sad.","alts":["The news made us feel sad."],"keys":[["news"],["made us sad","made us feel sad","made us unhappy","made us upset"]],"why":"make + O + C = O を C にする。"},
+  {"k":"meaning","en":"The idea of working abroad that she talked about sounds exciting.","c":["彼女は海外で働くことについて話すのが好きです","彼女が話していた海外で働くという考えは、わくわくするものに聞こえます","海外で働く人たちは、彼女の考えにわくわくしました","彼女は海外の仕事をやめたいと話しました"],"a":1,"why":"主語は The idea 〜 talked about、動詞は sounds。"}
+ ]}
+];
+
 // ===== speech: 読み上げ(speechSynthesis)と音声認識(SpeechRecognition) =====
 const TTS={voices:[],ready:false};
 function loadVoices(){if(!('speechSynthesis'in window))return;TTS.voices=speechSynthesis.getVoices().filter(v=>/^en[-_]/i.test(v.lang));TTS.ready=TTS.voices.length>0}
@@ -3731,7 +4596,10 @@ function scoreSpeech(expected,alts){
 function wordHit(w,alt){return alt.endsWith('*')?w.startsWith(alt.slice(0,-1)):w===alt}
 function hasSeq(words,alt){const a=String(alt).toLowerCase().split(/\s+/).filter(Boolean);
  for(let i=0;i+a.length<=words.length;i++){let ok=true;for(let k=0;k<a.length;k++)if(!wordHit(words[i+k],a[k])){ok=false;break}if(ok)return true}return false}
-function keysOk(text,keys){const w=normWords(text);const hit=(keys||[]).map(g=>g.some(alt=>hasSeq(w,alt)));return {ok:hit.every(Boolean),hit,ratio:hit.length?hit.filter(Boolean).length/hit.length:1}}
+// it's / that's / he's などは「its」と「it is」の両方の形で照合する(どちらで書かれたキーでも一致するように)
+const SUBJ_S=/\b(it|that|there|what|he|she|here|where|who|how)['’]s\b/gi;
+function keysOk(text,keys){const w=normWords(text);const t2=String(text).replace(SUBJ_S,'$1 is').replace(/\blet['’]s\b/gi,'let us');const w2=t2!==text?normWords(t2):null;
+ const hit=(keys||[]).map(g=>g.some(alt=>hasSeq(w,alt)||(w2&&hasSeq(w2,alt))));return {ok:hit.every(Boolean),hit,ratio:hit.length?hit.filter(Boolean).length/hit.length:1}}
 function simScore(text,cands){// 模範解答との文字の一致度(0〜100)。発音の良さではない
  const hw=normWords(text);let best=0;for(const c of cands){const ew=normWords(c);const [l]=lcsMatch(ew,hw);best=Math.max(best,Math.round(200*l/(ew.length+hw.length||1)))}return best}
 
@@ -3763,14 +4631,14 @@ const DEF={schema:SCHEMA,xp:0,correct:0,answered:0,maxCombo:0,streak:0,last:'',d
  tc:{p2:[0,0],p3:[0,0],p5:[0,0],p6:[0,0],p7:[0,0]},miss:[],
  // --- schema 2 で追加 ---
  ph:{},ins:{},insLv:1,insAuto:true,lis:{},lrev:[],sh:{},shSaved:[],weak:[],qst:{},log:[],days:{},
- lesson:null,themes:[],dq:null,wk:null,passive:0,lastSeen:'',qMode:'auto',
+ lesson:null,themes:[],dq:null,wk:null,passive:0,lastSeen:'',qMode:'auto',sch:{},schG:{},schDiag:null,
  ai:{url:'',token:''},
  set:{accent:'en-US',rate:1,theme:'auto',showJa:true,hideEn:false,voice:''}};
 let LOAD_NOTE='';
 function migrate(s){// 古い記録を新しい形にそろえる(足りない項目を補うだけで、既存の値は消さない)
  const o={...structuredClone(DEF),...s};
  o.set={...DEF.set,...(s.set||{})};o.tc={...DEF.tc,...(s.tc||{})};o.daily={...DEF.daily,...(s.daily||{})};o.ai={...DEF.ai,...(s.ai||{})};
- ['ph','ins','lis','sh','qst','days','voc','badges','gStars','gRead','gBuild','tStars'].forEach(k=>{if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k]))o[k]={}});
+ ['ph','ins','lis','sh','qst','days','voc','badges','gStars','gRead','gBuild','tStars','sch','schG'].forEach(k=>{if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k]))o[k]={}});
  ['lrev','shSaved','weak','log','miss','themes'].forEach(k=>{if(!Array.isArray(o[k]))o[k]=[]});
  if(!s.schema||s.schema<2){
   // schema 1 → 2: 単語の箱は「見ただけ」で上がっていた分を考慮し、箱5は箱4に下げる(次の復習で確認)
@@ -3838,7 +4706,9 @@ const BADGES=[
  {id:'stg4',n:'最終ステージに到達',s:'最終<br>ステージ',ok:()=>typeof stageOpen==='function'&&stageOpen(4)},
  {id:'sh50',n:'シャドーイング 50 回',s:'影50',ok:()=>Object.values(S.sh).reduce((a,x)=>a+(x.n||0),0)>=50},
  {id:'over5',n:'苦手を 5 つ克服',s:'克服',ok:()=>(S.overcome||0)>=5},
- {id:'les1',n:'今日のレッスン 完了',s:'レッスン',ok:()=>!!(S.lesson&&S.lesson.done)}];
+ {id:'les1',n:'今日のレッスン 完了',s:'レッスン',ok:()=>!!(S.lesson&&S.lesson.done)},
+ {id:'schJ',n:'中学英語 全単元クリア',s:'中学<br>修了',ok:()=>typeof SCHOOL!=='undefined'&&SCHOOL.filter(u=>u.g[0]==='中').every(u=>(S.sch||{})[u.id]>=1)},
+ {id:'schH',n:'高校英語 全単元クリア',s:'高校<br>修了',ok:()=>typeof SCHOOL!=='undefined'&&SCHOOL.filter(u=>u.g[0]==='高').every(u=>(S.sch||{})[u.id]>=1)}];
 function checkBadges(){BADGES.forEach(b=>{if(!S.badges[b.id]&&b.ok()){S.badges[b.id]=today();setTimeout(()=>toast(`スタンプ獲得:${b.n}`),400)}})}
 function renderChip(){const L=lvOf(S.xp),b=lvBase(L),nx=lvBase(L+1);document.getElementById('chip').innerHTML=`<span class="lv">Lv.${L}</span><span class="xpbar" title="次のレベルまで ${nx-S.xp} XP"><span style="width:${(S.xp-b)/(nx-b)*100}%"></span></span><span class="lv xpt">${S.xp} XP</span>`}
 
@@ -3935,7 +4805,7 @@ function metrics(since){
   produce:sp.length?sp.filter(e=>e.ok&&e.f&&!e.h).length/sp.length:null,
   speed:median(sp.filter(e=>e.ms>0).map(e=>e.ms)),
   retain:phs.length?phs.filter(p=>p.b>=4).length/phs.length:null,
-  grammar:rate(last(['gram','p5','p6'],80)),
+  grammar:rate(last(['gram','p5','p6','sch'],80)),
   review:rvDue?rvDone/rvDue:null,
   nohint:sp.length?sp.filter(e=>!e.h).length/sp.length:null,
   nSpeak:sp.length};
@@ -4180,6 +5050,7 @@ VIEWS.home=function(app){
   <div class="modes">
    <button class="mode" data-go='{"name":"speak"}'><span class="ic">${IC.talk}</span><span><span class="tt">英会話コース</span><span class="tg">瞬間英会話・フレーズ復習・耳から英語・シャドーイング・会話クエスト・AI会話</span></span></button>
    <button class="mode" data-go='{"name":"toeicc"}'><span class="ic">${IC.test}</span><span><span class="tt">TOEIC対策コース</span><span class="tg">文法・単語・TOEIC形式(Part 2・3・5・6・7)</span></span></button>
+   <button class="mode" data-go='{"name":"school"}' style="grid-column:1/-1"><span class="ic" style="font-size:13px">中高</span><span><span class="tt">中1〜高3 英語の総復習</span><span class="tg">学年ごとの要点と確認テスト・まとめテスト・診断テスト</span><span class="pg">${SCHOOL.filter(u=>(S.sch||{})[u.id]>=1).length} / ${SCHOOL.length} 単元</span></span></button>
   </div>
   <div class="row" style="margin-top:12px"><button class="btn ghost" data-go='{"name":"stats"}'>進み具合と苦手分析</button><button class="btn ghost" data-go='{"name":"map"}'>学習マップ</button>${S.weak.length?`<button class="btn ghost" data-go='{"name":"weak"}'>苦手リスト(${S.weak.length})</button>`:''}</div>
  </section>
@@ -4344,6 +5215,8 @@ function missToItem(r){
  if(r.t==='g'){const u=gById(r.u);const q=u&&u.q[r.i];if(!q)return null;return gramItem(u,q,r.i)}
  if(r.t==='p5'){const q=P5[r.i];if(!q)return null;return p5Item(q,r.i)}
  if(r.t==='p2'){const q=P2[r.i];if(!q)return null;return p2Item(q,r.i)}
+ if(r.t==='s'){const u=sById(r.u);const q=u&&u.q[r.i];if(!q||(q.k!=='fill'&&q.k!=='meaning'))return null;
+  return q.k==='fill'?{s:blankify(q.s),c:q.c,a:q.a,why:q.why,ref:r,label:u.g+' '+u.t,review:blankify(q.s)}:{s:esc(q.en),c:q.c,a:q.a,why:q.why,ref:r,label:u.g+' '+u.t,jaOpt:true,oneCol:true,review:esc(q.en)}}
  return null;
 }
 
@@ -4754,7 +5627,7 @@ function drillHead(title,i,n,res){return `<div class="row">${RT.lc?`<button clas
  <div class="pips">${[...Array(n)].map((_,k)=>`<i class="${k<i?(res[k]?'ok':'ng'):k===i?'cur':''}"></i>`).join('')}</div>`}
 function wireBack(app){wireGo(app);const b=app.querySelector('#dr-back');if(b)b.onclick=()=>{RT.lc&&RT.lc.leave()}}
 VIEWS.drill=function(app){const D=RT.drill;if(!D)return go({name:'home'},true);
- ({ins:insView,ph:phView,lis:lisView,sh:shView})[D.kind](app,D)};
+ ({ins:insView,ph:phView,lis:lisView,sh:shView,sch:schView})[D.kind](app,D)};
 
 function insView(app,D){
  if(D.i>=D.items.length)return insEnd(app,D);
@@ -5388,6 +6261,118 @@ async function aiFeedback(){const A=RT.ai;stopAllAudio();const turn=document.get
   ${items.length?items.map(it=>`<div class="ex" style="grid-template-columns:1fr"><div class="j">あなた:<span class="en">${esc(it.you||'')}</span></div><div class="e en"><b>${esc(it.better||'')}</b> ${it.better?sayBtn(String(it.better)):''}</div><div class="n">${esc(it.why||'')}</div></div>`).join('')+'<p class="muted">提案された言い方は苦手リストに入り、シャドーイングや復習で出てきます。</p>':'<p class="muted">言い換えの提案はありませんでした。</p>'}
   <div class="next"><button class="btn hl" id="ai-new">もう一度話す</button></div></div>`;
  wireSay(turn);turn.querySelector('#ai-new').onclick=()=>go({name:'ai'},true);
+}
+
+// ===== 中1〜高3 英語総復習 =====
+const SCHOOL=[...SCHOOL_A,...SCHOOL_B,...SCHOOL_C];
+const SG=[{k:'中1',n:'中学1年'},{k:'中2',n:'中学2年'},{k:'中3',n:'中学3年'},{k:'高1',n:'高校1年'},{k:'高2',n:'高校2年'},{k:'高3',n:'高校3年'}];
+const sById=id=>SCHOOL.find(u=>u.id===id);
+const sInG=g=>SCHOOL.filter(u=>u.g===g);
+const sStars=id=>(S.sch||{})[id]||0;
+const sDone=g=>sInG(g).filter(u=>sStars(u.id)>=1).length;
+VIEWS.school=function(app){
+ S.sch=S.sch||{};S.schG=S.schG||{};
+ const g=V.g||S.schTab||'中1';const units=sInG(g);const best=S.schG[g];
+ const diag=S.schDiag;
+ app.innerHTML=`<div class="row">${backBtn('ホーム',{name:'home'})}</div>
+ <div class="uhead"><span class="eyebrow">REVIEW 中1〜高3</span><h1>英語の総復習</h1><p>中学1年から高校3年までの文法と基本表現を、学年ごとに復習します。各単元は「要点 → 確認テスト10問(穴うめ・並べかえ・英作文・意味)」。英作文は話しても、キーボードで入力しても答えられます。</p></div>
+ <section class="sheet panel"><div class="row"><div><b>どこから始めればいい?</b><small style="display:block" class="muted">${diag?`前回の診断(${esc(diag.d)}):<b>${esc(diag.rec)}</b> からがおすすめ`:'各学年から2問ずつ、12問で目安を出します'}</small></div><span class="sp"></span><button class="btn ${diag?'ghost':'hl'}" id="sc-diag">診断テスト</button></div></section>
+ <div class="tabs" role="tablist">${SG.map(x=>`<button class="tab" role="tab" data-g="${x.k}" aria-selected="${x.k===g}">${x.k}<small>${sDone(x.k)}/${sInG(x.k).length}</small></button>`).join('')}</div>
+ <section class="sheet panel"><div class="row"><div><b>${esc(SG.find(x=>x.k===g).n)}のまとめテスト</b><small style="display:block" class="muted">この学年の単元から20問 ・ ${best!=null?'最高 '+best+'%':'まだ挑戦していません'}</small></div><span class="sp"></span><button class="btn" id="sc-gt">挑戦する</button></div></section>
+ <section class="sheet"><div class="units">${units.map((u,i)=>`<button class="unit ${sStars(u.id)>=1?'done':''}" data-go='${JSON.stringify({name:'sunit',id:u.id})}'><span class="no">${i+1}</span><span><span class="tt">${esc(u.t)}</span><span class="tg">${esc(u.sub)}</span></span>${starStr(sStars(u.id))}</button>`).join('')}</div></section>
+ <p class="foot">学年の振り分けは現行の学習指導要領と一般的な教科書の順番にもとづく目安です。教科書によって学ぶ順番がちがうことがあります(特に高校は差が大きい)。</p>`;
+ wireGo(app);
+ app.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{S.schTab=b.dataset.g;save();go({name:'school',g:b.dataset.g},true)});
+ app.querySelector('#sc-gt').onclick=()=>{const pool=units.flatMap(u=>u.q.map((q,i)=>({u,q,i})));startSchool({title:g+' まとめテスト',items:pick(pool,20),grade:g})};
+ app.querySelector('#sc-diag').onclick=()=>{const items=SG.flatMap(x=>pick(sInG(x.k).flatMap(u=>u.q.map((q,i)=>({u,q,i})).filter(o=>o.q.k==='fill'||o.q.k==='meaning')),2));startSchool({title:'診断テスト',items,diag:true})};
+};
+VIEWS.sunit=function(app){
+ const u=sById(V.id);if(!u)return go({name:'school'},true);
+ const step=V.step||0;const gu=u.link&&gById(u.link);
+ app.innerHTML=`<div class="row">${backBtn(u.g+'の単元',{name:'school',g:u.g})}</div>
+ <div class="uhead"><div class="row"><span class="gtag">${esc(u.g)}</span>${starStr(sStars(u.id))}</div><h1>${esc(u.t)}</h1></div>
+ <div class="steps" style="grid-template-columns:1fr 1fr">${['要点','確認テスト'].map((s,i)=>`<button class="step" data-s="${i}" aria-selected="${i===step}"><small>STEP ${i+1}</small>${s}${i===1&&sStars(u.id)>=1?'<span class="ck">✓</span>':''}</button>`).join('')}</div>
+ <section class="sheet panel" id="sp"></section>`;
+ wireGo(app);
+ app.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>go({name:'sunit',id:u.id,step:+b.dataset.s},true));
+ const P=app.querySelector('#sp');
+ if(step===0){P.innerHTML=`<div class="one">${esc(u.sub)}</div>
+  <div class="blk"><h3>ここだけ押さえる</h3><div class="keybox"><ul>${u.pts.map(p=>`<li>${p}</li>`).join('')}</ul></div></div>
+  <div class="blk"><h3>例文(タップで発音)</h3><div class="exs">${u.ex.map(e=>`<div class="ex">${sayBtn(e.en)}<div><div class="e en">${esc(e.en)}</div>${jaD(esc(e.ja))}</div></div>`).join('')}</div></div>
+  ${gu?`<div class="blk"><button class="btn ghost sm" data-go='${JSON.stringify({name:'gram',id:gu.id})}'>くわしい解説:${esc(gu.t)} →</button></div>`:''}
+  <div class="next"><button class="btn hl" id="nx">確認テストへ →</button></div>`;
+  wireGo(P);wireSay(P);wireJa(P);P.querySelector('#nx').onclick=()=>go({name:'sunit',id:u.id,step:1},true);
+ }else{P.innerHTML=`<div class="one">確認テスト 10問</div><p>穴うめ5問・並べかえ2問・英作文2問・意味1問。満点で星3つ、8問で星2つ、6問で星1つ。</p><div class="next"><button class="btn hl" id="go">はじめる</button></div>`;
+  P.querySelector('#go').onclick=()=>startSchool({title:u.t,items:u.q.map((q,i)=>({u,q,i})),unit:u.id})}
+};
+function startSchool(cfg){RT.drill={kind:'sch',...cfg,i:0,res:[],xp0:S.xp};go({name:'drill'})}
+function schView(app,D){
+ if(D.i>=D.items.length)return schEnd(app,D);
+ const {u,q,i:qi}=D.items[D.i];const N=D.items.length;
+ const ref={t:'s',u:u.id,i:qi};
+ app.innerHTML=`<div class="row">${backBtn(D.unit?'単元にもどる':'総復習',D.unit?{name:'sunit',id:D.unit,step:1}:{name:'school',g:u.g})}<span class="sp"></span><span class="eyebrow">${esc(D.title)}</span></div>
+ <div class="pips">${D.items.map((_,k)=>`<i class="${k<D.i?(D.res[k]?'ok':'ng'):k===D.i?'cur':''}"></i>`).join('')}</div>
+ <section class="sheet panel"><div class="qhead"><span>${esc(u.g)} ・ ${esc(u.t)} ・ ${({fill:'穴うめ',order:'並べかえ',write:'英作文',meaning:'意味'})[q.k]}</span><span>${D.i+1} / ${N}</span></div><div id="sq"></div><div id="sr"></div></section>`;
+ wireGo(app);
+ const $=s=>app.querySelector(s);
+ const done=(ok,html,weakEn,weakJa)=>{
+  D.res.push(ok);S.answered++;if(ok)S.correct++;
+  logEv({m:'sch',ok,r:u.id+':'+qi,f:q.k==='write'});
+  if(q.k==='fill'||q.k==='meaning')noteMiss(ref,ok);
+  if(!ok&&weakEn)addWeak(weakEn,weakJa,'総復習');
+  addXP(ok?(q.k==='write'?10:q.k==='order'?8:6):1);
+  $('#sr').innerHTML=`<div class="fb ${ok?'ok':'ng'}">${ok?hana:'<span class="verdict" style="font-size:30px">✕</span>'}<div><div class="verdict">${ok?'正解!':'おしい!'}</div>${html}</div></div>
+   <div class="next"><button class="btn hl" id="sn">${D.i+1<N?'つぎへ →':'結果を見る'}</button></div>`;
+  wireSay($('#sr'));$('#sn').onclick=()=>{D.i++;render();window.scrollTo({top:0})};$('#sn').scrollIntoView({block:'nearest',behavior:'smooth'})};
+ if(q.k==='fill'||q.k==='meaning'){
+  const ord=shuffle(q.c.map((_,k)=>k));
+  $('#sq').innerHTML=`<div class="q ${q.k==='fill'?'en':'en'}">${q.k==='fill'?blankify(q.s):esc(q.en)} ${q.k==='meaning'?sayBtn(q.en):''}</div>${q.k==='meaning'?'<p class="muted" style="margin-top:-8px">この英文の意味は?</p>':''}
+   <div class="opts ${q.k==='meaning'?'one-col':''}">${ord.map((k,j)=>`<button class="opt ${q.k==='fill'?'en':''}" data-i="${k}"><span class="k">${j+1}</span><span>${esc(q.c[k])}</span></button>`).join('')}</div>`;
+  wireSay($('#sq'));
+  $('#sq').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{const ok=+b.dataset.i===q.a;$('#sq').querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(+o.dataset.i===q.a)o.classList.add('ok')});if(!ok)b.classList.add('ng');
+   const full=q.k==='fill'?q.s.replace(/_{3,}/,q.c[q.a]):q.en;
+   done(ok,`<div>${esc(q.why||'')}</div><div class="tr en">${esc(full)} ${sayBtn(full)}</div>`)});
+ }else if(q.k==='order'){
+  const words=q.en.split(/\s+/);let pool=shuffle(words.map((w,k)=>({w,k})));if(pool.every((p,k)=>p.k===k)&&pool.length>1)pool.reverse();let picked=[],tries=0;
+  $('#sq').innerHTML=`<div class="bq">${esc(q.ja)}</div><div class="slot" id="slot"></div><div class="pool" id="pool">${pool.map((p,j)=>`<button class="tile" data-j="${j}">${esc(p.w)}</button>`).join('')}</div><div id="ofb"></div><div class="next"><button class="btn ghost" id="clr">やり直す</button><button class="btn hl" id="chk" disabled>答え合わせ</button></div>`;
+  const slot=$('#slot'),pe=$('#pool'),chk=$('#chk');
+  const upd=()=>{slot.innerHTML=picked.map((j,x)=>`<button class="tile" data-x="${x}">${esc(pool[j].w)}</button>`).join('');pe.querySelectorAll('.tile').forEach(t=>t.classList.toggle('used',picked.includes(+t.dataset.j)));
+   slot.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{picked.splice(+t.dataset.x,1);slot.className='slot';upd()});chk.disabled=picked.length!==words.length};
+  pe.querySelectorAll('.tile').forEach(t=>t.onclick=()=>{const j=+t.dataset.j;if(!picked.includes(j)){picked.push(j);upd()}});
+  $('#clr').onclick=()=>{picked=[];slot.className='slot';upd()};
+  chk.onclick=()=>{const s=picked.map(j=>pool[j].w).join(' ');const ok=s===q.en;
+   if(!ok&&tries<1){tries++;slot.className='slot ng';$('#ofb').innerHTML='<p class="bad">語順がちがうようです。もう一度!</p>';return}
+   slot.className='slot '+(ok?'ok':'ng');chk.disabled=true;$('#clr').disabled=true;pe.querySelectorAll('.tile').forEach(t=>t.disabled=true);$('#ofb').innerHTML='';
+   if(ok)speak(q.en);done(ok&&tries===0||ok,`<div class="en">${esc(q.en)} ${sayBtn(q.en)}</div>${tries&&ok?'<small class="muted">2回目で正解</small>':''}`,ok?null:q.en,q.ja)};
+  upd();
+ }else{// write: 話すか入力して英作文
+  $('#sq').innerHTML=`<div class="bq">${esc(q.ja)}</div><small class="muted">英語で言うか、入力してください。</small><div id="sa" style="margin-top:10px"></div>`;
+  answerBox($('#sa'),{hintHtml:`最初の言葉:<span class="en">${esc(q.model.split(' ').slice(0,2).join(' '))} …</span>`}).then(res=>{
+   if(res.text&&!res.typed){S.said++;dayRec().said++}
+   const ev=evalAnswer(res,{model:q.model,alts:q.alts,keys:q.keys});const ok=ev.meaning==='ok';$('#sa').innerHTML='';
+   done(ok,`${evalChips(ev,{note:false})}${modelBlock(q.model,q.alts,[])}${q.why?`<p class="trap">${esc(q.why)}</p>`:''}${!ok&&res.text?'<button class="btn ghost sm" id="sself">合っていたと思う</button>':''}`,q.model,q.ja);
+   const sb=$('#sself');if(sb)sb.onclick=()=>{D.res[D.res.length-1]=true;S.correct++;sb.disabled=true;sb.textContent='正解として記録しました';save()};
+  });
+ }
+}
+function schEnd(app,D){const n=D.res.length,ok=D.res.filter(Boolean).length;const r=n?ok/n:0;
+ let msg='';
+ if(!D.ended){D.ended=true;S.sch=S.sch||{};S.schG=S.schG||{};
+  if(D.unit){const st=r>=1?3:r>=.8?2:r>=.6?1:0;S.sch[D.unit]=Math.max(S.sch[D.unit]||0,st);if(st===3)confetti()}
+  if(D.grade){S.schG[D.grade]=Math.max(S.schG[D.grade]||0,Math.round(r*100))}
+  if(D.diag){// 学年ごとの正答から、最初につまずいた学年をすすめる
+   const by=SG.map(g=>{const idx=D.items.map((x,k)=>x.u.g===g.k?k:-1).filter(k=>k>=0);return {g:g.k,ok:idx.filter(k=>D.res[k]).length,n:idx.length}});
+   const weak=by.find(x=>x.ok<x.n);D.by=by;S.schDiag={d:today(),rec:weak?weak.g:'高3',by};}
+  checkBadges();save()}
+ if(D.diag)msg=`<p>おすすめのスタート:<b>${esc(S.schDiag.rec)}</b></p><div class="row" style="justify-content:center">${D.by.map(x=>`<span class="chip ${x.ok===x.n?'good':''}"><small>${x.g}</small>${x.ok}/${x.n}</span>`).join('')}</div>`;
+ const st=r>=1?3:r>=.8?2:r>=.6?1:0;
+ app.innerHTML=`<div class="row">${backBtn('総復習',{name:'school',g:D.diag?S.schDiag.rec:(D.grade||(D.items[0]&&D.items[0].u.g))})}</div>
+ <section class="sheet result"><div class="eyebrow">${esc(D.title)}</div><div class="big" style="margin-top:10px">${ok}<small style="font-size:22px"> / ${n}</small></div>
+ ${D.unit?`<div class="rst">${[0,1,2].map(i=>`<span class="${i<st?'on':''}" style="animation-delay:${.15+i*.18}s">★</span>`).join('')}</div>`:''}${msg}
+ <div class="gain"><span>獲得 <b>${S.xp-D.xp0}</b> XP</span></div>
+ <div class="row" style="justify-content:center">${D.unit?`<button class="btn" id="again">${IC.redo}もう一度</button>`:''}<button class="btn hl" data-go='${JSON.stringify({name:'school',g:D.diag?S.schDiag.rec:(D.grade||D.items[0].u.g)})}'>単元一覧へ</button></div></section>
+ ${D.items.some((x,k)=>!D.res[k])?`<section class="sheet panel"><h3 class="eyebrow">まちがえた問題</h3>${D.items.map((x,k)=>D.res[k]?'':`<div class="ex" style="grid-template-columns:1fr"><div class="e en">${esc(x.q.k==='fill'?x.q.s.replace(/_{3,}/,'['+x.q.c[x.q.a]+']'):x.q.k==='meaning'?x.q.en+' → '+x.q.c[x.q.a]:x.q.k==='order'?x.q.en:x.q.model)}</div><div class="j">${esc(x.q.why||x.q.ja||'')}</div></div>`).join('')}</section>`:''}`;
+ wireGo(app);const a=app.querySelector('#again');if(a)a.onclick=()=>{const u=sById(D.unit);startSchool({title:u.t,items:u.q.map((q,i)=>({u,q,i})),unit:u.id})};
 }
 
 // ===== main =====

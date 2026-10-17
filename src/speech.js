@@ -94,7 +94,10 @@ function scoreSpeech(expected,alts){
 function wordHit(w,alt){return alt.endsWith('*')?w.startsWith(alt.slice(0,-1)):w===alt}
 function hasSeq(words,alt){const a=String(alt).toLowerCase().split(/\s+/).filter(Boolean);
  for(let i=0;i+a.length<=words.length;i++){let ok=true;for(let k=0;k<a.length;k++)if(!wordHit(words[i+k],a[k])){ok=false;break}if(ok)return true}return false}
-function keysOk(text,keys){const w=normWords(text);const hit=(keys||[]).map(g=>g.some(alt=>hasSeq(w,alt)));return {ok:hit.every(Boolean),hit,ratio:hit.length?hit.filter(Boolean).length/hit.length:1}}
+// it's / that's / he's などは「its」と「it is」の両方の形で照合する(どちらで書かれたキーでも一致するように)
+const SUBJ_S=/\b(it|that|there|what|he|she|here|where|who|how)['’]s\b/gi;
+function keysOk(text,keys){const w=normWords(text);const t2=String(text).replace(SUBJ_S,'$1 is').replace(/\blet['’]s\b/gi,'let us');const w2=t2!==text?normWords(t2):null;
+ const hit=(keys||[]).map(g=>g.some(alt=>hasSeq(w,alt)||(w2&&hasSeq(w2,alt))));return {ok:hit.every(Boolean),hit,ratio:hit.length?hit.filter(Boolean).length/hit.length:1}}
 function simScore(text,cands){// 模範解答との文字の一致度(0〜100)。発音の良さではない
  const hw=normWords(text);let best=0;for(const c of cands){const ew=normWords(c);const [l]=lcsMatch(ew,hw);best=Math.max(best,Math.round(200*l/(ew.length+hw.length||1)))}return best}
 
