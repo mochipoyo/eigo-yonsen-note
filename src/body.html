@@ -341,6 +341,63 @@ input[type=range]{accent-color:var(--blue)}
 .cd span{position:absolute;top:2px;left:4px;font-family:var(--f-num);font-size:10px;color:var(--muted)}
 code{font-family:var(--f-num);font-size:.9em;background:color-mix(in srgb,var(--marker-hl) 40%,transparent);padding:0 4px;border-radius:4px}
 @media (max-width:520px){.micbig{width:84px;height:84px}.abig{flex-direction:row}.qplay{gap:10px}.cal{grid-template-columns:repeat(6,1fr)}.next .btn{flex:1;justify-content:center}}
+
+/* ---- うごかす英語ワールド ---- */
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.wcardsel{border:1.5px solid var(--line);background:var(--sheet);border-radius:var(--r);padding:0;overflow:hidden;text-align:left;display:flex;flex-direction:column;transition:transform .12s,border-color .12s}
+.wcardsel:hover{transform:translateY(-2px);border-color:var(--ink)}
+.wth{aspect-ratio:5/3;background:#f6efe2;overflow:hidden}.wthumb{width:100%;height:100%;display:block}
+.wcap{display:flex;align-items:center;gap:8px;padding:8px 12px 0}.wcap .no{font-family:var(--f-num);font-size:12px;color:var(--muted)}
+.wcardsel>small{padding:0 12px 10px}
+.wtop{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.wmodes .tab{min-width:0}
+.whint{font-size:13px;color:var(--muted);margin:0}
+.wstage{border-radius:16px;overflow-x:auto;overflow-y:hidden;border:2px solid var(--ink);background:#f6efe2;-webkit-overflow-scrolling:touch}
+.wsvg{display:block;width:100%;min-width:680px;height:auto;touch-action:pan-x pan-y;user-select:none;-webkit-user-select:none}
+.went{cursor:pointer}.went.k-person,.went.k-animal,.went.k-prop{cursor:grab;touch-action:none}
+.went.dragging{cursor:grabbing;filter:drop-shadow(0 8px 6px rgba(0,0,0,.25))}
+.went.sel>g,.went.sel>.pr{filter:drop-shadow(0 0 3px #fff) drop-shadow(0 0 4px #2a63c4)}
+.went.tgt{filter:drop-shadow(0 0 6px #f5c542) drop-shadow(0 0 2px #f5c542)}
+.walking .lgB,.walking .lgF,.walking .armF,.walking .armB,.running .lgB,.running .lgF,.running .armF,.running .armB{transform-box:fill-box;transform-origin:50% 0}
+.walking .lgB,.walking .armF{animation:wlk .45s ease-in-out infinite alternate}.walking .lgF,.walking .armB{animation:wlk .45s ease-in-out infinite alternate-reverse}
+.running .lgB,.running .armF{animation:run .26s ease-in-out infinite alternate}.running .lgF,.running .armB{animation:run .26s ease-in-out infinite alternate-reverse}
+.walking>*:not(ellipse),.running>*:not(ellipse){animation:bobw .45s ease-in-out infinite alternate}
+@keyframes wlk{from{transform:rotate(-20deg)}to{transform:rotate(20deg)}}
+@keyframes run{from{transform:rotate(-34deg)}to{transform:rotate(34deg)}}
+@keyframes bobw{to{transform:translateY(-3px)}}
+.dog .dl1,.dog .dl2,.cat .dl1,.cat .dl2{transform-box:fill-box;transform-origin:50% 0}
+.dog.walking .dl1,.cat.walking .dl1,.dog.running .dl1{animation:wlk .3s infinite alternate}.dog.walking .dl2,.cat.walking .dl2,.dog.running .dl2{animation:wlk .3s infinite alternate-reverse}
+.dog .tail{transform-box:fill-box;transform-origin:100% 100%;animation:wag .35s infinite alternate}
+@keyframes wag{from{transform:rotate(-12deg)}to{transform:rotate(14deg)}}
+.waving{transform-box:fill-box;transform-origin:50% 100%;animation:wav .4s ease-in-out infinite alternate}
+@keyframes wav{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
+.jumping{animation:jmp .42s ease-out infinite alternate}@keyframes jmp{to{transform:translateY(-26px) scale(var(--k,1))}}
+.swimming{animation:swm 1.1s ease-in-out infinite alternate}@keyframes swm{to{transform:translateY(4px)}}
+.flying .pr{animation:arc .7s ease-out}@keyframes arc{50%{transform:translateY(-90px)}}
+.steam{animation:stm 1.6s infinite}@keyframes stm{50%{opacity:.3;transform:translateY(-3px)}}
+.ring{animation:stm .5s infinite}
+.car.moving .wheel,.bike .wheel{transform-box:fill-box;transform-origin:50% 50%}.car.moving .wheel{animation:spin .5s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.wave{animation:wvv 2.4s ease-in-out infinite alternate}@keyframes wvv{to{transform:translateX(14px)}}
+.bub-in{animation:tin .25s}
+.wmenu:empty{display:none}
+.wmenu{border:1.5px solid var(--line);border-radius:14px;background:var(--sheet);padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.wmhead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.wacts{display:flex;flex-wrap:wrap;gap:8px}
+.wact{border:1.5px solid var(--ink);border-radius:12px;background:var(--sheet);padding:7px 12px;display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;box-shadow:0 2px 0 var(--ink);min-height:44px}
+.wact .en{font-weight:600;font-size:15px}.wact small{font-size:11.5px;color:var(--muted)}
+.wact:active{transform:translateY(2px);box-shadow:none}
+.wsent{border:2px solid var(--ink);border-radius:16px;background:var(--sheet);padding:14px 16px}
+.wsmain{border-bottom:2px solid var(--base);padding-bottom:2px}
+.wsmain{font-size:clamp(20px,4.6vw,28px);font-weight:600;line-height:1.35;cursor:pointer}
+.wblur{filter:blur(7px)}
+.wsx{margin-top:8px;border-top:1px dashed var(--line);padding-top:4px}
+.wsubj{display:flex;gap:4px;flex-wrap:wrap}
+.wmis{border:1.5px solid var(--line);border-radius:14px;background:var(--sheet);padding:10px 14px}
+.wmis .playbig.sm,.playbig.sm{width:44px;height:44px}.playbig.sm svg{width:20px;height:20px}
+.wok{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center}
+.wng{margin-top:6px;font-size:13px;color:var(--red)}
+.wclear{font-size:15px}
+@media (max-width:520px){.wtop{gap:6px}.wact{flex:1 1 45%}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.hana path{stroke-dashoffset:0}}
 </style>
 <header class="top"><div class="top-in">
