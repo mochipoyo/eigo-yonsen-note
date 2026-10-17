@@ -13,14 +13,14 @@ const DEF={schema:SCHEMA,xp:0,correct:0,answered:0,maxCombo:0,streak:0,last:'',d
  tc:{p2:[0,0],p3:[0,0],p5:[0,0],p6:[0,0],p7:[0,0]},miss:[],
  // --- schema 2 で追加 ---
  ph:{},ins:{},insLv:1,insAuto:true,lis:{},lrev:[],sh:{},shSaved:[],weak:[],qst:{},log:[],days:{},
- lesson:null,themes:[],dq:null,wk:null,passive:0,lastSeen:'',qMode:'auto',
+ lesson:null,themes:[],dq:null,wk:null,passive:0,lastSeen:'',qMode:'auto',sch:{},schG:{},schDiag:null,
  ai:{url:'',token:''},
  set:{accent:'en-US',rate:1,theme:'auto',showJa:true,hideEn:false,voice:''}};
 let LOAD_NOTE='';
 function migrate(s){// 古い記録を新しい形にそろえる(足りない項目を補うだけで、既存の値は消さない)
  const o={...structuredClone(DEF),...s};
  o.set={...DEF.set,...(s.set||{})};o.tc={...DEF.tc,...(s.tc||{})};o.daily={...DEF.daily,...(s.daily||{})};o.ai={...DEF.ai,...(s.ai||{})};
- ['ph','ins','lis','sh','qst','days','voc','badges','gStars','gRead','gBuild','tStars'].forEach(k=>{if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k]))o[k]={}});
+ ['ph','ins','lis','sh','qst','days','voc','badges','gStars','gRead','gBuild','tStars','sch','schG'].forEach(k=>{if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k]))o[k]={}});
  ['lrev','shSaved','weak','log','miss','themes'].forEach(k=>{if(!Array.isArray(o[k]))o[k]=[]});
  if(!s.schema||s.schema<2){
   // schema 1 → 2: 単語の箱は「見ただけ」で上がっていた分を考慮し、箱5は箱4に下げる(次の復習で確認)
@@ -88,7 +88,9 @@ const BADGES=[
  {id:'stg4',n:'最終ステージに到達',s:'最終<br>ステージ',ok:()=>typeof stageOpen==='function'&&stageOpen(4)},
  {id:'sh50',n:'シャドーイング 50 回',s:'影50',ok:()=>Object.values(S.sh).reduce((a,x)=>a+(x.n||0),0)>=50},
  {id:'over5',n:'苦手を 5 つ克服',s:'克服',ok:()=>(S.overcome||0)>=5},
- {id:'les1',n:'今日のレッスン 完了',s:'レッスン',ok:()=>!!(S.lesson&&S.lesson.done)}];
+ {id:'les1',n:'今日のレッスン 完了',s:'レッスン',ok:()=>!!(S.lesson&&S.lesson.done)},
+ {id:'schJ',n:'中学英語 全単元クリア',s:'中学<br>修了',ok:()=>typeof SCHOOL!=='undefined'&&SCHOOL.filter(u=>u.g[0]==='中').every(u=>(S.sch||{})[u.id]>=1)},
+ {id:'schH',n:'高校英語 全単元クリア',s:'高校<br>修了',ok:()=>typeof SCHOOL!=='undefined'&&SCHOOL.filter(u=>u.g[0]==='高').every(u=>(S.sch||{})[u.id]>=1)}];
 function checkBadges(){BADGES.forEach(b=>{if(!S.badges[b.id]&&b.ok()){S.badges[b.id]=today();setTimeout(()=>toast(`スタンプ獲得:${b.n}`),400)}})}
 function renderChip(){const L=lvOf(S.xp),b=lvBase(L),nx=lvBase(L+1);document.getElementById('chip').innerHTML=`<span class="lv">Lv.${L}</span><span class="xpbar" title="次のレベルまで ${nx-S.xp} XP"><span style="width:${(S.xp-b)/(nx-b)*100}%"></span></span><span class="lv xpt">${S.xp} XP</span>`}
 

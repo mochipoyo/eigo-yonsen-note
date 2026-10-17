@@ -58,7 +58,7 @@ function metrics(since){
   produce:sp.length?sp.filter(e=>e.ok&&e.f&&!e.h).length/sp.length:null,
   speed:median(sp.filter(e=>e.ms>0).map(e=>e.ms)),
   retain:phs.length?phs.filter(p=>p.b>=4).length/phs.length:null,
-  grammar:rate(last(['gram','p5','p6'],80)),
+  grammar:rate(last(['gram','p5','p6','sch'],80)),
   review:rvDue?rvDone/rvDue:null,
   nohint:sp.length?sp.filter(e=>!e.h).length/sp.length:null,
   nSpeak:sp.length};

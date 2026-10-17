@@ -12,7 +12,7 @@ function drillHead(title,i,n,res){return `<div class="row">${RT.lc?`<button clas
  <div class="pips">${[...Array(n)].map((_,k)=>`<i class="${k<i?(res[k]?'ok':'ng'):k===i?'cur':''}"></i>`).join('')}</div>`}
 function wireBack(app){wireGo(app);const b=app.querySelector('#dr-back');if(b)b.onclick=()=>{RT.lc&&RT.lc.leave()}}
 VIEWS.drill=function(app){const D=RT.drill;if(!D)return go({name:'home'},true);
- ({ins:insView,ph:phView,lis:lisView,sh:shView})[D.kind](app,D)};
+ ({ins:insView,ph:phView,lis:lisView,sh:shView,sch:schView})[D.kind](app,D)};
 
 function insView(app,D){
  if(D.i>=D.items.length)return insEnd(app,D);

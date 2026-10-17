@@ -30,6 +30,7 @@ VIEWS.home=function(app){
   <div class="modes">
    <button class="mode" data-go='{"name":"speak"}'><span class="ic">${IC.talk}</span><span><span class="tt">英会話コース</span><span class="tg">瞬間英会話・フレーズ復習・耳から英語・シャドーイング・会話クエスト・AI会話</span></span></button>
    <button class="mode" data-go='{"name":"toeicc"}'><span class="ic">${IC.test}</span><span><span class="tt">TOEIC対策コース</span><span class="tg">文法・単語・TOEIC形式(Part 2・3・5・6・7)</span></span></button>
+   <button class="mode" data-go='{"name":"school"}' style="grid-column:1/-1"><span class="ic" style="font-size:13px">中高</span><span><span class="tt">中1〜高3 英語の総復習</span><span class="tg">学年ごとの要点と確認テスト・まとめテスト・診断テスト</span><span class="pg">${SCHOOL.filter(u=>(S.sch||{})[u.id]>=1).length} / ${SCHOOL.length} 単元</span></span></button>
   </div>
   <div class="row" style="margin-top:12px"><button class="btn ghost" data-go='{"name":"stats"}'>進み具合と苦手分析</button><button class="btn ghost" data-go='{"name":"map"}'>学習マップ</button>${S.weak.length?`<button class="btn ghost" data-go='{"name":"weak"}'>苦手リスト(${S.weak.length})</button>`:''}</div>
  </section>
@@ -194,5 +195,7 @@ function missToItem(r){
  if(r.t==='g'){const u=gById(r.u);const q=u&&u.q[r.i];if(!q)return null;return gramItem(u,q,r.i)}
  if(r.t==='p5'){const q=P5[r.i];if(!q)return null;return p5Item(q,r.i)}
  if(r.t==='p2'){const q=P2[r.i];if(!q)return null;return p2Item(q,r.i)}
+ if(r.t==='s'){const u=sById(r.u);const q=u&&u.q[r.i];if(!q||(q.k!=='fill'&&q.k!=='meaning'))return null;
+  return q.k==='fill'?{s:blankify(q.s),c:q.c,a:q.a,why:q.why,ref:r,label:u.g+' '+u.t,review:blankify(q.s)}:{s:esc(q.en),c:q.c,a:q.a,why:q.why,ref:r,label:u.g+' '+u.t,jaOpt:true,oneCol:true,review:esc(q.en)}}
  return null;
 }
