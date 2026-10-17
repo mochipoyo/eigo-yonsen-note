@@ -6,7 +6,10 @@ src = root / "src"
 shell = (src / "shell.html").read_text(encoding="utf-8")
 body = (src / "body.html").read_text(encoding="utf-8")
 FILES = ["vocab1.js", "vocab2.js", "grammar1.js", "grammar2.js", "talk.js", "toeic_l.js", "toeic_r.js",
-         "speech.js", "core.js", "quiz.js", "v_home.js", "v_gram.js", "v_talk.js", "v_vocab.js", "v_toeic.js", "main.js"]
+         "d_instant.js", "d_phrases.js", "d_listen.js", "d_quests.js",
+         "speech.js", "core.js", "core2.js", "ai.js", "answer.js", "quiz.js",
+         "v_home.js", "v_gram.js", "v_talk.js", "v_vocab.js", "v_toeic.js",
+         "v_instant.js", "v_phrase.js", "v_shadow.js", "v_listen.js", "v_quest.js", "v_lesson.js", "v_ai.js", "main.js"]
 js = "\n".join((src / f).read_text(encoding="utf-8") for f in FILES)
 head_part, _, markup = body.partition("</style>")
 html = shell.replace("<!--BODY-->", head_part + "</style>").replace("</head>", "</head>\n<body>\n" + markup.strip() + "\n<script>\n" + js + "\n</script>\n</body>\n</html>\n", 1)

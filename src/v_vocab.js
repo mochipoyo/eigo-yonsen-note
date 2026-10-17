@@ -3,8 +3,13 @@
 const GAP=[0,1,3,7,16,35];
 const vState=w=>S.voc[w.w];
 function vDue(){const d=today();return VOC.filter(w=>{const s=vState(w);return s&&s.b<5&&s.due<=d}).concat(VOC.filter(w=>{const s=vState(w);return s&&s.b>=5&&s.due<=d}))}
-function vMark(w,ok){const s=S.voc[w.w]||{b:0,due:today(),n:0};s.n++;
- if(ok){s.b=Math.min(5,s.b+1);s.due=dayPlus(GAP[s.b])}else{s.b=1;s.due=dayPlus(1)}S.voc[w.w]=s}
+// kind: 'recall'(日→英で思い出せた) / 'recog'(英→日・リスニングで選べた) / 'seen'(カードを見ただけ)
+// 見ただけでは箱1まで、選べただけでは箱3まで。箱4(定着)以上は「思い出して書けた」ときだけ上がる。
+function vMark(w,ok,kind='recog'){const s=S.voc[w.w]||{b:0,due:today(),n:0};s.n++;
+ if(!ok){s.b=1;s.due=dayPlus(1)}
+ else if(kind==='seen'){if(s.b<1){s.b=1;s.due=dayPlus(1)}}
+ else{const cap=kind==='recall'?5:3;s.b=Math.min(cap,Math.max(s.b,s.b+1));if(kind!=='recall'&&s.b>3)s.b=3;s.due=dayPlus(GAP[s.b])}
+ S.voc[w.w]=s;logEv({m:'voc',ok,r:'v:'+w.w,h:kind==='seen'})}
 const PN={'名':'名詞','動':'動詞','形':'形容詞','副':'副詞','前':'前置詞','接':'接続詞','句':'フレーズ'};
 const TAGN={daily:'日常',travel:'旅行',office:'オフィス',meeting:'会議',hr:'人事・採用',sales:'営業',finance:'お金・経理',shopping:'買い物',phone:'電話',talk:'会話表現',legal:'契約・規則',logistics:'物流・発注',marketing:'マーケティング'};
 VIEWS.vocab=function(app){
@@ -12,8 +17,8 @@ VIEWS.vocab=function(app){
  const box=[0,1,2,3,4,5].map(b=>Object.values(S.voc).filter(x=>x.b===b).length);const mx=Math.max(1,...box);
  const lvc=LV.map(l=>({...l,all:VOC.filter(w=>w.lv===l.n).length,m:VOC.filter(w=>w.lv===l.n&&(vState(w)||{}).b>=4).length}));
  app.innerHTML=`
- <div class="row">${backBtn('ホーム',{name:'home'})}</div>
- <div class="uhead"><span class="eyebrow">VOCABULARY</span><h1>単語・フレーズ</h1><p>覚えた単語は「忘れかけた頃」にもう一度出てきます(1日後 → 3日後 → 1週間後 …)。何度も正解すると定着(箱4以上)。</p></div>
+ <div class="row">${backBtn('TOEIC対策コース',{name:'toeicc'})}</div>
+ <div class="uhead"><span class="eyebrow">VOCABULARY</span><h1>単語・フレーズ</h1><p>覚えた単語は「忘れかけた頃」にもう一度出てきます(1日後 → 3日後 → 1週間後 …)。カードを見ただけでは箱1まで、意味を選べただけでは箱3まで。<b>日本語から英語を思い出せたときだけ</b>定着(箱4以上)に進みます。</p></div>
  <section class="sheet panel">
   <div class="row"><span class="eyebrow">レベル</span>${lvc.map(l=>`<button class="tab" data-lv="${l.n}" aria-selected="${S.vlv===l.n}">${l.k}<small>${l.m}/${l.all}</small></button>`).join('')}</div>
   <div class="row" style="margin-top:16px">
@@ -70,13 +75,13 @@ VIEWS.vsess=function(app){
   const cd=app.querySelector('#cd');cd.onclick=()=>{cd.classList.toggle('flip');if(cd.classList.contains('flip'))speak(w.e,{g:'m'})};
   setTimeout(()=>speak(w.w),200);
   if(R.mode==='card'){
-   app.querySelector('#ok').onclick=()=>{vMark(w,true);R.ok++;addXP(2);dailyNow().v++;R.i++;render()};
+   app.querySelector('#ok').onclick=()=>{vMark(w,true,'seen');R.ok++;addXP(1);dailyNow().v++;R.i++;render()};
    app.querySelector('#ng').onclick=()=>{vMark(w,false);save();R.i++;render()};
   }else app.querySelector('#ok').onclick=()=>{R.shown=R.shown||{};R.shown[w.w]=1;render()};
   return;
  }
  // クイズ: 3種類からランダム(英→日 / 音→日 / 日→英)
- const type=R.type?.[R.i]??(R.type=R.type||{},R.type[R.i]=Math.floor(Math.random()*3));
+ const type=R.type?.[R.i]??(R.type=R.type||{},R.type[R.i]=(st&&st.b>=3)?2:Math.floor(Math.random()*3));// 箱3以上は「意味→英語」で思い出せるか確認
  const key=type===2?'w':'m';const ds=distract(w,3,key);const opts=shuffle([w,...ds]);
  const prompt=type===0?`<div class="w en" style="font-size:32px;font-weight:600">${esc(w.w)}</div><small>意味は?</small>`
   :type===1?`<button class="btn hl" id="lp">${IC.play}もう一度聞く</button><div><small>聞こえた単語の意味は?</small></div>`
@@ -95,7 +100,7 @@ VIEWS.vsess=function(app){
  app.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{if(done)return;done=true;const ok=b.dataset.w===w.w;
   app.querySelectorAll('.opt').forEach(o=>{o.disabled=true;if(o.dataset.w===w.w)o.classList.add('ok')});if(!ok)b.classList.add('ng');
   S.answered++;dailyNow().v++;
-  if(ok){S.correct++;R.ok++;R.combo++;S.maxCombo=Math.max(S.maxCombo,R.combo);if(!R.missed?.[w.w])vMark(w,true);addXP(5+Math.min(Math.max(R.combo-1,0),5))}
+  if(ok){S.correct++;R.ok++;R.combo++;S.maxCombo=Math.max(S.maxCombo,R.combo);if(!R.missed?.[w.w])vMark(w,true,type===2?'recall':'recog');addXP(5+Math.min(Math.max(R.combo-1,0),5))}
   else{R.combo=0;R.missed=R.missed||{};if(!R.missed[w.w]){R.missed[w.w]=1;vMark(w,false);R.again.push(w)}save()}
   const vf=app.querySelector('#vf');
   vf.innerHTML=`<div class="fb ${ok?'ok':'ng'}">${ok?hana:'<span class="verdict" style="font-size:34px">✕</span>'}<div><div class="verdict"><span class="en">${esc(w.w)}</span></div><div><b>${esc(w.m)}</b></div><div class="en" style="margin-top:4px">${esc(w.e)} ${sayBtn(w.e,'m')}</div><div class="tr">${esc(w.j)}</div>${ok?'':'<div class="tr">このあと、もう一度出てきます。</div>'}</div></div>

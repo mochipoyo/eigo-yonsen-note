@@ -273,6 +273,74 @@ input[type=range]{accent-color:var(--blue)}
 .jh::after{content:''}
 .note{font-size:13px;color:var(--muted);padding:10px 14px;border-radius:10px;border:1px dashed var(--line)}
 @media (max-width:520px){.chip-lv{gap:6px;font-size:12px}.xpbar{width:44px}.logo{font-size:15px}.logo i{width:24px;height:24px;font-size:11px;background:linear-gradient(to bottom,transparent 13px,var(--red) 13px 14.5px,transparent 14.5px)}.chip-lv .xpt{display:none}}
+
+/* ---- v2: 話す練習 ---- */
+.good{color:var(--green);font-weight:900}.bad{color:var(--red);font-weight:900}.muted{color:var(--muted)}
+.hint{font-size:14px;padding:10px 14px;border-radius:10px;background:color-mix(in srgb,var(--marker-hl) 55%,transparent)}
+.linkbtn{background:none;border:0;padding:0;color:var(--blue);font-weight:700;font-size:13px;text-decoration:underline}
+.abox{display:flex;flex-direction:column;gap:12px;padding:14px;border:2px solid var(--ink);border-radius:16px;background:var(--sheet)}
+.abig{display:flex;align-items:center;gap:16px}
+.abig small{display:block;color:var(--muted)}
+.micbig{width:76px;height:76px;flex:0 0 auto;border-radius:50%;border:0;background:var(--red);color:#fff;display:grid;place-items:center;box-shadow:0 4px 0 color-mix(in srgb,var(--red) 60%,#000);touch-action:manipulation}
+.micbig svg{width:32px;height:32px}
+.micbig.on{animation:pulse2 1s infinite}
+.micbig:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb,var(--red) 60%,#000)}
+.atype{display:flex;gap:8px}
+.atype input{flex:1;min-width:0;font-size:16px}
+.abtns{gap:8px}
+.timer{font-family:var(--f-num);font-size:13px;color:var(--muted)}.timer.late{color:var(--red)}
+.hintbox{padding:10px 14px;border-radius:10px;background:color-mix(in srgb,var(--marker-hl) 55%,transparent);font-size:14.5px}
+.hintbox small{font-weight:900;color:var(--blue);margin-right:6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{display:inline-flex;flex-direction:column;border:1.5px solid var(--line);border-radius:10px;padding:3px 10px;font-weight:700;font-size:14px;line-height:1.35;min-width:84px}
+.chip small{font-size:10.5px;color:var(--muted);font-weight:700}
+.chip.good{border-color:var(--green);color:var(--green)}.chip.bad{border-color:var(--red);color:var(--red)}
+.heardline{font-size:14px}
+.modelbox{margin-top:12px;padding:10px 14px;border:1.5px dashed var(--line);border-radius:12px}
+.qplay{display:flex;align-items:center;gap:14px;margin:12px 0}
+.playbig{width:60px;height:60px;flex:0 0 auto;border-radius:50%;border:2px solid var(--ink);background:var(--marker);color:var(--marker-ink);display:grid;place-items:center}
+.playbig svg{width:26px;height:26px}
+.qtext{font-size:18px;padding:8px 12px;border-left:3px solid var(--ink);margin:8px 0}
+.qja{font-size:14px;color:var(--muted);margin:0 0 8px 15px}
+.shline{padding:14px;border-radius:12px;background:linear-gradient(to bottom,transparent 30px,var(--base) 30px 31px,transparent 31px) 0 8px/100% 44px;border:1.5px solid var(--line);margin:12px 0;min-height:64px}
+.shen{font-size:clamp(18px,4.2vw,22px);line-height:1.6}
+.tg{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700}
+.tg select{border:1.5px solid var(--line);background:var(--sheet);border-radius:8px;padding:2px 6px}
+.tg input[type=range]{width:110px}
+.mode.sel{border-color:var(--ink);box-shadow:inset 0 -4px 0 var(--marker)}
+.themebar{display:flex;gap:6px;overflow-x:auto;align-items:center;padding-bottom:6px;scrollbar-width:thin}
+.themebar .eyebrow{flex:0 0 auto;margin-right:4px}
+/* home */
+.hero2{padding:20px 22px;display:flex;flex-direction:column;gap:10px}
+.startbtn{border:0;border-radius:18px;background:var(--ink);color:var(--sheet);padding:20px 22px;text-align:left;display:flex;flex-direction:column;gap:6px;box-shadow:0 5px 0 color-mix(in srgb,var(--ink) 55%,#000);transition:transform .1s}
+.startbtn:active{transform:translateY(3px);box-shadow:0 2px 0 color-mix(in srgb,var(--ink) 55%,#000)}
+.sb-main{font-family:var(--f-disp);font-size:clamp(20px,5vw,26px);font-weight:400;line-height:1.3}
+.sb-sub{font-size:13px;opacity:.8}
+.sb-bar{display:block;height:6px;border-radius:9px;background:color-mix(in srgb,var(--sheet) 25%,transparent);overflow:hidden;margin-top:4px}
+.sb-bar span{display:block;height:100%;background:var(--marker)}
+.today2{display:flex;flex-direction:column;gap:4px}
+.today2 .todo{grid-template-columns:28px 1fr auto;padding:8px 2px}
+.grow{font-size:13.5px;margin-top:6px}
+.lprog{height:10px;border-radius:9px;background:var(--grid2);overflow:hidden}.lprog span{display:block;height:100%;background:var(--green);transition:width .6s}
+.segs{display:flex;flex-direction:column;gap:8px}
+.seg{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:center;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px}
+.seg .ck{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-family:var(--f-num);font-weight:600}
+.seg.cur{border-color:var(--ink);box-shadow:inset 0 -4px 0 var(--marker)}
+.seg.done .ck{background:var(--green);border-color:var(--green);color:#fff}
+/* map */
+.map{display:flex;flex-direction:column;gap:14px}
+.stage{padding:14px 16px}
+.stage.locked{opacity:.55}
+.stno{width:40px;height:40px;border-radius:12px;background:var(--ink);color:var(--sheet);display:grid;place-items:center;font-family:var(--f-disp);font-size:20px;flex:0 0 auto}
+.unit:disabled{cursor:not-allowed}
+/* stats */
+.mets{display:flex;flex-direction:column;gap:14px;margin-top:8px}
+.met .meter{margin:4px 0}
+.cal{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;margin:10px 0 6px}
+.cd{aspect-ratio:1;border-radius:6px;border:1px solid var(--line);position:relative;background:color-mix(in srgb,var(--green) calc(var(--v)*100%),var(--sheet))}
+.cd span{position:absolute;top:2px;left:4px;font-family:var(--f-num);font-size:10px;color:var(--muted)}
+code{font-family:var(--f-num);font-size:.9em;background:color-mix(in srgb,var(--marker-hl) 40%,transparent);padding:0 4px;border-radius:4px}
+@media (max-width:520px){.micbig{width:84px;height:84px}.abig{flex-direction:row}.qplay{gap:10px}.cal{grid-template-columns:repeat(6,1fr)}.next .btn{flex:1;justify-content:center}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.hana path{stroke-dashoffset:0}}
 </style>
 <header class="top"><div class="top-in">

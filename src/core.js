@@ -6,17 +6,41 @@ const tById=id=>TALK.find(t=>t.id===id);
 const LV=[{n:1,k:'基礎',s:'〜600'},{n:2,k:'標準',s:'600〜730'},{n:3,k:'応用',s:'730〜860'},{n:4,k:'上級',s:'860〜990'}];
 const lvTag=n=>`<span class="gtag l${n}">${LV[n-1].k}</span>`;
 
-const KEY='eigo-yonsen-v1';
-const DEF={xp:0,correct:0,answered:0,maxCombo:0,streak:0,last:'',daily:{d:'',xp:0,v:0,t:0,q:0},badges:{},
+const KEY='eigo-yonsen-v1';      // 保存キーは v1 のまま(既存の学習記録を引き継ぐ)。中身のスキーマは S.schema で管理
+const SCHEMA=2;
+const DEF={schema:SCHEMA,xp:0,correct:0,answered:0,maxCombo:0,streak:0,last:'',daily:{d:'',xp:0,v:0,t:0,q:0},badges:{},
  gStars:{},gRead:{},gBuild:{},tStars:{},said:0,saidGood:0,voc:{},vlv:1,goal:2,gTab:0,tTab:0,
  tc:{p2:[0,0],p3:[0,0],p5:[0,0],p6:[0,0],p7:[0,0]},miss:[],
+ // --- schema 2 で追加 ---
+ ph:{},ins:{},insLv:1,insAuto:true,lis:{},lrev:[],sh:{},shSaved:[],weak:[],qst:{},log:[],days:{},
+ lesson:null,themes:[],dq:null,wk:null,passive:0,lastSeen:'',qMode:'auto',
+ ai:{url:'',token:''},
  set:{accent:'en-US',rate:1,theme:'auto',showJa:true,hideEn:false,voice:''}};
-let S=(()=>{try{const s=JSON.parse(localStorage.getItem(KEY));if(!s)return structuredClone(DEF);const o={...structuredClone(DEF),...s};o.set={...DEF.set,...(s.set||{})};o.tc={...DEF.tc,...(s.tc||{})};o.daily={...DEF.daily,...(s.daily||{})};return o}catch(e){return structuredClone(DEF)}})();
-const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+let LOAD_NOTE='';
+function migrate(s){// 古い記録を新しい形にそろえる(足りない項目を補うだけで、既存の値は消さない)
+ const o={...structuredClone(DEF),...s};
+ o.set={...DEF.set,...(s.set||{})};o.tc={...DEF.tc,...(s.tc||{})};o.daily={...DEF.daily,...(s.daily||{})};o.ai={...DEF.ai,...(s.ai||{})};
+ ['ph','ins','lis','sh','qst','days','voc','badges','gStars','gRead','gBuild','tStars'].forEach(k=>{if(!o[k]||typeof o[k]!=='object'||Array.isArray(o[k]))o[k]={}});
+ ['lrev','shSaved','weak','log','miss','themes'].forEach(k=>{if(!Array.isArray(o[k]))o[k]=[]});
+ if(!s.schema||s.schema<2){
+  // schema 1 → 2: 単語の箱は「見ただけ」で上がっていた分を考慮し、箱5は箱4に下げる(次の復習で確認)
+  Object.values(o.voc).forEach(v=>{if(v&&v.b>=5)v.b=4});
+ }
+ o.schema=SCHEMA;return o}
+let S=(()=>{let raw=null;try{raw=localStorage.getItem(KEY)}catch(e){return structuredClone(DEF)}
+ if(!raw)return structuredClone(DEF);
+ try{const s=JSON.parse(raw);if(!s||typeof s!=='object')throw 0;
+  if(!s.schema||s.schema<SCHEMA){try{localStorage.setItem(KEY+'-backup-schema'+(s.schema||1),raw)}catch(e){}}
+  return migrate(s)}
+ catch(e){// 壊れたデータは消さずに別名で退避してから、新しく始める
+  try{localStorage.setItem(KEY+'-corrupt-'+Date.now(),raw)}catch(_){}
+  LOAD_NOTE='学習記録が読み込めなかったため、新しく始めました。元のデータは端末内に退避してあります。';return structuredClone(DEF)}})();
+let saveFail=false;
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S));saveFail=false}catch(e){if(!saveFail){saveFail=true;setTimeout(()=>toast('学習記録を保存できませんでした(端末の空き容量やプライベートモードを確認してください)'),50)}}};
 const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const today=()=>ymd(new Date());
 const dayPlus=n=>{const d=new Date();d.setDate(d.getDate()+n);return ymd(d)};
-const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const pick=(a,n)=>shuffle(a).slice(0,n);
 const DAILY=60;
@@ -28,7 +52,7 @@ function dailyNow(){const d=today();if(S.daily.d!==d)S.daily={d,xp:0,v:0,t:0,q:0
 
 function applyTheme(){const r=document.documentElement;if(S.set.theme==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',S.set.theme)}
 function toast(msg,cls){const t=document.getElementById('toast');const d=document.createElement('div');d.innerHTML=msg;if(cls)d.className=cls;t.appendChild(d);setTimeout(()=>d.remove(),2600)}
-function addXP(n){const before=lvOf(S.xp);S.xp+=n;const d=today();
+function addXP(n){const before=lvOf(S.xp);S.xp+=n;if(typeof dayRec==='function')dayRec().xp+=n;const d=today();
  if(S.last!==d){S.streak=S.last===dayPlus(-1)?S.streak+1:1;S.last=d}
  const D=dailyNow();const wasDone=D.xp>=DAILY;D.xp+=n;
  const after=lvOf(S.xp);if(after>before){toast(`レベルアップ! Lv.${after}「${title(after)}」`,'lvup');confetti()}
@@ -55,7 +79,16 @@ const BADGES=[
  {id:'toeic',n:'TOEIC形式 全Partに挑戦',s:'全Part',ok:()=>Object.values(S.tc).every(x=>x[1]>0)},
  {id:'st3',n:'3 日連続で学習',s:'3日',ok:()=>S.streak>=3},
  {id:'st7',n:'7 日連続で学習',s:'7日',ok:()=>S.streak>=7},
- {id:'st30',n:'30 日連続で学習',s:'30日',ok:()=>S.streak>=30}];
+ {id:'st30',n:'30 日連続で学習',s:'30日',ok:()=>S.streak>=30},
+ {id:'ins1',n:'瞬間英会話 はじめての即答',s:'即答',ok:()=>S.log.some(e=>e.m==='ins'&&e.ok&&!e.h)},
+ {id:'free100',n:'自分の言葉で 100 回話す',s:'自力<br>100',ok:()=>S.log.filter(e=>e.f&&e.ok).length>=100},
+ {id:'ph20',n:'フレーズ 20 個 定着',s:'20<br>フレーズ',ok:()=>Object.values(S.ph).filter(x=>x.b>=4).length>=20},
+ {id:'q1',n:'会話クエスト 初クリア',s:'クエスト',ok:()=>Object.values(S.qst).some(x=>x.clear)},
+ {id:'qall',n:'全クエスト クリア',s:'クエスト<br>全制覇',ok:()=>QUESTS.every(q=>S.qst[q.id]&&S.qst[q.id].clear)},
+ {id:'stg4',n:'最終ステージに到達',s:'最終<br>ステージ',ok:()=>typeof stageOpen==='function'&&stageOpen(4)},
+ {id:'sh50',n:'シャドーイング 50 回',s:'影50',ok:()=>Object.values(S.sh).reduce((a,x)=>a+(x.n||0),0)>=50},
+ {id:'over5',n:'苦手を 5 つ克服',s:'克服',ok:()=>(S.overcome||0)>=5},
+ {id:'les1',n:'今日のレッスン 完了',s:'レッスン',ok:()=>!!(S.lesson&&S.lesson.done)}];
 function checkBadges(){BADGES.forEach(b=>{if(!S.badges[b.id]&&b.ok()){S.badges[b.id]=today();setTimeout(()=>toast(`スタンプ獲得:${b.n}`),400)}})}
 function renderChip(){const L=lvOf(S.xp),b=lvBase(L),nx=lvBase(L+1);document.getElementById('chip').innerHTML=`<span class="lv">Lv.${L}</span><span class="xpbar" title="次のレベルまで ${nx-S.xp} XP"><span style="width:${(S.xp-b)/(nx-b)*100}%"></span></span><span class="lv xpt">${S.xp} XP</span>`}
 
@@ -86,8 +119,8 @@ function confetti(){const cv=document.getElementById('fx');if(matchMedia('(prefe
 // ---- router ----
 let V={name:'home'};let RT={};// RT = 実行中の画面の一時データ(クイズの進行など)
 const VIEWS={};
-function go(v,replace){stopSpeak();stopListen();V=v;try{replace?history.replaceState(v,''):history.pushState(v,'')}catch(e){}render();window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'})}
-window.addEventListener('popstate',e=>{stopSpeak();stopListen();V=e.state||{name:'home'};if(V.name==='quiz'||V.name==='vsess')V={name:'home'};render()});
+function go(v,replace){stopAllAudio();if(!['drill','quest'].includes(v.name))RT.lc=null;if(V.name==='passive')RT.passiveStop&&RT.passiveStop();V=v;try{replace?history.replaceState(v,''):history.pushState(v,'')}catch(e){}render();window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'})}
+window.addEventListener('popstate',e=>{stopAllAudio();RT.passiveStop&&RT.passiveStop();V=e.state||{name:'home'};if(['quiz','vsess','drill','lesson-run'].includes(V.name))V={name:'home'};render()});
 function render(){renderChip();const app=document.getElementById('app');(VIEWS[V.name]||VIEWS.home)(app)}
 const backBtn=(label,v)=>`<button class="back" data-go='${JSON.stringify(v)}'>← ${label}</button>`;
 function wireGo(root){root.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(JSON.parse(b.dataset.go)))}

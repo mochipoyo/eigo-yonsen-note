@@ -8,7 +8,7 @@ VIEWS.grams=function(app){
  const T=tabs[Math.min(tab,tabs.length-1)];
  const list=GRAM.filter(T.f);
  app.innerHTML=`
- <div class="row">${backBtn('ホーム',{name:'home'})}</div>
+ <div class="row">${backBtn('TOEIC対策コース',{name:'toeicc'})}</div>
  <div class="uhead"><span class="eyebrow">GRAMMAR</span><h1>文法</h1><p>どの単元も「イメージ → 並べかえ → チャレンジ」の3ステップ。チャレンジはTOEIC Part 5 と同じ形の4択です。</p></div>
  <div class="tabs" role="tablist">${tabs.map((t,i)=>`<button class="tab" role="tab" data-t="${i}" aria-selected="${i===tab}">${t.k}${t.s?`<small>${t.s}</small>`:`<small>${GRAM.length}単元</small>`}</button>`).join('')}</div>
  <section class="sheet"><div class="units">${list.map(g=>`<button class="unit ${S.gStars[g.id]>=1?'done':''}" data-go='${JSON.stringify({name:'gram',id:g.id})}'><span class="no">${g.id.slice(1)}</span><span><span class="tt">${esc(g.t)}</span> ${lvTag(g.lv)}<span class="tg">${esc(g.sub)} ・ ${esc(g.cat)}</span></span>${starStr(S.gStars[g.id]||0)}</button>`).join('')}</div></section>`;
@@ -49,7 +49,7 @@ VIEWS.gram=function(app){
 };
 function gramQuiz(u){
  const qs=pick(u.q.map((q,i)=>({q,i})),5);
- startQuiz({title:u.t+' のチャレンジ',back:{name:'gram',id:u.id,step:2},backLabel:'単元にもどる',items:qs.map(({q,i})=>gramItem(u,q,i)),
+ startQuiz({title:u.t+' のチャレンジ',mode:'gram',back:{name:'gram',id:u.id,step:2},backLabel:'単元にもどる',items:qs.map(({q,i})=>gramItem(u,q,i)),
   onEnd:r=>{S.gStars[u.id]=Math.max(S.gStars[u.id]||0,r.stars)},retry:()=>gramQuiz(u)});
 }
 function buildView(P,u){

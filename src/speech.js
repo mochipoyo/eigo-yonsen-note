@@ -48,19 +48,23 @@ const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 const canListen=!!SR;
 let recNow=null;
-function listen(){
+// 音声認識。onStart(時刻) は話し始めを検知したとき呼ばれる(反応時間の計測用)。
+// 二重起動を防ぐため、認識中は新しい認識を始めない。
+function listen(onStart){
  return new Promise((res,rej)=>{
   if(!SR)return rej('unsupported');
+  if(recNow)return rej('busy');
   stopSpeak();
   const r=new SR();recNow=r;r.lang=S.set.accent==='en-GB'?'en-GB':'en-US';r.interimResults=false;r.maxAlternatives=5;r.continuous=false;
-  let got=null;
-  r.onresult=e=>{const alts=[];for(let i=0;i<e.results[0].length;i++)alts.push(e.results[0][i].transcript);got=alts};
-  r.onerror=e=>{recNow=null;rej(e.error||'error')};
-  r.onend=()=>{recNow=null;got?res(got):rej('no-speech')};
-  try{r.start()}catch(e){rej('busy')}
+  let got=null,conf=null;
+  r.onspeechstart=()=>{onStart&&onStart(Date.now())};
+  r.onresult=e=>{const alts=[];for(let i=0;i<e.results[0].length;i++)alts.push(e.results[0][i].transcript);got=alts;conf=e.results[0][0].confidence};
+  r.onerror=e=>{if(recNow===r)recNow=null;rej(e.error||'error')};
+  r.onend=()=>{if(recNow===r)recNow=null;got?res(Object.assign(got,{conf})):rej('no-speech')};
+  try{r.start()}catch(e){recNow=null;rej('busy')}
  });
 }
-function stopListen(){if(recNow){try{recNow.stop()}catch(e){}}}
+function stopListen(){if(recNow){try{recNow.abort?recNow.abort():recNow.stop()}catch(e){}recNow=null}}
 const NUMW=['zero','one','two','three','four','five','six','seven','eight','nine','ten','eleven','twelve','thirteen','fourteen','fifteen','sixteen','seventeen','eighteen','nineteen','twenty'];
 function normWords(s){
  s=s.toLowerCase().replace(/[’‘]/g,"'")
@@ -85,3 +89,24 @@ function scoreSpeech(expected,alts){
  best.marks=ow.map(w=>{const n=normWords(w).length;const ok=n===0||best.hit.slice(k,k+n).every(Boolean);k+=n;return `<span class="${ok?'hit':'miss'}">${esc(w)}</span>`}).join(' ');
  return best;
 }
+
+// ---- キーワード判定(意味が通じるかの目安) ----
+function wordHit(w,alt){return alt.endsWith('*')?w.startsWith(alt.slice(0,-1)):w===alt}
+function hasSeq(words,alt){const a=String(alt).toLowerCase().split(/\s+/).filter(Boolean);
+ for(let i=0;i+a.length<=words.length;i++){let ok=true;for(let k=0;k<a.length;k++)if(!wordHit(words[i+k],a[k])){ok=false;break}if(ok)return true}return false}
+function keysOk(text,keys){const w=normWords(text);const hit=(keys||[]).map(g=>g.some(alt=>hasSeq(w,alt)));return {ok:hit.every(Boolean),hit,ratio:hit.length?hit.filter(Boolean).length/hit.length:1}}
+function simScore(text,cands){// 模範解答との文字の一致度(0〜100)。発音の良さではない
+ const hw=normWords(text);let best=0;for(const c of cands){const ew=normWords(c);const [l]=lcsMatch(ew,hw);best=Math.max(best,Math.round(200*l/(ew.length+hw.length||1)))}return best}
+
+// ---- 録音(自分の声の確認用。端末の中だけで再生し、どこにも送信しない) ----
+const canRecord=!!(navigator.mediaDevices&&navigator.mediaDevices.getUserMedia&&window.MediaRecorder);
+let recStream=null,recorder=null;
+async function recStart(){if(!canRecord)throw new Error('unsupported');if(recorder&&recorder.state==='recording')throw new Error('busy');
+ recStream=await navigator.mediaDevices.getUserMedia({audio:true});const chunks=[];recorder=new MediaRecorder(recStream);
+ recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+ const done=new Promise(r=>{recorder.onstop=()=>{recStream&&recStream.getTracks().forEach(t=>t.stop());recStream=null;r(new Blob(chunks,{type:recorder.mimeType||'audio/webm'}))}});
+ recorder.start();return done}
+function recStop(){try{if(recorder&&recorder.state==='recording')recorder.stop()}catch(e){}if(recStream){recStream.getTracks().forEach(t=>t.stop());recStream=null}}
+let playEl=null;
+function playBlob(url){return new Promise(res=>{if(playEl){playEl.pause()}stopSpeak();playEl=new Audio(url);playEl.onended=()=>res(true);playEl.onerror=()=>res(false);playEl.play().catch(()=>res(false))})}
+function stopAllAudio(){stopSpeak();stopListen();recStop();if(playEl){try{playEl.pause()}catch(e){}}}

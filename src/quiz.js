@@ -31,7 +31,7 @@ VIEWS.quiz=function(app){
   app.querySelectorAll('.opt').forEach(o=>{o.disabled=true;const oi=+o.dataset.i;if(it.hideOpts)o.querySelector('.ot').textContent=it.c[oi];if(oi===it.a)o.classList.add('ok')});
   if(!ok)btn.classList.add('ng');
   S.answered++;if(ok){S.correct++;Q.combo++;S.maxCombo=Math.max(S.maxCombo,Q.combo)}else Q.combo=0;
-  noteMiss(it.ref,ok);
+  noteMiss(it.ref,ok);logEv({m:cfg.mode||'gram',ok,r:it.ref?JSON.stringify(it.ref):(cfg.title+Q.i)});
   const gain=ok?(cfg.xp||10)+Math.min(Math.max(Q.combo-1,0),5)*2:0;Q.xp+=gain;Q.res.push(ok);
   if(gain)addXP(gain);else save();
   const fbx=app.querySelector('#fbx');
