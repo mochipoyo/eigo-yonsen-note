@@ -283,7 +283,7 @@ const PHRASES = [
 {"id":"ph-music-05","lv":2,"theme":"music","en":"How often do you ~?","ja":"どのくらいの頻度で〜しますか?","tip":"頻度をたずねる形。答えは once a week / every day / twice a month などです。","core":[["how often"]],"sits":[
  {"place":"ギター教室","ja":"上手になったとほめてくれた仲間に、どのくらい練習しているか聞く","p":"Your playing is getting so good.","model":"Thanks! How often do you practice?","keys":[["practic*"]]},
  {"place":"バンドのミーティング","ja":"本番前にリハーサルしようと言うメンバーに、どのくらいの頻度で集まりたいか聞く","p":"We should rehearse before the show.","model":"How often do you want to meet?","keys":[["meet","rehears*","practic*"]]},
- {"place":"ギターショップ","ja":"弦が古いと言われ、どのくらいの頻度で替えればいいか聞く","p":"Your strings look pretty old.","model":"How often should I change them?","keys":[["change*","replace*","new"]]}]},
+ {"place":"ギターショップ","ja":"弦が古いと言われ、どのくらいの頻度で替えればいいか聞く","p":"Your strings look pretty old.","model":"How often should I change them?","keys":[["chang*","replac*","new"]]}]},
 {"id":"ph-music-06","lv":2,"theme":"music","en":"Why don't we ~?","ja":"〜しませんか?","tip":"Why don't we ~? は理由をたずねるのではなく「一緒に〜しようよ」という提案。Let's ~. より少し控えめです。","core":[["why do not we","lets","should we","how about we"]],"sits":[
  {"place":"バンドの練習","ja":"曲がまだしっくりこないと言うメンバーに、少しゆっくり演奏しようと提案する","p":"This song still doesn't sound right.","model":"Why don't we play it a little slower?","keys":[["slow*"]]},
  {"place":"友だちとの電話","ja":"今週末ギターのフェスがあると聞き、一緒に行こうと提案する","p":"There's a guitar festival this weekend.","model":"Why don't we go together?","keys":[["go","together"]]},

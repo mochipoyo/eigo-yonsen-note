@@ -31,7 +31,7 @@ const QUESTS = [
    "free":{"ja":"緑茶か紅茶か、どちらかを選んで伝える","model":"Green tea, please.","alts":["I'll have the black tea.","Black tea, please."],"keys":[["green","black"]],"hint":"~ tea, please."},
    "go":"size"},
   "rude":{"p":"Oh... okay. I'll be quick. What would you like?","ja":"あ…はい。急ぎますね。何にしますか?",
-   "free":{"ja":"急かしたことを謝って、ラテを注文する","model":"Sorry about that. A latte, please.","alts":["Sorry, I'm just in a hurry. Can I get a latte?"],"keys":[["sorry","apologize*","my bad","excuse me"],["latte","coffee","tea","smoothie","cappuccino"]],"hint":"Sorry about that. A ~, please."},
+   "free":{"ja":"急かしたことを謝って、ラテを注文する","model":"Sorry about that. A latte, please.","alts":["Sorry, I'm just in a hurry. Can I get a latte?"],"keys":[["sorry","apologi*","my bad","excuse me"],["latte","coffee","tea","smoothie","cappuccino"]],"hint":"Sorry about that. A ~, please."},
    "go":"size"},
   "size":{"p":"Sure. What size would you like? And is that for here or to go?","ja":"かしこまりました。サイズはどうしますか?店内でお飲みですか、お持ち帰りですか?",
    "free":{"ja":"サイズと、店内か持ち帰りかを伝える","model":"A medium, please. For here.","alts":["Medium, and I'll drink it here.","A small one to go, please."],"keys":[["medium","small","large","regular"],["here","stay","to go","take out","takeout","inside","in"]],"hint":"A medium ~ / For here"},
@@ -131,7 +131,7 @@ const QUESTS = [
     {"en":"No. Leave me alone.","go":"rude","bad":true,"fb":"親切な申し出への返事としては冷たすぎます。断るなら No, thanks. I'm okay. と柔らかく言いましょう。","keys":[["leave me","go away","alone"]]}
    ]},
   "rude":{"p":"Oh, sorry. I just thought you looked lost.","ja":"あ、すみません。迷っているように見えたので。",
-   "free":{"ja":"失礼な言い方を謝って、駅への行き方を聞く","model":"Sorry, I didn't mean that. Actually, how do I get to the station?","alts":["I'm sorry. Could you tell me the way to the station?"],"keys":[["sorry","apologize*"],["station"]],"hint":"Sorry. How do I get to the ~?"},
+   "free":{"ja":"失礼な言い方を謝って、駅への行き方を聞く","model":"Sorry, I didn't mean that. Actually, how do I get to the station?","alts":["I'm sorry. Could you tell me the way to the station?"],"keys":[["sorry","apologi*"],["station"]],"hint":"Sorry. How do I get to the ~?"},
    "go":"dir"},
   "dir":{"p":"Go straight down this street and turn right at the second traffic light.","ja":"この通りをまっすぐ進んで、2つ目の信号を右に曲がってください。",
    "ch":[
@@ -281,13 +281,13 @@ const QUESTS = [
     {"en":"I'm not sure. What's popular right now?","go":"pop","keys":[["popular","not sure","recommend*","suggest*","best seller*","no idea"]]}
    ]},
   "garden":{"p":"Then how about this set of garden gloves and seeds? It's thirty dollars.","ja":"それなら、ガーデニング手袋と種のセットはいかがですか?30ドルです。",
-   "free":{"ja":"気に入ったと言い、気に入らなかったら返品できるか聞く","model":"I love it. Can I return it if she doesn't like it?","alts":["Nice. Can I exchange it later if needed?"],"keys":[["return*","exchange*","refund*"]],"hint":"Can I return it if ~?"},
+   "free":{"ja":"気に入ったと言い、気に入らなかったら返品できるか聞く","model":"I love it. Can I return it if she doesn't like it?","alts":["Nice. Can I exchange it later if needed?"],"keys":[["return*","exchang*","refund*"]],"hint":"Can I return it if ~?"},
    "go":"policy"},
   "pop":{"p":"These scented candles are really popular. They come in lavender, vanilla, and citrus.","ja":"この香りつきキャンドルがとても人気です。ラベンダー、バニラ、シトラスがあります。",
    "free":{"ja":"ラベンダーの香りを選ぶ","model":"I'll take the lavender one.","alts":["The vanilla one, please."],"keys":[["lavender","vanilla","citrus"]],"hint":"I'll take the ~ one."},
    "go":"wrap"},
   "wrap":{"p":"Good choice. Would you like it gift-wrapped?","ja":"いいですね。プレゼント用に包みましょうか?",
-   "free":{"ja":"包装をお願いして、返品できるか聞く","model":"Yes, please. And can I return it if she doesn't like it?","alts":["Yes, thanks. Is it possible to exchange it later?"],"keys":[["return*","exchange*","refund*"]],"hint":"And can I return it if ~?"},
+   "free":{"ja":"包装をお願いして、返品できるか聞く","model":"Yes, please. And can I return it if she doesn't like it?","alts":["Yes, thanks. Is it possible to exchange it later?"],"keys":[["return*","exchang*","refund*"]],"hint":"And can I return it if ~?"},
    "go":"policy"},
   "policy":{"p":"Yes, you can return it within thirty days. Just keep the receipt.","ja":"はい、30日以内なら返品できます。レシートは保管しておいてくださいね。","go":"endg"},
   "endg":{"p":"Here you go. I hope your mom loves it!","ja":"どうぞ。お母さまに気に入っていただけるといいですね!","end":true,
@@ -373,7 +373,7 @@ const QUESTS = [
   "rec":{"p":"Then I'd recommend this one. It's light, easy to play, and it comes with a small amp.","ja":"それならこれがおすすめです。軽くて弾きやすく、小さなアンプも付いています。",
    "ch":[
     {"en":"Could I try it before I decide?","go":"tryit","keys":[["try","play","test"]]},
-    {"en":"Is there any chance you could include a cable and a strap?","go":"incl","keys":[["include*","cable","strap","throw in"]]}
+    {"en":"Is there any chance you could include a cable and a strap?","go":"incl","keys":[["includ*","cable","strap","throw in"]]}
    ]},
   "incl":{"p":"I can include a cable, and the strap would be half price. How does that sound?","ja":"ケーブルはお付けできますし、ストラップは半額にします。いかがですか?",
    "free":{"ja":"それで十分だと言い、購入を決める","model":"That sounds fair. I'll take it.","alts":["Deal. I'll buy it."],"keys":[["i will take","i will buy","i will get","deal","take it","sounds fair","sounds good","sounds great"]],"hint":"That sounds fair. I'll ~."},
@@ -452,7 +452,7 @@ const QUESTS = [
  "nodes":{
   "n1":{"p":"Have you heard that management wants us to try an AI writing assistant?","ja":"経営陣がAIの文章作成アシスタントを試してほしいって話、聞いた?",
    "ch":[
-    {"en":"Yes, and I think it could save us a lot of time.","go":"pos","keys":[["save*","efficien*","faster","helpful","useful"]]},
+    {"en":"Yes, and I think it could save us a lot of time.","go":"pos","keys":[["sav*","efficien*","faster","helpful","useful"]]},
     {"en":"I have, but I'm a little worried about data privacy.","go":"priv","keys":[["privacy","worried","concern*","security","confidential"]]},
     {"en":"No, what's it for?","go":"what","keys":[["whats it","what is it","what for","no","never heard"]]}
    ]},
