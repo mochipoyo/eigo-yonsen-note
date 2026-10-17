@@ -7539,7 +7539,7 @@ VIEWS.wscene=function(app){
   const d=describe(ev);return imp&&!imp.target?{en:imp.en,ja:imp.ja,how:'command'}:{en:d.main.en,ja:d.main.ja,how:'target'}}
  function renderMission(){const box=$('#w-mis');if(!box)return;
   if(W.mi>=W.mq.length){box.innerHTML=`<div class="wclear"><b>ステージクリア!</b> <span>「${esc(WMODES[mode-1].k)}」のミッションをすべてクリアしました。</span><div class="row" style="margin-top:6px"><button class="btn sm" id="wm-again">もう一度</button>${mode<4?`<button class="btn hl sm" id="wm-next">次のモードへ</button>`:''}</div></div>`;
-   box.querySelector('#wm-again').onclick=()=>{W.mq=shuffle(def.missions.map((_,i)=>i));W.mi=0;renderMission()};
+   box.querySelector('#wm-again').onclick=()=>freshWorld(shuffle(def.missions.map((_,i)=>i)),0);
    const nx=box.querySelector('#wm-next');if(nx)nx.onclick=()=>go({name:'wscene',id:def.id,mode:mode+1},true);return}
   const m=def.missions[W.mq[W.mi]];const tx=missionText(m);W.mission=m;W.mText=tx;
   const head=`<span class="gtag">ミッション ${W.mi+1} / ${W.mq.length}</span>`;
@@ -7554,10 +7554,13 @@ VIEWS.wscene=function(app){
    const box=$('#w-mis');const tx=W.mText;
    box.innerHTML=`<div class="wok">${hana}<div><b class="good">ミッション成功! +${gain} XP</b><div class="en">${esc(tx.en)}</div>${mode===3?'<div id="wm-mic"></div>':''}<div class="row" style="margin-top:6px"><button class="btn hl sm" id="wm-next">つぎのミッション →</button></div></div></div>`;
    if(mode===3)micPanel(box.querySelector('#wm-mic'),tx.how==='command'?d.main.en:tx.en,()=>{const m2=box.querySelector('#wm-mic');if(m2)m2.innerHTML=''},{skipLabel:'言わずに進む',doneLabel:'OK'});
-   box.querySelector('#wm-next').onclick=()=>{W.mi++;if(W.mi>=W.mq.length){R.clear[mode]=today();addXP(30);confetti();checkBadges();save()}renderMission()};
-  }else{st.v[tag]=st.v[tag]||[0,0];st.v[tag][1]++;if(pp){st.p[pp]=st.p[pp]||[0,0];st.p[pp][1]++}R.miss++;save();
+   box.querySelector('#wm-next').onclick=()=>{const ni=W.mi+1;if(ni>=W.mq.length){R.clear[mode]=today();addXP(30);confetti();checkBadges();save()}freshWorld(W.mq,ni)};
+  }else{const wrong=m.v.includes(ev.v);
+   if(wrong){st.v[tag]=st.v[tag]||[0,0];st.v[tag][1]++;if(pp){st.p[pp]=st.p[pp]||[0,0];st.p[pp][1]++}R.miss++;save()}
    const box=$('#w-mis');let n=box.querySelector('.wng');if(!n){n=document.createElement('div');n.className='wng';box.appendChild(n)}
-   n.textContent='いまの動きはミッションとちがうようです。もう一度聞いて(読んで)みましょう。'}}
+   n.textContent=wrong?'動作は合っていますが、人・物・場所がミッションとちがうようです。もう一度聞いて(読んで)みましょう。':'まだミッションの場面になっていません(準備の動作ならそのまま続けてOK)。'}}
+ // ミッションごとにシーンを最初の状態にもどす
+ function freshWorld(mq,mi){W.alive=false;const N=W_new(def);Object.assign(N,{mq,mi,mqMode:mode,alive:true});RT.w=N;render()}
  if(mode>1)renderMission();
 };
 VIEWS.wbook=function(app){const L=S.wfav||[];
