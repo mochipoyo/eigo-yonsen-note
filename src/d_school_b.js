@@ -40,7 +40,7 @@ const SCHOOL_B = [
   {"k":"fill","s":"____ is important to drink enough water.","c":["This","It","That","There"],"a":1,"why":"仮の主語 It を置き、本当の主語 to drink ~ をあとに回します。"},
   {"k":"order","ja":"私は彼に窓を開けるように頼みました。","en":"I asked him to open the window."},
   {"k":"order","ja":"このケーキの作り方を教えてください。","en":"Please tell me how to make this cake."},
-  {"k":"write","ja":"英語を話すことは私にとって楽しいです。","model":"It is fun for me to speak English.","alts":["It's fun for me to speak English.","It is interesting for me to speak English."],"keys":[["it is","its"],["fun","enjoyable","interesting"],["to speak english"]],"why":"It is ~ for 人 to ... の形。"},
+  {"k":"write","ja":"英語を話すことは私にとって楽しいです。(It で始めて)","model":"It is fun for me to speak English.","alts":["It's fun for me to speak English.","It is interesting for me to speak English."],"keys":[["it is","its"],["fun","enjoyable","interesting"],["to speak english"]],"why":"It is ~ for 人 to ... の形。"},
   {"k":"write","ja":"私はあなたに私の町に来てほしいです。","model":"I want you to come to my town.","alts":["I would like you to come to my town.","I'd like you to visit my town."],"keys":[["want you to","like you to"],["come","visit"],["town","city"]],"why":"want + 人 + to ~ で「人に~してほしい」。"},
   {"k":"meaning","en":"She asked me to wait outside.","c":["彼女は外で待ってほしいと私に頼みました","彼女は外で私を待っていました","彼女は私に外で待つかどうか聞きました","彼女は外で待つのが好きです"],"a":0,"why":"ask + 人 + to ~ = 人に~するように頼む。"}
  ]},
@@ -281,7 +281,7 @@ const SCHOOL_B = [
   {"k":"order","ja":"これが私がほしかったものです。","en":"This is what I wanted."},
   {"k":"order","ja":"私には父親が医者の友だちがいます。","en":"I have a friend whose father is a doctor."},
   {"k":"write","ja":"あなたが言ったことは正しいです。","model":"What you said is right.","alts":["What you said is true.","What you said is correct."],"keys":[["what you said"],["right","true","correct"]],"why":"what = 「~すること・もの」。"},
-  {"k":"write","ja":"私は屋根が赤い家に住んでいます。","model":"I live in a house whose roof is red.","alts":["I live in a house whose roof is painted red."],"keys":[["whose roof"],["red"],["house"]],"why":"「その家の屋根が」なので whose roof。"},
+  {"k":"write","ja":"私は屋根が赤い家に住んでいます。(whose を使って)","model":"I live in a house whose roof is red.","alts":["I live in a house whose roof is painted red."],"keys":[["whose roof"],["red"],["house"]],"why":"「その家の屋根が」なので whose roof。"},
   {"k":"meaning","en":"He said nothing, which made her angry.","c":["彼は彼女を怒らせたことについて何も言いませんでした","彼女が怒ったので、彼は何も言いませんでした","彼は何も言わなかったので、怒っていました","彼が何も言わなかったことが、彼女を怒らせました"],"a":3,"why":", which は前の内容全体(何も言わなかったこと)を受けて説明を加えます。"}
  ]},
 {"id":"s-h1-10","g":"高1","t":"比較の発展(倍数・the 比較級, the 比較級・最上級の言い換え)","sub":"比べ方のバリエーション","link":"g16",

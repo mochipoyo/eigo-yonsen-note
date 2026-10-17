@@ -28,7 +28,7 @@ const SCHOOL_C = [
   {"k":"order","ja":"あれは私がテニスをする公園です。","en":"That is the park where I play tennis."},
   {"k":"order","ja":"夏は私がいちばん幸せを感じる季節です。","en":"Summer is the season when I feel happiest."},
   {"k":"write","ja":"ここは私が生まれた町です。","model":"This is the town where I was born.","alts":["This is the city where I was born."],"keys":[["where","in which"],["town","city"],["was born"]],"why":"場所(town)を where 〜 で後ろから説明します。"},
-  {"k":"write","ja":"彼が怒っている理由がわかりません。","model":"I don't know the reason why he is angry.","alts":["I don't know why he's angry."],"keys":[["why"],["do not know","can not understand","do not understand","have no idea"],["angry","mad","upset"]],"why":"理由は the reason why 〜。the reason は省略しても OK。"},
+  {"k":"write","ja":"彼が怒っている理由がわかりません。","model":"I don't know the reason why he is angry.","alts":["I don't know why he's angry."],"keys":[["why","the reason he","the reason that"],["do not know","can not understand","do not understand","have no idea"],["angry","mad","upset"]],"why":"理由は the reason why 〜。the reason は省略しても OK。"},
   {"k":"meaning","en":"Spring is the time when many people start new jobs.","c":["春になると多くの人が仕事をやめます","多くの人が春になる前に仕事を始めます","春は多くの人が休みをとる時期です","春は多くの人が新しい仕事を始める時期です"],"a":3,"why":"the time when 〜 = 〜する時期。"}
  ]},
 {"id":"s-h2-03","g":"高2","t":"複合関係詞(whoever・whatever・however など)","sub":"「だれでも・何でも・どんなに〜でも」",
@@ -60,7 +60,7 @@ const SCHOOL_C = [
   {"k":"order","ja":"知っていたら、手伝ったのに。","en":"If I had known, I would have helped."},
   {"k":"order","ja":"もし来ていたら、あなたも楽しめたでしょう。","en":"If you had come, you would have enjoyed it."},
   {"k":"write","ja":"もっと早く起きていたら、電車に間に合ったのに。","model":"If I had gotten up earlier, I would have caught the train.","alts":["If I had woken up earlier, I could have caught the train."],"keys":[["if i had","had i"],["would have","could have"],["train"]],"why":"If + had + 過去分詞, would / could have + 過去分詞。"},
-  {"k":"write","ja":"もし彼女が助けてくれなかったら、私は今ここにいないでしょう。","model":"If she hadn't helped me, I wouldn't be here now.","alts":["If she had not helped me, I would not be here now."],"keys":[["had not helped","had not saved"],["would not be","could not be"],["here"]],"why":"過去の仮定+今の結果なので混合仮定法。would not be 〜 now。"},
+  {"k":"write","ja":"もし彼女が助けてくれなかったら、私は今ここにいないでしょう。","model":"If she hadn't helped me, I wouldn't be here now.","alts":["If she had not helped me, I would not be here now."],"keys":[["had not helped","had not saved","had not been for her"],["would not be","could not be"],["here"]],"why":"過去の仮定+今の結果なので混合仮定法。would not be 〜 now。"},
   {"k":"meaning","en":"If I had saved more money, I could have bought that car.","c":["お金を貯めたので、あの車を買えました","お金を貯めれば、あの車を買えるでしょう","もっとお金を貯めていたら、あの車を買えたのに","あの車を買ったので、お金が貯まりませんでした"],"a":2,"why":"had saved / could have bought = 過去の事実の反対(実際は買えなかった)。"}
  ]},
 {"id":"s-h2-05","g":"高2","t":"仮定法を使った表現(without・as if・It's time・I wish の過去完了)","sub":"if を使わない仮定の言い方",
@@ -99,7 +99,7 @@ const SCHOOL_C = [
  "ex":[{"en":"This bus will take you to the airport.","ja":"このバスに乗れば空港に行けます。"},{"en":"The heavy rain kept us from going out.","ja":"大雨のせいで、私たちは出かけられませんでした。"},{"en":"A short walk will make you feel better.","ja":"少し散歩すれば気分がよくなりますよ。"}],
  "link":"g01",
  "q":[
-  {"k":"fill","s":"This road will ____ you to the station.","c":["go","take","arrive","reach"],"a":1,"why":"take 人 to 場所 = 人を〜へ連れて行く(この道を行けば市役所に着く)。"},
+  {"k":"fill","s":"This road will ____ you to the station.","c":["go","take","arrive","reach"],"a":1,"why":"take 人 to 場所 = 人を〜へ連れて行く(この道を行けば駅に着く)。"},
   {"k":"fill","s":"The snow ____ us from leaving the house.","c":["kept","made","let","had"],"a":0,"why":"keep 人 from -ing = 人が〜できないようにする。"},
   {"k":"fill","s":"What ____ you come to Japan?","c":["did","made","got","took"],"a":1,"why":"make 人 + 原形 = 人に〜させる。何があなたを日本に来させたのか → なぜ日本に来たのか。"},
   {"k":"fill","s":"This photo ____ me of my school days.","c":["remembers","recalls","reminds","memorizes"],"a":2,"why":"remind 人 of 〜 = 人に〜を思い出させる。"},
@@ -155,7 +155,7 @@ const SCHOOL_C = [
   {"k":"order","ja":"私に電話してきたのは母でした。","en":"It was my mother who called me."},
   {"k":"order","ja":"私がいちばん好きなのはこの歌です。","en":"It is this song that I like best."},
   {"k":"write","ja":"このケーキを作ったのは私の父です。(It で始めて)","model":"It was my father who made this cake.","alts":["It was my dad that baked this cake."],"keys":[["it was","it is"],["father","dad"],["who made","that made","who baked","that baked"]],"why":"It was + 人 + who 〜。"},
-  {"k":"write","ja":"私が東京に引っ越したのは2010年でした。(It で始めて)","model":"It was in 2010 that I moved to Tokyo.","alts":["It was 2010 that I moved to Tokyo."],"keys":[["it was"],["2010","twenty ten","two thousand ten"],["that i moved"]],"why":"時(in 2010)を It was 〜 that で強調します。"},
+  {"k":"write","ja":"私が東京に引っ越したのは2010年でした。(It で始めて)","model":"It was in 2010 that I moved to Tokyo.","alts":["It was in the year 2010 that I moved to Tokyo."],"keys":[["it was"],["2010","twenty ten","two thousand ten"],["that i moved"]],"why":"時(in 2010)を It was 〜 that で強調します。"},
   {"k":"meaning","en":"It was not until I got home that I noticed my mistake.","c":["家に帰る前に、まちがいに気づきました","家に帰らなかったので、まちがいに気づきませんでした","家に帰って初めて、自分のまちがいに気づきました","家に帰ってもまちがいに気づきませんでした"],"a":2,"why":"It was not until A that B = AしてはじめてB。"}
  ]},
 {"id":"s-h3-03","g":"高3","t":"省略と挿入","sub":"言わなくてもわかる部分は省き、ひと言をはさむ",
@@ -170,7 +170,7 @@ const SCHOOL_C = [
   {"k":"fill","s":"When ____, I often played in this river.","c":["a child","child","childhood","children"],"a":0,"why":"When (I was) a child の I was を省いた形。"},
   {"k":"order","ja":"必要なら電話してください。","en":"Call me if necessary."},
   {"k":"order","ja":"その計画は、私が思うに、うまくいくでしょう。","en":"The plan, I think, will work."},
-  {"k":"write","ja":"できれば、明日までにその報告書を送ってください。","model":"Please send the report by tomorrow if possible.","alts":["If possible, please send me the report by tomorrow."],"keys":[["if possible","if you can"],["send"],["by tomorrow"]],"why":"if (it is) possible の省略形。"},
+  {"k":"write","ja":"できれば、明日までにその報告書を送ってください。","model":"Please send the report by tomorrow if possible.","alts":["If possible, please send me the report by tomorrow."],"keys":[["if possible","if you can","if you could"],["send"],["by tomorrow"]],"why":"if (it is) possible の省略形。"},
   {"k":"write","ja":"私は行きたかったけれど、行けませんでした。","model":"I wanted to go, but I couldn't.","alts":["I wanted to go, but I wasn't able to."],"keys":[["wanted to"],["could not","was not able to"]],"why":"くり返しの go は省いて couldn't だけで OK。"},
   {"k":"meaning","en":"If asked, I will explain the plan.","c":["計画を説明するように頼みます","計画についてたずねるつもりです","説明されても、計画がわかりません","たずねられたら、その計画を説明します"],"a":3,"why":"If (I am) asked = たずねられたら。"}
  ]},
@@ -186,7 +186,7 @@ const SCHOOL_C = [
   {"k":"order","ja":"全員がその計画に賛成しているわけではありません。","en":"Not everyone agrees with the plan."},
   {"k":"order","ja":"私はもう彼を待てません。","en":"I can no longer wait for him."},
   {"k":"write","ja":"すべての生徒がその問題を解けたわけではありません。","model":"Not all the students could solve the problem.","alts":["Not every student was able to solve the problem."],"keys":[["not all","not every"],["student*"],["solve*","answer*"]],"why":"部分否定は not all / not every。"},
-  {"k":"write","ja":"彼はもうここには住んでいません。","model":"He no longer lives here.","alts":["He doesn't live here anymore."],"keys":[["no longer","anymore","any longer"],["live*"],["here"]],"why":"no longer = not 〜 anymore。"},
+  {"k":"write","ja":"彼はもうここには住んでいません。","model":"He no longer lives here.","alts":["He doesn't live here anymore."],"keys":[["no longer","anymore","any more","any longer"],["live*"],["here"]],"why":"no longer = not 〜 anymore。"},
   {"k":"meaning","en":"This book is far from easy.","c":["この本はとてもやさしいです","この本は遠くで買いました","この本は決してやさしくありません","この本はまあまあやさしいです"],"a":2,"why":"far from 〜 = 〜からほど遠い → 決して〜ではない。"}
  ]},
 {"id":"s-h3-05","g":"高3","t":"同格の that","sub":"「〜という」名詞の中身を that で説明する",
@@ -201,7 +201,7 @@ const SCHOOL_C = [
   {"k":"fill","s":"There is some doubt ____ he will come.","c":["whether","what","which","who"],"a":0,"why":"doubt whether 〜 = 〜かどうかという疑い。"},
   {"k":"order","ja":"早めに始めるという考えが気に入っています。","en":"I like the idea that we start early."},
   {"k":"order","ja":"彼が勝ったという知らせに、私たちは驚きました。","en":"The news that he won surprised us."},
-  {"k":"write","ja":"彼が会社をやめるといううわさを聞きました。","model":"I heard a rumor that he is leaving the company.","alts":["I heard the rumor that he would quit the company."],"keys":[["rumor that","rumors that"],["quit*","leav*","resign*"],["company","job","firm"]],"why":"a rumor that 〜 = 〜といううわさ。"},
+  {"k":"write","ja":"彼が会社をやめるといううわさを聞きました。","model":"I heard a rumor that he is leaving the company.","alts":["I heard the rumor that he would quit the company."],"keys":[["rumor that","rumors that","rumour that","rumours that"],["quit*","leav*","resign*"],["company","job","firm"]],"why":"a rumor that 〜 = 〜といううわさ。"},
   {"k":"write","ja":"彼女がうそをついたという事実は変わりません。","model":"The fact that she lied will not change.","alts":["The fact that she lied doesn't change."],"keys":[["fact that"],["lied","told a lie","was lying"],["change*","remain*"]],"why":"The fact that 〜 = 〜という事実。"},
   {"k":"meaning","en":"We lost hope that the train would come on time.","c":["電車が時間どおりに来たので安心しました","電車が時間どおりに来るという望みを失いました","電車に乗る望みがかないました","電車が遅れるといううわさを聞きました"],"a":1,"why":"hope that 〜 = 〜という望み。lost hope = 望みを失った。"}
  ]},
@@ -217,7 +217,7 @@ const SCHOOL_C = [
   {"k":"fill","s":"The school provides students ____ free lunch.","c":["for","with","of","to"],"a":1,"why":"provide A with B = AにBを与える。"},
   {"k":"order","ja":"ホテルは私たちにタオルを用意してくれました。","en":"The hotel provided us with towels."},
   {"k":"order","ja":"彼は私たちが早く出発することを提案しました。","en":"He suggested that we leave early."},
-  {"k":"write","ja":"医者は私に、もっと野菜を食べるようにすすめました。(suggest を使って)","model":"The doctor suggested that I eat more vegetables.","alts":["The doctor recommended that I eat more vegetables."],"keys":[["suggested that i eat","suggested that i should eat","suggested i eat","recommended that i eat","recommended that i should eat","recommended i eat"],["more"],["vegetables","veggies"]],"why":"suggest that + 主語 + 原形(eat)。"},
+  {"k":"write","ja":"医者は私に、もっと野菜を食べるようにすすめました。(suggest を使って)","model":"The doctor suggested that I eat more vegetables.","alts":["The doctor recommended that I eat more vegetables."],"keys":[["suggested that i eat","suggested that i should eat","suggested i eat","recommended that i eat","recommended that i should eat","recommended i eat","suggested i should eat","recommended i should eat"],["more"],["vegetables","veggies"]],"why":"suggest that + 主語 + 原形(eat)。"},
   {"k":"write","ja":"騒音のせいで、私は勉強に集中できませんでした。(The noise を主語に)","model":"The noise kept me from concentrating on my studies.","alts":["The noise prevented me from focusing on my studies."],"keys":[["kept me from","prevented me from","stopped me from"],["concentrat*","focus*","studying"]],"why":"keep / prevent A from -ing。"},
   {"k":"meaning","en":"The thief robbed her of her bag.","c":["どろぼうは彼女にバッグを返しました","彼女はどろぼうのバッグを奪いました","どろぼうは彼女からバッグを奪いました","どろぼうはバッグを彼女に売りました"],"a":2,"why":"rob A of B = AからBを奪う。"}
  ]},

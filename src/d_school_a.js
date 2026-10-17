@@ -177,7 +177,7 @@ const SCHOOL_A = [
   {"k":"fill","s":"I ____ be late. I promise.","c":["don't","am not","won't","isn't"],"a":2,"why":"後ろが元の形 be なので will not = won't。"},
   {"k":"order","ja":"私は来年カナダで勉強するつもりです。","en":"I'm going to study in Canada next year."},
   {"k":"order","ja":"彼は試験に合格するでしょう。","en":"He will pass the test."},
-  {"k":"write","ja":"私は今夜、母に電話するつもりです。","model":"I'm going to call my mother tonight.","alts":["I will call my mother tonight.","I'm going to call my mom tonight."],"keys":[["going to call","will call","gonna call"],["mother","mom"],["tonight"]],"why":"予定なので be going to + call。"},
+  {"k":"write","ja":"私は今夜、母に電話するつもりです。","model":"I'm going to call my mother tonight.","alts":["I will call my mother tonight.","I'm going to call my mom tonight."],"keys":[["going to call","will call","gonna call","going to phone","will phone"],["mother","mom"],["tonight"]],"why":"予定なので be going to + call。"},
   {"k":"write","ja":"明日はとても暑くなるでしょう。","model":"It will be very hot tomorrow.","alts":["It's going to be very hot tomorrow.","It'll be really hot tomorrow."],"keys":[["will be","going to be"],["hot"],["tomorrow"]],"why":"予想なので will be。hot の前に be を忘れずに。"},
   {"k":"meaning","en":"I'll carry your bag.","c":["あなたのかばんを持ちますよ","あなたのかばんを持っていました","あなたのかばんを持ってくれますか","あなたのかばんを持ってはいけません"],"a":0,"why":"I'll ~ はその場で決めた「〜しますよ」。"}
  ]},
@@ -192,7 +192,7 @@ const SCHOOL_A = [
   {"k":"fill","s":"____ I use your phone? — Of course.","c":["Am","Have","May","Was"],"a":2,"why":"許可を求める「〜してもいいですか」は May I ~?。"},
   {"k":"order","ja":"あなたはここで靴を脱がなければなりません。","en":"You have to take off your shoes here."},
   {"k":"order","ja":"あなたは今日、学校に行かなくてもいいです。","en":"You don't have to go to school today."},
-  {"k":"write","ja":"あなたはもっと野菜を食べたほうがいいです。","model":"You should eat more vegetables.","alts":["You should eat more veggies."],"keys":[["should"],["more vegetables","more veggies"]],"why":"アドバイスは should + 元の形。"},
+  {"k":"write","ja":"あなたはもっと野菜を食べたほうがいいです。","model":"You should eat more vegetables.","alts":["You should eat more veggies."],"keys":[["should","had better","would better","ought to"],["more vegetables","more veggies"]],"why":"アドバイスは should + 元の形。"},
   {"k":"write","ja":"私は今日、宿題を終わらせなければなりません。","model":"I have to finish my homework today.","alts":["I must finish my homework today.","I've got to finish my homework today."],"keys":[["have to","must","have got to"],["finish","do","complete"],["homework"]],"why":"「〜しなければならない」は have to / must。"},
   {"k":"meaning","en":"You must not talk during the test.","c":["テスト中に話さなくてもいいです","テスト中に話したほうがいいです","テスト中に話すかもしれません","テスト中に話してはいけません"],"a":3,"why":"must not = 〜してはいけない(禁止)。"}
  ]},
@@ -282,7 +282,7 @@ const SCHOOL_A = [
   {"k":"fill","s":"The window ____ broken yesterday.","c":["is","were","was","did"],"a":2,"why":"yesterday で過去、The window は単数なので was。"},
   {"k":"order","ja":"この本は多くの人に読まれています。","en":"This book is read by many people."},
   {"k":"order","ja":"このお寺は300年前に建てられました。","en":"This temple was built 300 years ago."},
-  {"k":"write","ja":"このケーキは私の母によって作られました。","model":"This cake was made by my mother.","alts":["This cake was made by my mom."],"keys":[["was made","is made"],["by my mother","by my mom"]],"why":"be動詞 + made + by ~ の受け身。"},
+  {"k":"write","ja":"このケーキは私の母によって作られました。","model":"This cake was made by my mother.","alts":["This cake was made by my mom."],"keys":[["was made","is made","was baked"],["by my mother","by my mom"]],"why":"be動詞 + made + by ~ の受け身。"},
   {"k":"write","ja":"フランス語はカナダで話されています。","model":"French is spoken in Canada.","alts":["French is spoken in Canada, too."],"keys":[["is spoken"],["french"],["canada"]],"why":"言語は「話される」側なので is spoken。"},
   {"k":"meaning","en":"My bike was stolen last night.","c":["昨夜、私の自転車が盗まれました","昨夜、私は自転車を盗みました","昨夜、私の自転車が壊れました","昨夜、私は自転車を見つけました"],"a":0,"why":"was stolen = 盗まれた(受け身)。"}
  ]},
