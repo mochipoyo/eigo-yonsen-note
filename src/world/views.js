@@ -33,6 +33,7 @@ VIEWS.wscene=function(app){
  ${mode===1?`<p class="whint">人物をタップ → 動作を選ぶ / 人物を選んでから物をタップ → 組み合わせの動作 / ドラッグで移動。家具の電源やドアは直接タップでも操作できます。</p>`:''}
  ${mode>1&&mode<5?'<div class="wmis" id="w-mis"></div>':''}
  ${story?'<div class="wsgoal" id="w-sgoal"></div>':''}
+ <div class="wzoom"><button class="linkbtn" id="w-fit"></button></div>
  <div class="wstage" id="w-stage"></div>
  ${story?'<div class="wtalk" id="w-talk"><div class="wlog" id="w-log" aria-live="polite"></div><div class="wnow" id="w-now"></div></div>':''}
  <div class="wmenu" id="w-menu"></div>
@@ -67,6 +68,11 @@ VIEWS.wscene=function(app){
   drop(e,pt){if(role&&e!==role){W.draw();toast(`会話ミッションでは、あなたの役(${role.ja})を動かして操作します。`);return}doAct(()=>dropAct(W,e,pt))},
   onDragStart(){menu.innerHTML=''}};
  W_mount($('#w-stage'),W,api);
+ // 画面がせまいとき: 全体を表示(会話ミッションの初期値)/拡大して横にスクロール を切りかえる
+ const fitBtn=$('#w-fit'),stageEl=$('#w-stage');const narrow=()=>window.innerWidth<700;
+ const applyFit=()=>{const fit=S.set.wFit??(mode>=5);stageEl.classList.toggle('fit',fit);fitBtn.textContent=fit?'🔍 拡大して見る':'⤢ シーン全体を表示';fitBtn.parentElement.hidden=!narrow()};
+ fitBtn.onclick=()=>{S.set.wFit=!(S.set.wFit??(mode>=5));save();applyFit()};applyFit();
+ const selTab=app.querySelector('.wmodes [aria-selected="true"]');if(selTab&&selTab.scrollIntoView)selTab.scrollIntoView({block:'nearest',inline:'center'});
  function sayWord(e){if(e.en){speak(e.en.replace(/^the /,''))}}
  function showMenu(title,sub,list,actor){
   menu.innerHTML=`<div class="wmhead"><b class="en">${esc(title)}</b><small class="muted">${esc(sub)}</small><span class="sp"></span><button class="btn ghost sm" id="wm-x">とじる</button></div>

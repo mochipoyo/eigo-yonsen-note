@@ -3,7 +3,7 @@
 const TM=[{id:'t2',say:"two o'clock",num:'2:00',ja:'2時',u:['two','2']},{id:'t3',say:"three o'clock",num:'3:00',ja:'3時',u:['three','3']},{id:'t4',say:"four o'clock",num:'4:00',ja:'4時',u:['four','4']}];
 const RS=[{id:'client',en:'the client is running late',ja:'取引先の到着が遅れている',u:['client','customer','late','delay*']},{id:'room',en:"the meeting room isn't available",ja:'会議室が使えない',u:['room','not available','unavailable','booked']}];
 const CL=[{id:'tom',name:'Tom Baker',co:'ABC Company',ja:'ABC社のトム・ベイカーさん',pron:'he',u:['tom','baker']},{id:'lisa',name:'Lisa Chen',co:'Green Foods',ja:'グリーンフーズのリサ・チェンさん',pron:'she',u:['lisa','chen']}];
-const BY=[{id:'b5',say:'before five',ja:'5時までに',memo:'Call back by 5',u:['five','5']},{id:'b12',say:'before noon',ja:'正午までに',memo:'Call back by 12',u:['noon','twelve','12','midday','lunch']}];
+const BY=[{id:'b5',say:'by five',ja:'5時までに',memo:'Call back by 5',u:['five','5']},{id:'b12',say:'by noon',ja:'正午までに',memo:'Call back by 12',u:['noon','twelve','12','midday','lunch']}];
 const MOVE=['moved','changed','postponed','pushed','rescheduled','now at','is at','will be at','starts at','start at','meeting at','meeting is','new time'];
 WSC.add({id:'office',t:'オフィス',en:'Office',cat:'business',bg:'office',floor:[410,580],ground:{en:'the floor',ja:'床'},
  ents:[
@@ -49,7 +49,7 @@ WSC.add({id:'office',t:'オフィス',en:'Office',cat:'business',bg:'office',flo
    {if:{variant:'vague'},npc:'boss',say:'Oh, sorry. At {time.say}.',ja:'ああ、ごめん。{time.ja}だよ。',key:true},
    {id:'why',focus:'could',talk:{ja:'変更の理由をたずねよう',hint:'Could you tell me why?'},to:'boss',
     intents:[I('why',[['why','reason','what happened','how come']],'Could you tell me why?',{main:true,ja:'理由を教えていただけますか。',alts:['May I ask why?','Why was it moved?']}),
-     I('ok',[U.yes.concat(U.thanks)],'OK.',{tone:'unnatural',better:'Could you tell me why?',why:'理由を聞いておくと、同僚にも説明できます。',set:{toldWhy:true},reply:[{say:'By the way, the reason is that {why.en}. Could you let Ryo know?',ja:'ちなみに、理由は{why.ja}からなんだ。リョウにも伝えてくれる?'}]})],
+     I('ok',[U.yes.concat(U.thanks)],'OK.',{tone:'unnatural',better:'Could you tell me why?',why:'英語としては自然ですが、理由を聞いておくと同僚にも説明できます(この場面の目的)。',set:{toldWhy:true},reply:[{say:'By the way, the reason is that {why.en}. Could you let Ryo know?',ja:'ちなみに、理由は{why.ja}からなんだ。リョウにも伝えてくれる?'}]})],
     choices:[{en:'Could you tell me why?',i:'why'},{en:'OK.',i:'ok'}]},
    {if:{not:{flag:'toldWhy'}},npc:'boss',say:'The reason is that {why.en}. Could you let Ryo know?',ja:'理由は、{why.ja}からなんだ。リョウにも伝えてくれる?',key:true},
    {id:'reply',talk:{ja:'引き受けよう',hint:'Sure, no problem.'},to:'boss',intents:[I('sure',[U.yes.concat(['will do','i will'])],'Sure, no problem.',{main:true,ja:'はい、わかりました。'})],choices:[{en:'Sure, no problem.',i:'sure'}]},
@@ -74,7 +74,8 @@ WSC.add({id:'office',t:'オフィス',en:'Office',cat:'business',bg:'office',flo
    {id:'op',focus:'ithink',talk:{ja:'自分の意見と理由を言おう',hint:'I think we should finish them before lunch because we have time now.'},to:'ryo',
     intents:[I('op',[U.think,U.reason.concat(['so that','that way'])],'I think we should finish them before lunch because we have time now.',{main:true,ja:'今は時間があるので、昼前に仕上げたほうがいいと思います。',alts:['I think after the meeting is better because the client may have new ideas.']}),
      I('opbare',[U.think],'I think before lunch.',{tone:'unnatural',better:'I think we should finish them before lunch because we have time now.',why:'because ... で理由を加えると、意見に説得力が出ます。'}),
-     I('either',[['whatever','either is fine','i do not care','dont care','up to you']],'Whatever.',{tone:'rude',better:'I think we should finish them before lunch because we have time now.',why:'Whatever. は投げやりに聞こえます。自分の意見を言いましょう。'})],
+     I('upto',[['either is fine','up to you','either way']],"Either is fine. It's up to you.",{tone:'unnatural',better:'I think we should finish them before lunch because we have time now.',why:'失礼ではありませんが、意見を聞かれているので、自分の考えと理由を言ってみましょう。'}),
+     I('either',[['whatever','i do not care','dont care']],'Whatever.',{tone:'rude',better:'I think we should finish them before lunch because we have time now.',why:'Whatever. は投げやりに聞こえます。自分の意見を言いましょう。'})],
     choices:[{en:'I think we should finish them before lunch because we have time now.',i:'op'},{en:'Whatever.',i:'either'},{en:'I think before lunch.',i:'opbare'}]},
    SAY('ryo',"Good point. Let's do that. Thanks, Emma!",'いい考えだね。そうしよう。ありがとう、エマ!',{expr:'happy'}),
   ],

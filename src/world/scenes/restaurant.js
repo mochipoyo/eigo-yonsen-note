@@ -34,7 +34,7 @@ WSC.add({id:'restaurant',t:'レストラン',cat:'daily',en:'Restaurant',bg:'res
   init:[{op:'hide',id:'woman'},{op:'pos',who:'man',x:900,y:540},{op:'pos',who:'waiter',x:300,y:470}],
   steps:[
    DO({op:'walk',who:'waiter',x:820,y:520}),
-   SAY('waiter','Good evening. Do you have a reservation?','いらっしゃいませ。ご予約はありますか。',{key:true}),
+   SAY('waiter','Good evening. Do you have a reservation?','いらっしゃいませ。ご予約はございますか。',{key:true}),
    {id:'table',focus:'could',talk:{ja:'予約はしていない。1人分の席を頼もう',hint:"No, I don't. Could I have a table for one, please?"},to:'waiter',
     intents:[I('t1',[['table','seat','one person','just one','just me','for one','by myself','alone']],"No, I don't. Could I have a table for one, please?",{main:true,ja:'いいえ。1人なのですが、席はありますか。',alts:['No. A table for one, please.','Just one, please.']}),
      I('yes',[['yes','i do','i have']],'Yes, I do.',{tone:'wrong',retry:true,not:[['no']],why:'予約はしていません。',reply:[{say:"May I have your name?... Hmm, I can't find it.",ja:'お名前は?…うーん、見つかりませんね。',expr:'confused',exprAfter:'normal'}]})],

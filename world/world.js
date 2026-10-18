@@ -48,7 +48,7 @@ const U={
  propose:['how about','what about','would you like','can i suggest','could i suggest','why not','maybe','instead','i recommend','we have','we do have','try'],
  yes:['yes','yeah','yep','sure','of course','certainly','no problem','ok','okay','absolutely','go ahead','right','fine'],
  no:['no','nope','not really'],
- notatall:['not at all','no problem','of course not','go ahead','i do not mind','dont mind','no not at all','sure'],
+ notatall:['not at all','no problem','of course not','go ahead','i do not mind','dont mind','no not at all','sure','no','no worries','that is fine','thats fine','fine','okay'],
  thanks:['thank you','thanks','appreciate','cheers'],
  bye:['have a nice day','have a good day','have a great day','enjoy','see you','take care','come again','bye','goodbye','have a good one','have a nice','have a good'],
  hello:['hello','hi','good morning','good afternoon','good evening','hey','welcome'],
@@ -948,7 +948,7 @@ const EXPR=[
   resp:[['Sure. It\'s over there.','いいですよ。あちらです。'],['Of course.','もちろんです。'],['I\'m sorry, I can\'t right now.','すみません、今はできません。']]},
  {id:'wouldmind',en:'Would you mind ...ing?',ja:'ていねいにお願いする',use:'「〜していただいてもかまいませんか」。さらにていねい。引き受けるときの答えは No / Not at all(「気にしない」=いいですよ)。Yes と答えると「いやです」の意味になるので注意。',
   ex:[['Would you mind waiting a few minutes?','数分お待ちいただいてもよろしいですか。'],['Would you mind closing the window?','窓を閉めていただけませんか。']],
-  resp:[['Not at all.','かまいませんよ。'],['No, go ahead.','いいですよ、どうぞ。'],['Actually, I\'m in a bit of a hurry.','実は少し急いでいるんです。']]},
+  resp:[['Not at all.','かまいませんよ。'],['No problem.','いいですよ。'],['Actually, I\'m in a bit of a hurry.','実は少し急いでいるんです。']]},
  {id:'doyoumean',en:'Do you mean ...?',ja:'確認する',use:'相手の言ったことが合っているか確かめるとき。聞きまちがいによるトラブルを防げる。',
   ex:[['Do you mean the meeting on Friday?','金曜日の会議のことですか。'],['Do you mean Gate 12?','12番ゲートということですか。']],
   resp:[['Yes, that\'s right.','はい、そうです。'],['No, I mean Thursday.','いいえ、木曜日のことです。']]},
@@ -968,7 +968,7 @@ const EXPR=[
   ex:[['There\'s a problem with my reservation.','予約に問題があります。'],['There\'s a problem with this jacket. The zipper is broken.','このジャケットに問題があります。ファスナーが壊れています。']],
   resp:[['I\'m sorry. Let me check.','申し訳ありません。確認します。'],['What seems to be the problem?','どうなさいましたか。']]},
  {id:'whatimean',en:'What I mean is ...',ja:'言い換える',use:'うまく伝わらなかったとき、言い方を変えて説明し直す。I mean ... でもよい。',
-  ex:[['What I mean is, I booked three nights, not two.','つまり、2泊ではなく3泊で予約したということです。']],
+  ex:[['No, what I mean is, I booked three nights, not two.','いえ、つまり、2泊ではなく3泊で予約したということです。']],
   resp:[['Oh, I see.','ああ、わかりました。'],['Got it. Thanks.','了解です。']]},
  {id:'ithink',en:'I think ... because ...',ja:'意見を述べる',use:'自分の考えと理由をセットで言う。会議や相談で、理由まで言うと説得力が出る。',
   ex:[['I think we should move the meeting because the client is late.','お客様が遅れているので、会議を移したほうがいいと思います。']],
@@ -1260,6 +1260,7 @@ VIEWS.wscene=function(app){
  ${mode===1?`<p class="whint">人物をタップ → 動作を選ぶ / 人物を選んでから物をタップ → 組み合わせの動作 / ドラッグで移動。家具の電源やドアは直接タップでも操作できます。</p>`:''}
  ${mode>1&&mode<5?'<div class="wmis" id="w-mis"></div>':''}
  ${story?'<div class="wsgoal" id="w-sgoal"></div>':''}
+ <div class="wzoom"><button class="linkbtn" id="w-fit"></button></div>
  <div class="wstage" id="w-stage"></div>
  ${story?'<div class="wtalk" id="w-talk"><div class="wlog" id="w-log" aria-live="polite"></div><div class="wnow" id="w-now"></div></div>':''}
  <div class="wmenu" id="w-menu"></div>
@@ -1294,6 +1295,11 @@ VIEWS.wscene=function(app){
   drop(e,pt){if(role&&e!==role){W.draw();toast(`会話ミッションでは、あなたの役(${role.ja})を動かして操作します。`);return}doAct(()=>dropAct(W,e,pt))},
   onDragStart(){menu.innerHTML=''}};
  W_mount($('#w-stage'),W,api);
+ // 画面がせまいとき: 全体を表示(会話ミッションの初期値)/拡大して横にスクロール を切りかえる
+ const fitBtn=$('#w-fit'),stageEl=$('#w-stage');const narrow=()=>window.innerWidth<700;
+ const applyFit=()=>{const fit=S.set.wFit??(mode>=5);stageEl.classList.toggle('fit',fit);fitBtn.textContent=fit?'🔍 拡大して見る':'⤢ シーン全体を表示';fitBtn.parentElement.hidden=!narrow()};
+ fitBtn.onclick=()=>{S.set.wFit=!(S.set.wFit??(mode>=5));save();applyFit()};applyFit();
+ const selTab=app.querySelector('.wmodes [aria-selected="true"]');if(selTab&&selTab.scrollIntoView)selTab.scrollIntoView({block:'nearest',inline:'center'});
  function sayWord(e){if(e.en){speak(e.en.replace(/^the /,''))}}
  function showMenu(title,sub,list,actor){
   menu.innerHTML=`<div class="wmhead"><b class="en">${esc(title)}</b><small class="muted">${esc(sub)}</small><span class="sp"></span><button class="btn ghost sm" id="wm-x">とじる</button></div>

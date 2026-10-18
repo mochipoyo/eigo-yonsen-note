@@ -43,7 +43,7 @@ const U={
  propose:['how about','what about','would you like','can i suggest','could i suggest','why not','maybe','instead','i recommend','we have','we do have','try'],
  yes:['yes','yeah','yep','sure','of course','certainly','no problem','ok','okay','absolutely','go ahead','right','fine'],
  no:['no','nope','not really'],
- notatall:['not at all','no problem','of course not','go ahead','i do not mind','dont mind','no not at all','sure'],
+ notatall:['not at all','no problem','of course not','go ahead','i do not mind','dont mind','no not at all','sure','no','no worries','that is fine','thats fine','fine','okay'],
  thanks:['thank you','thanks','appreciate','cheers'],
  bye:['have a nice day','have a good day','have a great day','enjoy','see you','take care','come again','bye','goodbye','have a good one','have a nice','have a good'],
  hello:['hello','hi','good morning','good afternoon','good evening','hey','welcome'],

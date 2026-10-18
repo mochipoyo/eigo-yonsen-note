@@ -1,6 +1,6 @@
 // ===== シーン 08 駅 =====
 (()=>{
-const DEST=[{id:'air',en:'the Airport',d:'Airport',ja:'空港',u:['airport']},{id:'cen',en:'Central Station',d:'Central',ja:'中央駅',u:['central']}];
+const DEST=[{id:'air',en:'the airport',d:'Airport',ja:'空港',u:['airport']},{id:'cen',en:'Central Station',d:'Central',ja:'中央駅',u:['central']}];
 const DL=[{id:'d20',say:'twenty',num:'20',ja:'20分',u:['twenty','20']},{id:'d30',say:'thirty',num:'30',ja:'30分',u:['thirty','30']}];
 WSC.add({id:'station',t:'駅',cat:'travel',en:'Station',bg:'station',floor:[380,580],ground:{en:'the platform',ja:'ホーム'},
  ents:[
@@ -39,7 +39,7 @@ WSC.add({id:'station',t:'駅',cat:'travel',en:'Station',bg:'station',floor:[380,
     intents:[I('ask',[['train','ten fifteen','{dest.u}','my train'],['on time','delayed','late','what time','when','leave','arrive','depart','coming','running','schedule']],'Excuse me. Could you tell me if the ten fifteen train to {dest.en} is on time?',{main:true,ja:'すみません、{dest.ja}行き10時15分の電車は時間どおりか教えていただけますか。',alts:['Is the ten fifteen train delayed?']}),
      I('again',[['announcement','did not catch','didnt catch','could not hear','couldnt hear','what did they say','say again']],"Sorry, I couldn't hear the announcement. Is the ten fifteen train on time?",{ja:'すみません、放送が聞こえなかったのですが、10時15分の電車は時間どおりですか。'})],
     choices:[{en:'Excuse me. Could you tell me if the ten fifteen train to {dest.en} is on time?',i:'ask'},{en:"Sorry, I couldn't hear the announcement. Is the ten fifteen train on time?",i:'again'}]},
-   {if:{variant:'delay'},npc:'staff',say:"I'm afraid it's delayed by about {dl.say} minutes. The reason is signal trouble.",ja:'あいにく約{dl.ja}遅れています。信号トラブルが原因です。',expr:'sorry',exprAfter:'normal',key:true},
+   {if:{variant:'delay'},npc:'staff',say:"I'm afraid it's delayed by about {dl.say} minutes. It's because of signal trouble.",ja:'あいにく約{dl.ja}遅れています。信号トラブルのためです。',expr:'sorry',exprAfter:'normal',key:true},
    {if:{variant:'normal'},npc:'staff',say:"Yes, it's on time. It'll arrive on track two in a few minutes.",ja:'はい、時間どおりです。数分で2番線に到着します。',key:true},
    {if:{variant:'delay'},id:'conf',focus:'doyoumean',talk:{ja:'遅れの時間を確かめよう',hint:'Do you mean about {dl.say} minutes?'},to:'staff',
     intents:[I('ok',[U.doyoumean.concat(['so','about','right']),['{dl.u}']],'Do you mean about {dl.say} minutes?',{main:true,ja:'約{dl.ja}ということですか。',reply:[{say:"Yes, that's right. You can wait on the bench over there.",ja:'はい、そうです。あちらのベンチでお待ちいただけます。'}]}),
