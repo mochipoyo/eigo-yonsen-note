@@ -379,6 +379,36 @@ code{font-family:var(--f-num);font-size:.9em;background:color-mix(in srgb,var(--
 .walking .lgB,.walking .armF{animation:wlk .45s ease-in-out infinite alternate}.walking .lgF,.walking .armB{animation:wlk .45s ease-in-out infinite alternate-reverse}
 .running .lgB,.running .armF{animation:run .26s ease-in-out infinite alternate}.running .lgF,.running .armB{animation:run .26s ease-in-out infinite alternate-reverse}
 .walking>*:not(ellipse),.running>*:not(ellipse){animation:bobw .45s ease-in-out infinite alternate}
+/* ワールド: 会話ミッション */
+.tabs .tab.tstory{border-color:var(--blue)}
+.wh2{font-size:20px;margin:26px 0 8px}.wh2 small{font-size:13px;font-weight:400}
+.wslist{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.wscard{background:var(--sheet);border:1.5px solid var(--line);border-radius:var(--r);padding:12px;text-align:left;color:var(--ink);font:inherit}
+.wscard.wsmini{display:flex;flex-direction:column;gap:4px;cursor:pointer}.wscard.wsmini:hover{border-color:var(--blue)}
+.wsintro{background:var(--sheet);border:1.5px solid var(--line);border-radius:var(--r);padding:12px;margin:8px 0}.wsintro p{margin:4px 0}
+.wsgoal{background:var(--sheet);border:2px solid var(--ink);border-radius:14px;padding:10px 12px;margin:8px 0}
+.wprog{display:flex;gap:4px;margin-top:8px}.wprog i{flex:1;height:6px;border-radius:3px;background:var(--line)}.wprog i.on{background:var(--green)}
+.wtalk{background:var(--sheet);border:1.5px solid var(--line);border-radius:14px;margin-top:10px;padding:10px}
+.wlog{display:flex;flex-direction:column;gap:8px;max-height:340px;overflow-y:auto;padding:2px}
+.wintro{font-size:14px;color:var(--muted);border-left:3px solid var(--blue);padding:2px 8px}
+.wl{display:flex;flex-direction:column;max-width:88%}.wl.me{align-self:flex-end;align-items:flex-end}
+.wlw{font-size:12px;color:var(--muted);margin:0 4px 2px}
+.wlb{background:var(--them);border-radius:14px 14px 14px 4px;padding:8px 12px}.wl.me .wlb{background:var(--me);border-radius:14px 14px 4px 14px}
+.wl.pa .wlb{background:color-mix(in srgb,var(--marker) 30%,var(--sheet));border-radius:10px}
+.wl.again .wlb{outline:2px dashed var(--blue)}
+.wle{font-size:17px;line-height:1.45}.wle.hid{font-size:14px}.wlj{font-size:14px;color:var(--muted);margin-top:2px}
+.wlbtn{display:flex;gap:6px;align-items:center;margin-top:4px}.wlbtn .say{width:30px;height:30px}
+.wres{font-size:13px;margin-top:4px}.wres.good{color:var(--green)}.wres.bad{color:var(--red)}
+.chips.sm .chip{font-size:12px;padding:2px 8px}
+.wbetter{font-size:14px;margin-top:4px}
+.wnow{border-top:1px dashed var(--line);margin-top:10px;padding-top:10px}
+.wtask{display:flex;gap:8px;flex-wrap:wrap;align-items:baseline;margin-bottom:6px}.wtask b{background:var(--ink);color:var(--sheet);border-radius:999px;padding:2px 10px;font-size:13px}
+.wchoice{display:grid;gap:6px;margin:6px 0}.wchoice .wact{text-align:left}
+.wwait{font-size:14px}
+.wfb h4{margin:14px 0 4px}.wfbh{font-size:20px;font-weight:700;margin-bottom:8px}.wfbh.ok{color:var(--green)}.wfbh small{font-size:12px;color:var(--muted);margin-left:8px;font-weight:400}
+.wfbu{margin:4px 0;padding-left:20px}.wfbl .ex{margin-bottom:6px}
+.wexrows{display:flex;flex-direction:column;gap:4px;margin-top:8px}.wexr{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;border-bottom:1px dashed var(--line);padding:4px 0}
+.btn.hl,.hl.btn{}#ab-hint.hl{outline:2px solid var(--marker)}
 /* ワールド: 話している人の口・吹き出し・タップしやすさ */
 .went.talking .m-o{animation:mOpen .28s steps(1) infinite}.went.talking .m-c{animation:mClose .28s steps(1) infinite}
 @keyframes mOpen{0%{opacity:0}50%{opacity:1}}@keyframes mClose{0%{opacity:1}50%{opacity:0}}
@@ -4804,8 +4834,8 @@ function confetti(){const cv=document.getElementById('fx');if(matchMedia('(prefe
 // ---- router ----
 let V={name:'home'};let RT={};// RT = 実行中の画面の一時データ(クイズの進行など)
 const VIEWS={};
-function go(v,replace){stopAllAudio();if(!['drill','quest'].includes(v.name))RT.lc=null;if(V.name==='passive')RT.passiveStop&&RT.passiveStop();V=v;try{replace?history.replaceState(v,''):history.pushState(v,'')}catch(e){}render();window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'})}
-window.addEventListener('popstate',e=>{stopAllAudio();RT.passiveStop&&RT.passiveStop();V=e.state||{name:'home'};if(['quiz','vsess','drill','lesson-run'].includes(V.name))V={name:'home'};render()});
+function go(v,replace){stopAllAudio();if(RT.wLeave){RT.wLeave();RT.wLeave=null}if(!['drill','quest'].includes(v.name))RT.lc=null;if(V.name==='passive')RT.passiveStop&&RT.passiveStop();V=v;try{replace?history.replaceState(v,''):history.pushState(v,'')}catch(e){}render();window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'})}
+window.addEventListener('popstate',e=>{stopAllAudio();if(RT.wLeave){RT.wLeave();RT.wLeave=null}RT.passiveStop&&RT.passiveStop();V=e.state||{name:'home'};if(['quiz','vsess','drill','lesson-run'].includes(V.name))V={name:'home'};render()});
 function render(){renderChip();const app=document.getElementById('app');(VIEWS[V.name]||VIEWS.home)(app)}
 const backBtn=(label,v)=>`<button class="back" data-go='${JSON.stringify(v)}'>← ${label}</button>`;
 function wireGo(root){root.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(JSON.parse(b.dataset.go)))}
@@ -6441,8 +6471,8 @@ function schEnd(app,D){const n=D.res.length,ok=D.res.filter(Boolean).length;cons
  wireGo(app);const a=app.querySelector('#again');if(a)a.onclick=()=>{const u=sById(D.unit);startSchool({title:u.t,items:u.q.map((q,i)=>({u,q,i})),unit:u.id})};
 }
 
-const WORLD_V="91f6c001a4";
-const WMAN=[{"id":"living","t":"リビング","en":"Living Room","cat":"daily","n":7,"s":0},{"id":"kitchen","t":"キッチン","en":"Kitchen","cat":"daily","n":7,"s":0},{"id":"bedroom","t":"寝室","en":"Bedroom","cat":"daily","n":8,"s":0},{"id":"park","t":"公園","en":"Park","cat":"daily","n":7,"s":0},{"id":"cafe","t":"カフェ","en":"Café","cat":"daily","n":7,"s":0},{"id":"school","t":"学校","en":"Classroom","cat":"daily","n":7,"s":0},{"id":"market","t":"スーパー","en":"Supermarket","cat":"daily","n":7,"s":0},{"id":"station","t":"駅","en":"Station","cat":"daily","n":7,"s":0},{"id":"office","t":"オフィス","en":"Office","cat":"daily","n":6,"s":0},{"id":"restaurant","t":"レストラン","en":"Restaurant","cat":"daily","n":7,"s":0},{"id":"beach","t":"ビーチ","en":"Beach","cat":"daily","n":7,"s":0},{"id":"street","t":"街の交差点","en":"Street","cat":"daily","n":6,"s":0}];
+const WORLD_V="0ccf59e619";
+const WMAN=[{"id":"living","t":"リビング","en":"Living Room","cat":"daily","n":7,"st":[]},{"id":"kitchen","t":"キッチン","en":"Kitchen","cat":"daily","n":7,"st":[]},{"id":"bedroom","t":"寝室","en":"Bedroom","cat":"daily","n":8,"st":[]},{"id":"park","t":"公園","en":"Park","cat":"daily","n":7,"st":[]},{"id":"cafe","t":"カフェ","en":"Café","cat":"daily","n":7,"st":[{"id":"cafe-barista","t":"注文を受ける","en":"Take an order","me":"店員","focus":["sayagain","afraid","howabout","wouldmind"]},{"id":"cafe-customer","t":"注文して、問題を伝える","en":"Order and fix a problem","me":"女性","focus":["could","whatimean","problem","doyoumean"]}]},{"id":"school","t":"学校","en":"Classroom","cat":"daily","n":7,"st":[]},{"id":"market","t":"スーパー","en":"Supermarket","cat":"daily","n":7,"st":[]},{"id":"station","t":"駅","en":"Station","cat":"daily","n":7,"st":[]},{"id":"office","t":"オフィス","en":"Office","cat":"daily","n":6,"st":[]},{"id":"restaurant","t":"レストラン","en":"Restaurant","cat":"daily","n":7,"st":[]},{"id":"beach","t":"ビーチ","en":"Beach","cat":"daily","n":7,"st":[]},{"id":"street","t":"街の交差点","en":"Street","cat":"daily","n":6,"st":[]}];
 // ===== うごかす英語ワールド: 読み込み係 =====
 // ワールド本体(world/world.js)とシーン(world/scenes/<id>.js)は、ワールドを開いたときだけ読み込む。
 // WORLD_V(版の番号)と WMAN(シーン一覧に出す情報)は build.py が作って、このファイルの前に入れる。

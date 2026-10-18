@@ -21,6 +21,30 @@ const LK={// 登場人物の見た目
  waiter:{skin:'#ffe0c7',hair:'#3a2a24',hs:'short',top:'#f6f6f2',bottom:'#2b2b33',kind:'suit',tie:'#2b2b33'},
  swimman:{skin:'#f6d3b8',hair:'#3a2a24',hs:'short',top:'#f28b7f',bottom:'#3a8fd0',kind:'tee',shortSleeve:true},
  swimwoman:{skin:'#ffe3cf',hair:'#8a4b2a',hs:'pony',top:'#f5c542',bottom:'#f5c542',kind:'dress'},
+ guest:{skin:'#f3cfb3',hair:'#2f2f3a',hs:'bob',top:'#3aa0db',bottom:'#4a4f5c',kind:'hoodie'},
  cyclist:{skin:'#ffe0c7',hair:'#3a2a24',hs:'short',top:'#3aa0db',bottom:'#2b2f38',kind:'hoodie',bike:'#3a8a5a'},
 };
 const P=(id,en,ja,pron,look,x,y,o={})=>({id,k:'person',en,ja,pron,look,x,y,...o});
+// ---- 会話ミッションを書くための部品 ----
+const I=(id,units,model,o={})=>({id,units,model,...o});// 意図: 意味のかたまり・模範の言い方
+const SAY=(npc,say,ja,o={})=>({npc,say,ja,...o});
+const DO=(...ops)=>({do:ops});
+// よく使う「意味のかたまり」(言い方の候補)。照合のときに短縮形はそろえる(don't → do not)
+const U={
+ req:['please','could i','can i','may i','i would like','i will have','could you','can you','would you','could we','can we','i will get','let me get','i will take'],
+ could:['could you','can you','would you','will you','could i','can i','may i'],
+ sorry:['afraid','sorry','unfortunately','apolog*'],
+ outof:['out of','sold out','run out','ran out','no more','do not have any','do not have','dont have','not available','none left','finished'],
+ propose:['how about','what about','would you like','can i suggest','could i suggest','why not','maybe','instead','i recommend','we have','we do have','try'],
+ yes:['yes','yeah','yep','sure','of course','certainly','no problem','ok','okay','absolutely','go ahead','right','fine'],
+ no:['no','nope','not really'],
+ notatall:['not at all','no problem','of course not','go ahead','i do not mind','dont mind','no not at all','sure'],
+ thanks:['thank you','thanks','appreciate','cheers'],
+ bye:['have a nice day','have a good day','have a great day','enjoy','see you','take care','come again','bye','goodbye','have a good one','have a nice','have a good'],
+ hello:['hello','hi','good morning','good afternoon','good evening','hey','welcome'],
+ problem:['problem with','problem','something wrong','wrong with','issue','does not work','is not working','not working','broken','doesnt work','isnt working'],
+ mean:['what i mean','i mean','i meant','i said','what i said','i ordered','i wanted','i asked for','actually'],
+ doyoumean:['do you mean','you mean','did you say','you said','so you mean','is that'],
+ reason:['the reason','because','since','that is why','thats why','due to'],
+ think:['i think','i believe','in my opinion','i feel','maybe we should','we should','i suggest','how about'],
+};

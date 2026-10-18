@@ -26,9 +26,33 @@ const LK={// 登場人物の見た目
  waiter:{skin:'#ffe0c7',hair:'#3a2a24',hs:'short',top:'#f6f6f2',bottom:'#2b2b33',kind:'suit',tie:'#2b2b33'},
  swimman:{skin:'#f6d3b8',hair:'#3a2a24',hs:'short',top:'#f28b7f',bottom:'#3a8fd0',kind:'tee',shortSleeve:true},
  swimwoman:{skin:'#ffe3cf',hair:'#8a4b2a',hs:'pony',top:'#f5c542',bottom:'#f5c542',kind:'dress'},
+ guest:{skin:'#f3cfb3',hair:'#2f2f3a',hs:'bob',top:'#3aa0db',bottom:'#4a4f5c',kind:'hoodie'},
  cyclist:{skin:'#ffe0c7',hair:'#3a2a24',hs:'short',top:'#3aa0db',bottom:'#2b2f38',kind:'hoodie',bike:'#3a8a5a'},
 };
 const P=(id,en,ja,pron,look,x,y,o={})=>({id,k:'person',en,ja,pron,look,x,y,...o});
+// ---- 会話ミッションを書くための部品 ----
+const I=(id,units,model,o={})=>({id,units,model,...o});// 意図: 意味のかたまり・模範の言い方
+const SAY=(npc,say,ja,o={})=>({npc,say,ja,...o});
+const DO=(...ops)=>({do:ops});
+// よく使う「意味のかたまり」(言い方の候補)。照合のときに短縮形はそろえる(don't → do not)
+const U={
+ req:['please','could i','can i','may i','i would like','i will have','could you','can you','would you','could we','can we','i will get','let me get','i will take'],
+ could:['could you','can you','would you','will you','could i','can i','may i'],
+ sorry:['afraid','sorry','unfortunately','apolog*'],
+ outof:['out of','sold out','run out','ran out','no more','do not have any','do not have','dont have','not available','none left','finished'],
+ propose:['how about','what about','would you like','can i suggest','could i suggest','why not','maybe','instead','i recommend','we have','we do have','try'],
+ yes:['yes','yeah','yep','sure','of course','certainly','no problem','ok','okay','absolutely','go ahead','right','fine'],
+ no:['no','nope','not really'],
+ notatall:['not at all','no problem','of course not','go ahead','i do not mind','dont mind','no not at all','sure'],
+ thanks:['thank you','thanks','appreciate','cheers'],
+ bye:['have a nice day','have a good day','have a great day','enjoy','see you','take care','come again','bye','goodbye','have a good one','have a nice','have a good'],
+ hello:['hello','hi','good morning','good afternoon','good evening','hey','welcome'],
+ problem:['problem with','problem','something wrong','wrong with','issue','does not work','is not working','not working','broken','doesnt work','isnt working'],
+ mean:['what i mean','i mean','i meant','i said','what i said','i ordered','i wanted','i asked for','actually'],
+ doyoumean:['do you mean','you mean','did you say','you said','so you mean','is that'],
+ reason:['the reason','because','since','that is why','thats why','due to'],
+ think:['i think','i believe','in my opinion','i feel','maybe we should','we should','i suggest','how about'],
+};
 
 // ===== ワールド: キャラクター描画(人物・動物・小物のSVG) =====
 // すべてオリジナルのベクター画。原点 (0,0) は足元(床に接する点)、+x が向いている方向。
@@ -195,6 +219,11 @@ const PROP={
  docs:()=>`<rect x="-14" y="-6" width="26" height="6" fill="#fff" ${ow}/><rect x="-12" y="-9" width="26" height="4" fill="#f4f6fb" ${ow}/><path d="M-8 -3h14" stroke="#9aa" stroke-width="1.2"/>`,
  phone:()=>`<rect x="-6" y="-20" width="12" height="20" rx="3" fill="#2d3340" ${ow}/><rect x="-4" y="-17" width="8" height="13" fill="#7fc7f0"/>`,
  flowerpot:()=>`<path d="M-10 0l-3-14h26l-3 14z" fill="#c8693f" ${ow}/><circle cx="-6" cy="-22" r="5" fill="#f28bb0" ${ow}/><circle cx="6" cy="-24" r="5" fill="#f5c542" ${ow}/><path d="M-6 -17v4M6 -19v6" stroke="#4e9a3a" stroke-width="2"/>`,
+ latte:(st)=>`<path d="M-9 -34h18l-2.5 34h-13z" fill="#fff" opacity=".95" ${ow}/><path d="M-8.2 -22h16.4l-1.6 21h-13.2z" fill="#a8703f"/><path d="M-8.6 -28h17.2l-.4 6h-16.4z" fill="#f2e2c6"/><path d="M-6 -31q6-4 12 0" stroke="#fff" stroke-width="2" fill="none"/>${st.cold?'':'<path class="steam" d="M-2 -38q-3-5 0-9M4 -38q-3-5 0-9" stroke="#c9d3e6" stroke-width="1.8" fill="none"/>'}`,
+ cappu:(st)=>`<ellipse cx="0" cy="-1" rx="17" ry="3.5" fill="#fff" ${ow}/><path d="M-12 -20h24l-3 18h-18z" fill="#fff" ${ow}/><path d="M12 -16q8 0 7 6q-1 4-8 4" fill="none" stroke="${OL}" stroke-width="2"/><path d="M-12 -20q12-11 24 0z" fill="#fbf1e2" ${ow}/><circle cx="-3" cy="-24" r="1.4" fill="#8a5a3c"/><circle cx="3" cy="-25" r="1.4" fill="#8a5a3c"/><circle cx="0" cy="-22" r="1.2" fill="#8a5a3c"/>`,
+ tea:(st)=>`<path d="M-11 -18h22l-3 18h-16z" fill="#fff" ${ow}/><path d="M11 -14q8 0 7 6q-1 4-8 4" fill="none" stroke="${OL}" stroke-width="2"/><ellipse cx="0" cy="-18" rx="10" ry="2.4" fill="#c46a2c"/><path d="M4 -18q2 10 10 14" stroke="#ddd" stroke-width="1.2" fill="none"/><rect x="11" y="-6" width="7" height="8" rx="1" fill="#6ab04c" ${ow}/>${st.cold?'':'<path class="steam" d="M-3 -22q-3-5 0-9" stroke="#c9d3e6" stroke-width="1.8" fill="none"/>'}`,
+ card:()=>`<rect x="-14" y="-10" width="28" height="18" rx="3" fill="#3d6fd0" ${ow}/><rect x="-14" y="-6" width="28" height="4" fill="#24356b"/><rect x="-10" y="1" width="8" height="4" rx="1" fill="#f5c542"/>`,
+ cash:()=>`<rect x="-14" y="-8" width="28" height="12" rx="1.5" fill="#9bd18c" ${ow}/><circle cx="0" cy="-2" r="3.5" fill="none" stroke="#4e8a3e" stroke-width="1.5"/>`,
  money:()=>`<rect x="-12" y="-6" width="24" height="6" rx="1" fill="#9bd18c" ${ow}/>`,
 };
 function propSvg(type,st={}){const f=PROP[type];return `<g class="pr">${f?f(st):''}</g>`}
@@ -235,7 +264,7 @@ const FIX={
  bicycle:(st,o)=>bikeSvg(o.c||'#e05a47'),
  // カウンター 天板 96 / 幅 o.w
  counter:(st,o)=>{const w=o.w||240,c=o.c||'#8a5a3c';return `<rect x="${-w/2}" y="-92" width="${w}" height="92" fill="${c}" ${ow}/><rect x="${-w/2-6}" y="-100" width="${w+12}" height="12" rx="3" fill="${shade(c,.35)}" ${ow}/><path d="M${-w/2+14} -70h${w-28}" stroke="${shade(c,.15)}" stroke-width="3"/>`},
- register:(st,o)=>`<rect x="-30" y="-36" width="60" height="36" rx="4" fill="#3c4250" ${ow}/><rect x="-24" y="-54" width="34" height="20" rx="2" fill="#2b2f38" ${ow}/><rect x="-21" y="-51" width="28" height="14" fill="${st.paid?'#7fe08a':'#7fc7f0'}"/><path d="M-22 -26h44M-22 -18h44" stroke="#8892a6" stroke-width="2"/>`,
+ register:(st,o)=>`<rect x="-30" y="-36" width="60" height="36" rx="4" fill="#3c4250" ${ow}/><rect x="-24" y="-54" width="34" height="20" rx="2" fill="#2b2f38" ${ow}/><rect x="-21" y="-51" width="28" height="14" fill="${st.err?'#f08a7e':st.paid?'#7fe08a':'#7fc7f0'}"/>${st.err?'<text x="-7" y="-40" text-anchor="middle" font-size="8" font-weight="700" fill="#7a1f17" font-family="sans-serif">ERROR</text>':''}<path d="M-22 -26h44M-22 -18h44" stroke="#8892a6" stroke-width="2"/>`,
  // 黒板(壁) 原点は下端中央 / 幅 300
  blackboard:(st,o)=>`<rect x="-156" y="-160" width="312" height="160" rx="6" fill="#a0754e" ${ow}/><rect x="-146" y="-150" width="292" height="140" fill="#2f5d4a"/>${st.text?`<text x="-120" y="-96" font-family="'Lexend',sans-serif" font-size="30" fill="#f4f4ec">${esc(st.text)}</text><path d="M-120 -80h170" stroke="#f4f4ec" stroke-width="2" opacity=".6"/>`:''}<rect x="-140" y="-8" width="280" height="8" fill="#8a6a4a" ${ow}/><rect x="60" y="-14" width="22" height="6" fill="#fff" ${ow}/>`,
  // 商品棚 幅 200 / 段の高さ 50, 100, 150
@@ -260,6 +289,8 @@ const FIX={
  building:(st,o)=>`<rect x="-90" y="-${o.h||320}" width="180" height="${o.h||320}" fill="${o.c||'#c9d3e0'}" ${ow}/>${[...Array(Math.floor((o.h||320)/60))].map((_,r)=>[-50,0,50].map(x=>`<rect x="${x-16}" y="${-(o.h||320)+20+r*60}" width="32" height="36" fill="#eaf4ff" ${ow}/>`).join('')).join('')}`,
  towel:(st,o)=>PROP.towel(),
  sea:(st,o)=>`<rect x="-500" y="-160" width="1000" height="160" fill="rgba(0,0,0,0)"/>`,
+ menuboard:(st,o)=>{const it=o.items||[];return `<rect x="-120" y="-130" width="240" height="130" rx="6" fill="#2f2a26" ${ow}/><text x="0" y="-104" text-anchor="middle" fill="#f5c542" font-size="17" font-weight="700" font-family="'Lexend',sans-serif">MENU</text>
+  ${it.map((m,i)=>{const y=-76+i*28,out=st.out===m.id;return `<text x="-100" y="${y}" fill="${out?'#8a8079':'#f5e6c8'}" font-size="16" font-family="'Lexend',sans-serif">${esc(m.label)}</text><text x="100" y="${y}" text-anchor="end" fill="${out?'#8a8079':'#f5e6c8'}" font-size="16" font-family="'Lexend',sans-serif">${esc(m.price)}</text>${out?`<path d="M-104 ${y-5}h208" stroke="#f0eae0" stroke-width="2"/><g transform="translate(40 ${y-6}) rotate(-8)"><rect x="-44" y="-12" width="88" height="22" rx="4" fill="#d9473b" stroke="#fff" stroke-width="1.5"/><text y="4" text-anchor="middle" fill="#fff" font-size="13" font-weight="700" font-family="'Lexend',sans-serif">SOLD OUT</text></g>`:''}`}).join('')}`},
  whiteboard:(st,o)=>`<rect x="-140" y="-150" width="280" height="150" rx="6" fill="#d9dde6" ${ow}/><rect x="-132" y="-142" width="264" height="134" fill="#fbfcff"/>${st.text?`<text x="-110" y="-90" font-family="'Lexend',sans-serif" font-size="26" fill="#2a63c4">${esc(st.text)}</text>`:'<path d="M-110 -110h120M-110 -84h170M-110 -58h90" stroke="#c9d3e6" stroke-width="5"/>'}<rect x="-120" y="-8" width="240" height="6" fill="#a3acbd" ${ow}/>`,
  cushion:(st,o)=>``,
 };
@@ -375,6 +406,10 @@ const VB={
  depart:{prog:(S,e)=>[`${cap(e.o.en)} ${isAre(e.o)} leaving.`,`${e.o.ja}が出発するところです。`],past:(S,e)=>[`${cap(e.o.en)} left.`,`${e.o.ja}が出発しました。`]},
 };
 // 文型の「何を学べるか」ラベル(苦手分析用)
+// ストーリーの特別な動作: 文型をシーン側で持つ({S}=主語 {be}=be動詞 {Sja}=主語の日本語 {poss}=所有格)
+const txFill=(t,S)=>String(t||'').replace(/\{S\}/g,S.en).replace(/\{be\}/g,S.be).replace(/\{Sja\}/g,S.ja).replace(/\{poss\}/g,S.poss);
+VB.custom={prog:(S,e)=>[txFill(e.tx.prog[0],S),txFill(e.tx.prog[1],S)],past:(S,e)=>e.tx.past&&e.tx.past.length?[txFill(e.tx.past[0],S),txFill(e.tx.past[1],S)]:null,
+ state:(S,e)=>e.tx.state?[txFill(e.tx.state[0],S),txFill(e.tx.state[1],S)]:null};
 const VERB_TAG={meeting:'start',sitA:'sit',liedown:'lie down',putdown:'put',jumpon:'jump onto',sit:'sit',sitfloor:'sit',lie:'lie',sleep:'sleep',stand:'stand up',walk:'walk',run:'run',go:'go',jump:'jump',wave:'wave',raise:'raise',bark:'bark',swim:'swim',pickup:'pick up',takeout:'take out',put:'put',place:'put',give:'give',show:'show',read:'read',open:'open',close:'close',turnon:'turn on',turnoff:'turn off',watch:'watch',drink:'drink',eat:'eat',pour:'pour',throw:'throw',catch:'catch',write:'write',use:'use',answer:'answer',order:'order',pay:'pay',bring:'bring',board:'get on',getoff:'get off',gothrough:'go through',enter:'go into',exit:'come out of',cross:'cross',ride:'ride',getonbike:'get on',getoffbike:'get off',wear:'put on',takeoff:'take off',drive:'drive',stopcar:'stop',light:'change',write_nb:'write',fetch:'bring back',arrive:'arrive',depart:'leave'};
 // 一つの出来事から、学習カード用の文をまとめて作る
 function describe(ev,mode='noun'){
@@ -382,7 +417,7 @@ function describe(ev,mode='noun'){
  const S=subj(ev.a,ev.a&&ev.a.user?'I':mode);
  const own=x=>x&&x.owner&&ev.a&&x.owner===ev.a.id?{...x,en:S.poss+' '+x.base,ja:'自分の'+x.baseja}:x;
  if(ev.r&&ev.r.owner||ev.o&&ev.o.owner)ev={...ev,r:own(ev.r),o:own(ev.o),state:ev.state?{...ev.state,r:own(ev.state.r),o:own(ev.state.o)}:ev.state};
- const mk=f=>{if(!f)return null;const [en,ja]=f(S,ev);return {en:T(en),ja}};
+ const mk=f=>{if(!f)return null;const r=f(S,ev);if(!r)return null;const [en,ja]=r;return {en:T(en),ja}};
  const out={prog:mk(vb.prog),past:mk(vb.past),state:mk(vb.state),v:ev.v,p:ev.p||(ev.state&&ev.state.p)||null,tag:VERB_TAG[ev.v]||ev.v};
  if(ev.state&&VB[ev.state.v]&&VB[ev.state.v].state){const e2={...ev.state,a:ev.a};const [en,ja]=VB[ev.state.v].state(S,e2);out.state={en:T(en),ja}}
  out.main=ev.stateFirst&&out.state?out.state:out.prog;
@@ -404,7 +439,7 @@ function imperative(g){const v=g.v,A=g.a,O=g.o,R=g.r,p=g.p;
 // ===== ワールド: オブジェクト状態管理(配置・持つ・座る・位置と奥行き)。描画やDOMには依存しない =====
 const USER={user:true,en:'I',ja:'私',k:'user'};
 // 家具の大きさ(当たり判定用) [幅, 高さ]
-const FIXSZ={towel:[124,24],sea:[1000,160],whiteboard:[290,156],sofa:[250,110],chair:[56,104],table:[160,70],desk:[120,64],tv:[150,150],door:[96,186],window:[172,130],fridge:[90,192],sink:[210,100],bed:[280,112],lamp:[60,160],clock:[56,56],tree:[220,290],bench:[176,90],pond:[264,70],flowers:[124,44],bicycle:[110,70],counter:[250,104],register:[64,56],blackboard:[316,164],shelf:[204,184],gate:[124,110],train:[524,206],computer:[70,60],deskphone:[44,30],parasol:[224,200],car:[210,110],trafficlight:[50,214],crosswalk:[260,72],shop:[284,244],building:[184,320]};
+const FIXSZ={menuboard:[240,130],towel:[124,24],sea:[1000,160],whiteboard:[290,156],sofa:[250,110],chair:[56,104],table:[160,70],desk:[120,64],tv:[150,150],door:[96,186],window:[172,130],fridge:[90,192],sink:[210,100],bed:[280,112],lamp:[60,160],clock:[56,56],tree:[220,290],bench:[176,90],pond:[264,70],flowers:[124,44],bicycle:[110,70],counter:[250,104],register:[64,56],blackboard:[316,164],shelf:[204,184],gate:[124,110],train:[524,206],computer:[70,60],deskphone:[44,30],parasol:[224,200],car:[210,110],trafficlight:[50,214],crosswalk:[260,72],shop:[284,244],building:[184,320]};
 const SPEED={walk:150,run:330};
 function W_new(def){// シーン定義から実行用の状態を作る
  const W={def,ents:{},order:[],busy:false,sel:null,ground:{en:def.ground?.en||'the floor',ja:def.ground?.ja||'床',k:'ground',id:'ground'}};
@@ -464,6 +499,9 @@ async function moveTo(W,e,x,y,gait='walk'){
  const dur=Math.max(260,d/SPEED[gait]*1000);W.draw(dur);await wait(dur);e.moving=null;W.draw()}
 function faceTo(e,t){e.flip=t.x<e.x}
 function spotNear(W,a,t){// 相手の横に立つ位置
+ // カウンターの中にいる店員(stay)は中を移動し、客はカウンターの前から話す
+ if(a.stay&&W.ents[a.stay]){const f=W.ents[a.stay];const hw=(f.o&&f.o.w||240)/2-20;return {x:Math.max(f.x-hw,Math.min(f.x+hw,t.x+(t.k==='person'?0:0))),y:f.staffY}}
+ if(t.k==='person'&&t.stay&&W.ents[t.stay]){const f=W.ents[t.stay];return clampFloor(W,{x:t.x+(a.x<t.x?-12:12),y:(f.near?f.near.y:f.y)+14})}
  if(t.k==='fix'&&t.near)return {x:t.near.x,y:t.near.y};
  const side=a.x<t.x?-1:1;let y=t.k==='prop'&&t.at&&t.at.ref&&W.ents[t.at.ref]?W.ents[t.at.ref].y+14:t.y+2;
  if(t.k==='prop'&&t.inC){const c=W.ents[t.inC];y=c.at&&W.ents[c.at.ref]?W.ents[c.at.ref].y+14:c.y+2}
@@ -582,6 +620,7 @@ async function dropAct(W,e,pt){const z=dropZone(W,e,pt);const P=clampFloor(W,pt)
   return nf?{v:'place',a:USER,o:e,r:nf,p:nf.near.p||'next to',stateFirst:true}:{v:'place',a:USER,o:e,r:W.ground,p:'on',stateFirst:true}}
  if(e.k==='person'){
   if(e.inside||e.swim)return null;
+  if(e.stay&&W.ents[e.stay]){const f=W.ents[e.stay];const hw=(f.o&&f.o.w||240)/2-20;await moveTo(W,e,Math.max(f.x-hw,Math.min(f.x+hw,pt.x)),f.staffY,'walk');return {v:'walk',a:e}}
   if(W.def.floors&&bandOf(W,pt.y)!==bandOf(W,e.y)&&!ents(W).some(f=>f.k==='fix'&&f.art==='crosswalk'&&inRect(pt,fixHit(f)))){const cw=ents(W).find(f=>f.art==='crosswalk');if(cw&&crossOk(W)){const act=comboMenu(W,e,cw).find(a=>a.en==='Cross the street');if(act)return act.run()}bubble(W,e,'Red light!');return null}
   if(z.kind==='sit'){await sitOn(W,e,z.r);return {v:z.r.floorSit?'sitfloor':'sit',a:e,r:z.r,p:'on'}}
   if(z.kind==='lie'){await lieOn(W,e,z.r);return {v:'lie',a:e,r:z.r,p:'on'}}
@@ -684,7 +723,7 @@ function comboMenu(W,a,t){const m=[];if(!t||t===a)return m;
   if(t.art==='computer')m.push(wA(`Use ${t.en}`,`${t.ja}を使う`,async()=>{const ch=t.useSeat&&W.ents[t.useSeat];if(ch&&ch.seats.some(s=>!s.occ||s.occ===a.id)){if(!(a.seat&&a.seat.f===ch.id))await sitOn(W,a,ch)}else await goNear(W,a,t);t.st.on=true;a.act='type';W.draw();return {v:'use',a,o:t}}));
   if(t.art==='deskphone')m.push(wA('Answer the phone','電話に出る',async()=>{if(!a.seat)await goNear(W,a,t);t.st.ring=false;t.st.up=true;a.act='phone';W.draw();return {v:'answer',a}}));
   if(t.art==='blackboard')m.push(wA(`Write on ${t.en}`,`${t.ja}に書く`,async()=>{await moveTo(W,a,t.near.x,t.near.y,'walk');a.flip=false;a.act='write';W.draw();await wait(500);t.st.text=t.text||'Hello!';W.bgDirty=true;W.draw();return {v:'write',a,r:t,p:'on'}}));
-  if(t.art==='register')m.push(wA(`Pay at ${t.en}`,`${t.ja}でお金を払う`,async()=>{await goNear(W,a,t);a.act='give';W.draw();await wait(500);t.st.paid=true;a.act=null;W.draw();return {v:'pay',a,r:t}}));
+  if(t.art==='register'&&!a.staff)m.push(wA(`Pay at ${t.en}`,`${t.ja}でお金を払う`,async()=>{await goNear(W,a,t);a.act='give';W.draw();await wait(500);t.st.paid=true;a.act=null;W.draw();return {v:'pay',a,r:t}}));
   if(t.art==='train'&&t.st.open&&!t.st.leaving)m.push(wA('Get on the train','電車に乗る',async()=>{await moveTo(W,a,t.x+(t.doorX||-120),t.boardY||t.y+80,'walk');a.inside=t.id;a.hidden=true;if(a.hold){}W.draw();return {v:'board',a,r:t}}));
   if(t.art==='gate')m.push(wA(`Go through ${t.en}`,`${t.ja}を通る`,async()=>{const side=a.x>t.x?-1:1;await moveTo(W,a,t.x-side*90,t.y+14,'walk');t.st.open=true;W.draw();await moveTo(W,a,t.x+side*120,t.y+14,'walk');t.st.passed=true;t.st.open=false;W.draw();return {v:'gothrough',a,r:t}}));
   if(t.art==='shop'&&bandOf(W,a.y)===bandOf(W,t.y+12))m.push(wA(`Go into ${t.en}`,`${t.ja}に入る`,async()=>{await moveTo(W,a,t.x,t.y+12,'walk');t.st.open=true;W.draw();await wait(300);a.inside=t.id;a.hidden=true;t.st.open=false;W.draw();return {v:'enter',a,r:t}}));
@@ -760,6 +799,33 @@ function wWeakHtml(){const st=wStat();const rows=(o,lab)=>Object.entries(o).filt
 function wMatch(m,ev){const id=x=>x&&x.id;const inL=(v,x)=>Array.isArray(v)?v.includes(x):v===x;
  if(!m.v.includes(ev.v))return false;if(m.a&&id(ev.a)!==m.a)return false;if(m.o&&!inL(m.o,id(ev.o)))return false;
  if(m.r&&!inL(m.r,id(ev.r)))return false;if(m.p&&ev.p!==m.p)return false;return true}
+// ---- 連続型ミッション(会話)の記録 ----
+// 途中でやめても、それまでの発話・行動の記録は残る(1回答えるたびに保存する)。
+function wsRec(id){S.wstory=S.wstory||{};return S.wstory[id]=S.wstory[id]||{runs:0,clear:0,perfect:0,last:null,var:{},mode:{},best:null}}
+function wTalkStat(){S.wtalk=S.wtalk||{f:{},spoken:0,typed:0,chose:0,skip:0,hist:[]};return S.wtalk}
+function stSave(ST){const r=wsRec(ST.story.id);if(!ST.counted){ST.counted=true;r.runs++;r.var[ST.variant]=(r.var[ST.variant]||0)+1}r.last=today();save()}
+function stSaveTalk(ST){const t=wTalkStat();ST.savedT=ST.savedT||0;ST.savedA=ST.savedA||0;
+ for(const rec of ST.log.talks.slice(ST.savedT)){
+  if(rec.kind==='repeat'){const f=t.f.sayagain=t.f.sayagain||[0,0];f[0]++;f[1]++;continue}// 聞き返せたことは「聞き返す」の成功
+  if(rec.focus){const f=t.f[rec.focus]=t.f[rec.focus]||[0,0];f[1]++;if(rec.ok===true&&!rec.hint)f[0]++}
+  if(rec.kind==='skip')t.skip++;else if(rec.ok===true){if(rec.how==='voice')t.spoken++;else if(rec.how==='typed')t.typed++;else t.chose++}
+  logEv({m:'wtalk',ok:rec.ok===true,h:rec.hint,f:rec.how==='voice'&&rec.ok===true&&!rec.hint,r:ST.story.id+':'+rec.step})}
+ ST.savedT=ST.log.talks.length;ST.savedA=ST.log.acts.length;save()}
+function stRecord(ST,fb){const r=wsRec(ST.story.id),t=wTalkStat();
+ if(fb.goal){r.clear++;r.mode[ST.mode]=today()}if(fb.perfect)r.perfect++;
+ const sc={hints:fb.hints,meaning:fb.metrics.meaning,spoken:fb.spoken.length};if(fb.goal&&(!r.best||sc.hints<r.best.hints||(sc.hints===r.best.hints&&sc.spoken>r.best.spoken)))r.best=sc;
+ t.hist.unshift({id:ST.story.id,t:ST.story.t,sc:ST.story.scene,d:today(),mode:ST.mode,goal:fb.goal,perfect:fb.perfect,hints:fb.hints,spoken:fb.spoken.length,meaning:fb.metrics.meaning,match:fb.metrics.match,pron:fb.metrics.pron,v:fb.variant});
+ if(t.hist.length>40)t.hist.length=40;
+ // 次に復習するフレーズは、既存の「苦手リスト」(復習)に入れる
+ for(const x of fb.review)addWeak(x.en,x.ja,'ワールド:'+ST.story.t);
+ addXP(fb.goal?(fb.perfect?40:25):5);checkBadges();save()}
+function wTalkHtml(){const t=wTalkStat();const rows=EXPR.map(x=>{const f=t.f[x.id];return {x,ok:f?f[0]:0,n:f?f[1]:0}});
+ if(!t.hist.length&&!rows.some(r=>r.n))return '';
+ return `<section class="sheet panel"><h3 class="eyebrow">会話ミッションの記録</h3>
+  <div class="chips"><span class="chip good"><small>自分の声で話せた</small>${t.spoken}文</span><span class="chip"><small>入力で答えた</small>${t.typed}文</span><span class="chip"><small>選んで答えた</small>${t.chose}文</span><span class="chip ${t.skip?'bad':''}"><small>言えなかった</small>${t.skip}回</span></div>
+  <div class="wexrows">${rows.map(r=>`<div class="wexr"><span class="en">${esc(r.x.en)}</span><small class="muted">${esc(r.x.ja)}</small><span class="sp"></span><small>${r.n?`${r.ok}/${r.n}回 ヒントなしで成功`:'まだ'}</small></div>`).join('')}</div>
+  ${t.hist.length?`<h4 style="margin:12px 0 4px">最近のミッション</h4>${t.hist.slice(0,8).map(h=>`<div class="wexr"><span>${h.goal?(h.perfect?'★':'✓'):'—'} ${esc(h.t)}</span><small class="muted">${esc(h.d)} ・ モード${h.mode}</small><span class="sp"></span><small>意味 ${h.meaning??'—'}% ・ 声で話せた ${h.spoken}文 ・ ヒント ${h.hints}</small></div>`).join('')}`:''}
+ </section>`}
 
 // ===== ワールド: 会話・分岐の判定 =====
 // 単語の一致率だけで「通じた」と決めない。相手の発言ごとに、受け取れる意図(intent)を用意し、
@@ -850,42 +916,266 @@ const D_YES=[{id:'yes',units:[['yes','yeah','yep','right','correct','exactly','t
  {id:'no',units:[['no','nope','not quite','not exactly','wrong']],model:'No, that\'s not what I meant.'}];
 function dYesNo(texts){const r=dIntent(texts,D_YES);return r.best?r.best.it.id:null}
 
+// ===== ワールド: 連続型ミッション(ストーリー)の進行 =====
+// 1つのミッションは複数の手順(steps)でできている。手順ごとに世界を初期化せず、人物や物の状態を次へ引き継ぐ。
+// クリア判定は「必要な行動(出来事)」と「実際のオブジェクトの状態」の両方で行う(ボタンを押しただけでは進まない)。
+// 手順の種類:
+//  {id, npc:'人', say:'英文', ja:'和訳', expr:'表情', to:'相手'}         登場人物が話す(音声・口の動き・字幕)
+//  {id, act:{ja,hint}, ev:出来事の条件, done:状態の条件, wrong:[{when,npc,say,ja,label}], acts:[追加の動作]}  自分で動かす
+//  {id, talk:{ja,hint}, to:'相手', intents:[...], other:{npc,say,ja}, focus:'表現id'}  自分で英語を話す(または入力・選択)
+//  {id, do:[台本の動き]}                                              登場人物が動く・物の状態が変わる
+//  どの手順にも if:条件 をつけると、その条件のときだけ行う(分岐・トラブル)
+// 条件: {held:[物,人]} {on:[物,場所]} {near:[人,場所]} {st:[id,キー,値]} {flag:名前|[名前,値]} {variant:'id'}
+//       {said:[手順id,意図id]} {var:[名前,値]} {ev:{v,a,o,r}} {all:[]} {any:[]} {not:{}}
+// '@名前' は変数(ミッションごとに選ばれる注文の品など)の id。文の中の {名前} / {名前.en} / {名前.ja} は言葉に置きかわる。
+
+function stPick(list,rnd){const tot=list.reduce((s,x)=>s+(x.w??1),0);let r=rnd()*tot;for(const x of list){r-=(x.w??1);if(r<=0)return x}return list[list.length-1]}
+function stNew(W,story,mode,ui,opt={}){const rnd=opt.rand||Math.random;
+ const vars={};for(const [k,list] of Object.entries(story.vars||{})){const fixed=opt.vars&&opt.vars[k];vars[k]=(fixed&&list.find(x=>x.id===fixed))||list[Math.floor(rnd()*list.length)]}
+ const variant=(opt.variant&&(story.variants||[]).find(v=>v.id===opt.variant))||(story.variants&&story.variants.length?stPick(story.variants,rnd):{id:'normal'});
+ return {W,story,mode,ui,vars,variant:variant.id,flags:{},said:{},i:0,waiting:null,alive:true,ended:false,t0:Date.now(),
+  log:{heard:[],acts:[],talks:[],mistakes:[],hints:0,taskHints:0}}}
+// 文の中の {名前} を置きかえる
+function stTx(ST,s){if(!s)return s;return String(s).replace(/\{(\w+)(?:\.(\w+))?\}/g,(m,k,f)=>{const v=ST.vars[k];if(!v)return m;return v[f||'en']??m})}
+// 変数の入った手順を、いまの変数で解決した写しにする(判定する言い方にも {drink.w} などが使える)
+function stResolve(ST,s){const tx=v=>typeof v==='string'?stTx(ST,v):v;
+ // {serve.p} のように変数の中身が配列なら、言い方の候補として全部ならべる
+ const ex=a=>{const m=typeof a==='string'&&a.match(/^\{(\w+)\.(\w+)\}$/);const v=m&&ST.vars[m[1]]&&ST.vars[m[1]][m[2]];return Array.isArray(v)?v:[tx(a)]};
+ const g=a=>a.map(x=>x.flatMap(ex));
+ return {...s,intents:(s.intents||[]).filter(it=>!it.if||stCond(ST,it.if)).map(it=>({...it,units:g(it.units),not:it.not?g(it.not):null,model:tx(it.model),alts:(it.alts||[]).map(tx),better:tx(it.better),ja:tx(it.ja)})),
+  choices:(s.choices||[]).filter(c=>!c.if||stCond(ST,c.if)).map(c=>({...c,en:tx(c.en),i:tx(c.i)}))}}
+function stSetVar(ST,k,v,other){if(other){const cur=ST.vars[other];const list=Object.values(ST.story.vars||{}).find(l=>cur&&l.includes(cur))||[];const c=list.filter(x=>x!==cur&&!(ST.vars.serve===x&&k!=='serve'));ST.vars[k]=c[Math.floor(Math.random()*c.length)]||cur;return}
+ if(typeof v==='string'&&v[0]==='@'){ST.vars[k]=ST.vars[v.slice(1)];return}
+ for(const list of Object.values(ST.story.vars||{})){const f=list.find(x=>x.id===v);if(f){ST.vars[k]=f;return}}}
+function stId(ST,x){if(typeof x==='string'&&x[0]==='@'){const v=ST.vars[x.slice(1)];return v?v.id:x}return x}
+function stEnt(ST,x){return ST.W.ents[stId(ST,x)]}
+// 出来事の条件 {v, a, o, r}: 値は id / '@変数' / [候補] / {not:値}
+function stEvMatch(ST,m,ev){if(!ev)return false;
+ const val=(want,got)=>{if(want==null)return true;const g=got&&(got.id||(got.user?'user':null));
+  if(want&&typeof want==='object'&&!Array.isArray(want)&&'not' in want)return !val(want.not,got);
+  const list=(Array.isArray(want)?want:[want]).map(x=>stId(ST,x));return list.includes(g)};
+ if(m.v&&!(Array.isArray(m.v)?m.v:[m.v]).includes(ev.v))return false;
+ if(m.act&&ev.act!==m.act)return false;
+ return val(m.a,ev.a)&&val(m.o,ev.o)&&val(m.r,ev.r)}
+function stCond(ST,c,ev){if(!c)return true;const W=ST.W;
+ if(c.all)return c.all.every(x=>stCond(ST,x,ev));
+ if(c.any)return c.any.some(x=>stCond(ST,x,ev));
+ if(c.not)return !stCond(ST,c.not,ev);
+ if(c.variant)return (Array.isArray(c.variant)?c.variant:[c.variant]).includes(ST.variant);
+ if(c.flag){const [k,v]=Array.isArray(c.flag)?c.flag:[c.flag,true];return (ST.flags[k]??false)===v}
+ if(c.var){const [k,v]=c.var;return ST.vars[k]&&(Array.isArray(v)?v.includes(ST.vars[k].id):ST.vars[k].id===v)}
+ if(c.said){const [s,i]=c.said;return (Array.isArray(i)?i:[i]).includes(ST.said[s])}
+ if(c.ev)return stEvMatch(ST,c.ev,ev);
+ if(c.held){const p=stEnt(ST,c.held[0]),h=stId(ST,c.held[1]);return !!p&&p.heldBy===h}
+ if(c.on){const p=stEnt(ST,c.on[0]),r=stId(ST,c.on[1]);return !!p&&!p.heldBy&&((p.at&&p.at.ref===r)||p.inC===r)}
+ if(c.near){const a=stEnt(ST,c.near[0]),f=stEnt(ST,c.near[1]);if(!a||!f||a.hidden)return false;const pt=f.near||f;return Math.hypot(a.x-pt.x,a.y-pt.y)<(c.r||80)}
+ if(c.st){const e=stEnt(ST,c.st[0]);return !!e&&(e.st[c.st[1]]??null)===stId(ST,c.st[2])}
+ if(c.seated){const a=stEnt(ST,c.seated);return !!a&&!!a.seat}
+ if(c.inside){const a=stEnt(ST,c.inside[0]);return !!a&&a.inside===stId(ST,c.inside[1])}
+ return true}
+
+// ---- 台本の動き(登場人物が自分で動く) ----
+async function stOps(ST,ops){const W=ST.W;
+ for(const o of ops){if(!ST.alive)return;if(o.if&&!stCond(ST,o.if))continue;
+  const who=o.who&&stEnt(ST,o.who),what=o.what&&stEnt(ST,o.what),to=o.to&&stEnt(ST,o.to);
+  switch(o.op){
+   case 'pos':who.x=o.x;who.y=o.y??who.y;if(o.flip!=null)who.flip=o.flip;W.draw();break;
+   case 'seat':{const f=to;const s=f.seats.find(s=>!s.occ);if(s)seatPerson(who,f,s);W.draw();break}
+   case 'walk':if(o.x!=null){await moveTo(W,who,o.x,o.y??who.y,o.gait||'walk')}else if(to){if(to.k==='fix'&&to.near){await moveTo(W,who,to.near.x+(o.dx||0),to.near.y+(o.dy||0),o.gait||'walk');faceTo(who,to)}else await goNear(W,who,to)}W.draw();break;
+   case 'enter':who.hidden=false;who.x=o.fromX??(who.x0>500?1040:-40);who.y=o.y??who.y0;W.draw();await wait(30);await moveTo(W,who,o.x??who.x0,o.y??who.y0,'walk');break;
+   case 'leave':await moveTo(W,who,o.toX??(who.x>500?1040:-40),who.y,'walk');who.hidden=true;W.draw();break;
+   case 'pick':await wPick(W,who,what);break;
+   case 'give':{if(what.heldBy!==who.id)await wPick(W,who,what);await goNear(W,who,to);faceTo(to,who);who.act='give';W.draw();await wait(380);who.act=null;who.hold=null;if(to.hold)await dropHeld(W,to);placeProp(W,what,to);W.draw(320);await wait(340);break}
+   case 'put':{if(what.heldBy!==who.id)await wPick(W,who,what);await putOn(W,who,what,to,o.p||'on');break}
+   case 'place':{if(what.heldBy){const h=W.ents[what.heldBy];h.hold=null}placeProp(W,what,to,o.p||'on',o.xh);what.hidden=false;W.draw(o.dur||0);break}
+   case 'show':for(const id of [].concat(o.id))stEnt(ST,id).hidden=false;W.draw();break;
+   case 'hide':for(const id of [].concat(o.id)){const e=stEnt(ST,id);e.hidden=true;if(e.heldBy){W.ents[e.heldBy].hold=null;e.heldBy=null}}W.draw();break;
+   case 'set':{const e=stEnt(ST,o.id);Object.assign(e.st,JSON.parse(stTx(ST,JSON.stringify(o.st))));if(e.k==='fix')W.bgDirty=true;W.draw();break}
+   case 'expr':who.expr=o.e==='normal'?null:o.e;W.draw();break;
+   case 'face':faceTo(who,to);W.draw();break;
+   case 'sit':await sitOn(W,who,to);break;
+   case 'stand':if(who.seat||who.lie){const sy=who.y+10;unseat(W,who);who.y=sy;W.draw();await wait(200)}break;
+   case 'act':who.act=o.a;W.draw();await wait(o.ms||600);if(!o.keep){who.act=null;W.draw()}break;
+   case 'flag':Object.assign(ST.flags,o.set);break;
+   case 'setvar':stSetVar(ST,o.k,o.v,o.other);break;
+   case 'return':{const h=who.hold&&W.ents[who.hold];if(h&&to){await goNear(W,who,to);who.act='give';W.draw();await wait(350);who.act=null;who.hold=null;if(to.hold)await dropHeld(W,to);placeProp(W,h,to);W.draw(300);await wait(320)}break}
+   case 'think':bubble(W,who,stTx(ST,o.say));await ST.ui.say(who,stTx(ST,o.say),stTx(ST,o.ja),stHeard(ST,who,o),{think:true});break;
+   case 'wait':await wait(o.ms||500);break;
+   case 'announce':await ST.ui.say(null,stTx(ST,o.say),stTx(ST,o.ja),stHeard(ST,null,o),{pa:true});break;
+  }}}
+function stHeard(ST,who,s){const h={who:who?who.id:'pa',name:who?who.en:'Announcement',en:stTx(ST,s.say),tts:s.tts?stTx(ST,s.tts):null,ja:stTx(ST,s.ja),step:ST.i,shown:false,jaShown:false,replays:0,asked:0,key:!!s.key};ST.log.heard.push(h);ST.lastHeard=h;return h}
+async function stSay(ST,s){const W=ST.W;const who=stEnt(ST,s.npc);const to=s.to?stEnt(ST,s.to):stEnt(ST,ST.story.me);
+ if(who&&to&&!s.noFace)faceEachOther(W,who,to);if(who&&s.expr){who.expr=s.expr==='normal'?null:s.expr;W.draw()}
+ const h=stHeard(ST,who,s);await ST.ui.say(who,h.en,h.ja,h,{});
+ if(who&&s.exprAfter){who.expr=s.exprAfter==='normal'?null:s.exprAfter;W.draw()}}
+
+// ---- 進行 ----
+async function stRun(ST){
+ while(ST.alive&&ST.i<ST.story.steps.length){const s=ST.story.steps[ST.i];
+  if(s.if&&!stCond(ST,s.if)){ST.i++;continue}
+  if(s.npc){await stSay(ST,s);ST.i++;continue}
+  if(s.do){await stOps(ST,s.do);ST.i++;continue}
+  if(s.act){if(!s.ev&&s.done&&stCond(ST,s.done)){ST.i++;continue}// すでにその状態なら次へ
+   ST.waiting={type:'act',s,tries:0,t0:Date.now(),hinted:false};ST.ui.task(s);stSave(ST);return}
+  if(s.talk){ST.waiting={type:'talk',s,tries:0,t0:Date.now(),hinted:false};ST.ui.talk(s);stSave(ST);return}
+  ST.i++}
+ if(ST.alive&&!ST.ended)stFinish(ST)}
+// 自分の操作(出来事)が起きたとき
+async function stOnEvents(ST,evs){const w=ST.waiting;if(!ST.alive||!w||w.type!=='act')return;const s=w.s;
+ for(const ev of evs){for(const r of s.wrong||[]){if(stCond(ST,r.when,ev)){
+   w.tries++;ST.log.mistakes.push({kind:'act',label:stTx(ST,r.label||s.act.ja),step:ST.i});ST.log.acts.push({step:ST.i,ok:false,label:stTx(ST,r.label||s.act.ja)});stSaveTalk(ST);
+   if(r.do)await stOps(ST,r.do);if(r.say)await stSay(ST,{npc:r.npc,say:r.say,ja:r.ja,expr:r.expr||'confused',exprAfter:'normal'});ST.ui.task(s,{again:true});return}}}
+ const okEv=!s.ev||evs.some(ev=>stEvMatch(ST,s.ev,ev));
+ if(okEv&&stCond(ST,s.done,evs[evs.length-1])){ST.log.acts.push({step:ST.i,ok:w.tries===0,label:stTx(ST,s.act.ja),hint:w.hinted});ST.waiting=null;ST.i++;stSaveTalk(ST);await stRun(ST)}}
+// 自分の発話(声・入力・選択)が届いたとき
+async function stOnAnswer(ST,res){const w=ST.waiting;if(!ST.alive||!w||w.type!=='talk'||w.busy)return;const s=stResolve(ST,w.s);w.busy=true;
+ try{
+ const j=await dJudge(s,res,{heard:ST.lastHeard&&ST.lastHeard.en});const main=dMain(s);
+ const rec={step:ST.i,focus:s.focus||null,how:j.how,text:j.text,kind:j.kind,intent:j.it&&j.it.id,tone:j.it&&j.it.tone||null,match:j.match??null,conf:j.conf,hint:!!(res.hint||w.hinted),ai:!!j.ai,
+  model:stTx(ST,(j.it&&!j.it.tone?j.it:main).model),better:j.better||null,ja:stTx(ST,(j.it&&!j.it.tone?j.it:main).ja||'')};
+ ST.log.talks.push(rec);
+ if(j.kind==='repeat'){rec.ok=null;ST.ui.result(rec);const h=ST.lastHeard;if(h){h.asked++;const who=h.who==='pa'?null:ST.W.ents[h.who];await ST.ui.say(who,h.en,h.ja,h,{slow:true,again:true})}stSaveTalk(ST);ST.ui.talk(s,{again:true});return}
+ if(j.kind==='skip'){rec.ok=false;w.tries++;ST.log.mistakes.push({kind:'talk',said:'',model:rec.model,step:ST.i,skip:true});ST.ui.result(rec);stSaveTalk(ST);await stAccept(ST,s,main,{skipped:true});return}
+ if(j.kind==='clarify'){rec.ok=false;w.tries++;ST.ui.result(rec);const it=j.it;const m=stTx(ST,it.model);
+  await stSay(ST,{npc:s.to||stNpcOf(ST),say:`Sorry, do you mean, "${m}"?`,ja:`「${m}」ということですか。`,expr:'confused',exprAfter:'normal'});
+  const yes=await ST.ui.confirm(m);if(!ST.alive)return;
+  if(yes){rec.confirmed=true;ST.log.mistakes.push({kind:'talk',said:rec.text,model:m,step:ST.i,part:true});stSaveTalk(ST);await stAccept(ST,s,it,{clarified:true});return}
+  await stSay(ST,{npc:s.to||stNpcOf(ST),say:'Sorry, could you say that again?',ja:'すみません、もう一度言っていただけますか。'});stSaveTalk(ST);ST.ui.talk(s,{again:true});return}
+ if(j.kind==='unknown'){rec.ok=false;w.tries++;ST.ui.result(rec);stSaveTalk(ST);const o=s.other||{say:'Sorry, I don\'t quite understand.',ja:'すみません、よくわかりません。'};
+  await stSay(ST,{npc:o.npc||s.to||stNpcOf(ST),say:o.say,ja:o.ja,expr:'confused',exprAfter:'normal'});ST.ui.talk(s,{again:true,offerHint:w.tries>=2});return}
+ // 意図として受け取れた
+ const it=j.it;rec.ok=!it.tone||it.tone==='ok';
+ if(it.tone){rec.better=stTx(ST,it.better||main.model);ST.log.mistakes.push({kind:'talk',said:rec.text,model:rec.better,why:it.why||'',step:ST.i,tone:it.tone})}
+ ST.ui.result(rec);stSaveTalk(ST);await stAccept(ST,s,it,{})
+ }finally{if(ST.waiting===w)w.busy=false}}
+function stNpcOf(ST){const h=[...ST.log.heard].reverse().find(x=>x.who&&x.who!=='pa');return h?h.who:null}
+// 意図を受け取ったあとの反応(相手の返事・状態の変化・分岐)
+async function stAccept(ST,s,it,o){const w=ST.waiting;
+ if(it.set)Object.assign(ST.flags,it.set);
+ if(it.setVar)for(const [k,v] of Object.entries(it.setVar))stSetVar(ST,k,v);
+ ST.said[s.id||('s'+ST.i)]=it.id;
+ for(const r of it.reply||[])await stSay(ST,{npc:r.npc||s.to||stNpcOf(ST),...r});
+ if(it.do)await stOps(ST,it.do);
+ if(it.retry&&!o.skipped){if(w)w.busy=false;ST.ui.talk(s,{again:true});return}// 内容がちがう答え(相手が訂正して聞き直す)
+ ST.waiting=null;ST.i++;await stRun(ST)}
+function stHint(ST,kind){const w=ST.waiting;if(w){w.hinted=true}ST.log.hints++;if(kind==='task')ST.log.taskHints++}
+function stFinish(ST){ST.ended=true;const goal=stCond(ST,ST.story.goal);const fb=stFeedback(ST,goal);stRecord(ST,fb);ST.ui.finish(fb)}
+function stStop(ST){if(ST){ST.alive=false}}
+
+// ---- 会話後のフィードバック ----
+function stFeedback(ST,goal){const L=ST.log,st=ST.story;
+ const answered=L.talks.filter(t=>t.kind!=='repeat');
+ const steps=st.steps.map((s,i)=>({s,i})).filter(x=>x.s.talk);
+ const perStep=new Map();for(const t of answered){if(!perStep.has(t.step))perStep.set(t.step,[]);perStep.get(t.step).push(t)}
+ const talkSteps=[...perStep.entries()].map(([i,ts])=>{const s=stResolve(ST,st.steps[i]);const fin=ts[ts.length-1];const first=ts[0];
+  return {i,s,ts,fin,firstOk:first.ok===true&&!first.hint,ok:fin.ok===true||fin.confirmed,skipped:fin.kind==='skip',main:dMain(s)}});
+ const voiceOk=answered.filter(t=>t.how==='voice'&&t.ok===true);
+ const spoken=voiceOk.map(t=>t.text);
+ const typed=answered.filter(t=>t.how==='typed'&&t.ok===true).map(t=>t.text);
+ const chose=answered.filter(t=>t.how==='choice'&&t.ok===true).map(t=>t.text);
+ const confs=answered.filter(t=>t.how==='voice'&&t.conf).map(t=>t.conf);
+ const matches=answered.filter(t=>t.kind!=='skip'&&t.how!=='choice'&&t.match!=null).map(t=>t.match);
+ const meaningOk=talkSteps.filter(x=>x.firstOk).length;
+ const heard=L.heard.map(h=>({...h,help:h.shown||h.jaShown||h.asked>0}));
+ const hints=L.hints+answered.filter(t=>t.hint).length;
+ const review=[];const addR=(en,ja,why)=>{if(en&&!review.some(r=>r.en===en))review.push({en,ja:ja||'',why})};
+ for(const x of talkSteps){if(!x.firstOk)addR(stTx(ST,x.main.model),stTx(ST,x.main.ja),x.skipped?'言えなかった':x.fin.tone?'より自然な言い方':'一度で伝わらなかった')}
+ for(const h of heard)if(h.help&&h.key)addR(h.en,h.ja,'聞き取りにくかった');
+ const para=talkSteps.map(x=>({model:stTx(ST,x.main.model),ja:stTx(ST,x.main.ja||''),alts:(x.main.alts||[]).slice(0,2).map(a=>stTx(ST,a)),focus:x.s.focus,better:x.fin.better}));
+ return {goal,story:st,variant:ST.variant,heard,acts:L.acts,talks:answered,talkSteps,spoken,typed,chose,hints,mistakes:L.mistakes,para,review,
+  metrics:{pron:confs.length?Math.round(100*confs.reduce((a,b)=>a+b,0)/confs.length):null,match:matches.length?Math.round(matches.reduce((a,b)=>a+b,0)/matches.length):null,
+   meaning:talkSteps.length?Math.round(100*meaningOk/talkSteps.length):null,nTalk:talkSteps.length},
+  perfect:goal&&hints===0&&L.mistakes.length===0&&talkSteps.every(x=>x.firstOk),sec:Math.round((Date.now()-ST.t0)/1000)}}
+
+// ===== ワールド: ミッション管理(モード2〜4: 1つの動作で完結するミッション) =====
+// c: {W, def, mode, R, box()=>ミッション欄, fresh(mq,mi)=>シーンを最初の状態にして次へ}
+function wMissionCtl(c){const {W,def,mode,R}=c;
+ function missionEv(m){const g=k=>m.ex[k]?(typeof m.ex[k]==='object'&&!Array.isArray(m.ex[k])?m.ex[k]:Array.isArray(m.ex[k])?W.ents[m.ex[k][0]]:W.ents[m.ex[k]]):null;
+  return {...m.ex,a:m.ex.a?g('a'):USER,o:g('o'),r:m.ex.r?g('r'):null}}
+ function missionText(m){const ev=missionEv(m);const imp=(m.ex.v==='place'||m.ex.v==='light'||((m.ex.v==='open'||m.ex.v==='close'||m.ex.v==='turnon'||m.ex.v==='turnoff')&&!m.a))?imperative(ev):null;
+  const d=describe(ev);return imp&&!imp.target?{en:imp.en,ja:imp.ja,how:'command'}:{en:d.main.en,ja:d.main.ja,how:'target'}}
+ function render(){const box=c.box();if(!box)return;
+  if(W.mi>=W.mq.length){box.innerHTML=`<div class="wclear"><b>ステージクリア!</b> <span>「${esc(WMODES[mode-1].k)}」のミッションをすべてクリアしました。</span><div class="row" style="margin-top:6px"><button class="btn sm" id="wm-again">もう一度</button>${mode<4?`<button class="btn hl sm" id="wm-next">次のモードへ</button>`:''}</div></div>`;
+   box.querySelector('#wm-again').onclick=()=>c.fresh(shuffle(def.missions.map((_,i)=>i)),0);
+   const nx=box.querySelector('#wm-next');if(nx)nx.onclick=()=>go({name:'wscene',id:def.id,mode:mode+1},true);return}
+  const m=def.missions[W.mq[W.mi]];const tx=missionText(m);W.mission=m;W.mText=tx;
+  const head=`<span class="gtag">ミッション ${W.mi+1} / ${W.mq.length}</span>`;
+  if(mode===2)box.innerHTML=`${head}<div class="row" style="margin-top:6px"><button class="playbig sm" id="wm-play" aria-label="指示を聞く">${IC.play}</button><div><b>英語の指示を聞いて、そのとおりに動かしましょう</b><div id="wm-tx" class="en muted" style="margin-top:2px"><button class="linkbtn" id="wm-show">英文を見る(ヒント)</button></div></div></div>`;
+  if(mode===3)box.innerHTML=`${head}<div class="one" style="margin-top:6px">${esc(tx.ja)}</div><small class="muted">この場面になるように動かしてから、英語で言ってみましょう。</small>`;
+  if(mode===4)box.innerHTML=`${head}<div class="row" style="margin-top:6px"><button class="playbig sm" id="wm-play" aria-label="英語を聞く">${IC.play}</button><div class="one en">${esc(tx.en)}</div></div>`;
+  const pl=box.querySelector('#wm-play');if(pl){pl.onclick=()=>speak(tx.en);setTimeout(()=>speak(tx.en),300)}
+  const sh=box.querySelector('#wm-show');if(sh)sh.onclick=()=>{W.mHint=true;box.querySelector('#wm-tx').textContent=tx.en}}
+ function check(ev,d){const m=W.mission;if(!m)return;const st=wStat();const tag=VERB_TAG[m.ex.v]||m.ex.v,pp=m.ex.p;
+  if(wMatch(m,ev)){st.v[tag]=st.v[tag]||[0,0];st.v[tag][0]++;st.v[tag][1]++;if(pp){st.p[pp]=st.p[pp]||[0,0];st.p[pp][0]++;st.p[pp][1]++}
+   R.ok++;const gain=[0,0,10,12,15][mode]-(W.mHint?4:0);addXP(gain);W.mHint=false;W.mission=null;
+   const box=c.box();const tx=W.mText;
+   box.innerHTML=`<div class="wok">${hana}<div><b class="good">ミッション成功! +${gain} XP</b><div class="en">${esc(tx.en)}</div>${mode===3?'<div id="wm-mic"></div>':''}<div class="row" style="margin-top:6px"><button class="btn hl sm" id="wm-next">つぎのミッション →</button></div></div></div>`;
+   if(mode===3)micPanel(box.querySelector('#wm-mic'),tx.how==='command'?d.main.en:tx.en,()=>{const m2=box.querySelector('#wm-mic');if(m2)m2.innerHTML=''},{skipLabel:'言わずに進む',doneLabel:'OK'});
+   box.querySelector('#wm-next').onclick=()=>{const ni=W.mi+1;if(ni>=W.mq.length){R.clear[mode]=today();addXP(30);confetti();checkBadges();save()}c.fresh(W.mq,ni)};
+  }else{const wrong=m.v.includes(ev.v);
+   if(wrong){st.v[tag]=st.v[tag]||[0,0];st.v[tag][1]++;if(pp){st.p[pp]=st.p[pp]||[0,0];st.p[pp][1]++}R.miss++;save()}
+   const box=c.box();let n=box.querySelector('.wng');if(!n){n=document.createElement('div');n.className='wng';box.appendChild(n)}
+   n.textContent=wrong?'動作は合っていますが、人・物・場所がミッションとちがうようです。もう一度聞いて(読んで)みましょう。':'まだミッションの場面になっていません(準備の動作ならそのまま続けてOK)。'}}
+ return {render,check}}
+
 // ===== ワールド: 画面(シーン一覧・シーン・フレーズ帳) =====
-const WMODES=[{n:1,k:'自由に動かす',d:'動かすと英文が出る'},{n:2,k:'聞いて動かす',d:'英語の指示どおりに'},{n:3,k:'日本語で動かす',d:'動かして英語で言う'},{n:4,k:'英語だけ',d:'日本語なし'}];
+const WMODES=[{n:1,k:'自由に動かす',d:'動かすと英文が出る'},{n:2,k:'聞いて動かす',d:'英語の指示どおりに'},{n:3,k:'日本語で動かす',d:'動かして英語で言う'},{n:4,k:'英語だけ',d:'日本語なし'},
+ {n:5,k:'実践ミッション',d:'聞いて判断・会話',story:1},{n:6,k:'英語で生活',d:'選択肢なしで会話',story:1}];
 VIEWS.world=function(app){
  const done=id=>{const r=(S.world||{})[id];return r?Object.keys(r.clear||{}).length:0};
  app.innerHTML=`<div class="row">${backBtn('ホーム',{name:'home'})}<span class="sp"></span><button class="btn ghost sm" data-go='{"name":"wbook"}'>マイフレーズ帳(${(S.wfav||[]).length})</button></div>
  <div class="uhead"><span class="eyebrow">INTERACTIVE ENGLISH WORLD</span><h1>うごかす英語ワールド</h1><p>人や物をタップ・ドラッグして動かすと、その動きを表す英文が表示され、読み上げられます。動きと英語を直接むすびつけて覚えましょう。</p></div>
  <div class="wgrid">${WMAN.map((s,i)=>`<button class="wcardsel" data-go='${JSON.stringify({name:'wscene',id:s.id})}'><div class="wth"><img src="world/thumbs/${s.id}.svg?v=${WORLD.v}" alt="" loading="lazy" width="1000" height="600"></div><div class="wcap"><span class="no">${String(i+1).padStart(2,'0')}</span><b>${esc(s.t)}</b><small class="en">${esc(s.en)}</small><span class="sp"></span><span class="stars">${[2,3,4].map(m=>`<span class="${(S.world||{})[s.id]&&S.world[s.id].clear[m]?'on':''}">★</span>`).join('')}</span></div><small class="muted">見つけた英文 ${Object.keys(((S.world||{})[s.id]||{}).found||{}).length} ・ ミッション ${s.n}</small></button>`).join('')}</div>
- <p class="foot">★は「聞いて動かす」「日本語で動かす」「英語だけ」の各モードでミッションをすべてクリアすると付きます。</p>`;
+ ${WMAN.some(s=>(s.st||[]).length)?`<h2 class="wh2">会話ミッション <small class="muted">登場人物と英語で話して目的を達成する</small></h2>
+ <div class="row" style="margin-bottom:8px"><button class="btn ghost sm" data-go='{"name":"wexpr"}'>重点フレーズ10</button><button class="btn ghost sm" data-go='{"name":"wbook"}'>会話の記録・苦手</button></div>
+ <div class="wslist">${WMAN.filter(s=>(s.st||[]).length).flatMap(s=>s.st.map(st=>{const r=(S.wstory||{})[st.id];return `<button class="wscard wsmini" data-go='${JSON.stringify({name:'wscene',id:s.id,mode:5,story:st.id})}'><small class="muted">${esc(s.t)} ・ あなたの役:${esc(st.me)}</small><b>${esc(st.t)}</b><span class="row" style="gap:4px;flex-wrap:wrap">${st.focus.map(f=>`<span class="gtag en">${esc((EXPR.find(x=>x.id===f)||{}).en||f)}</span>`).join('')}${r&&r.clear?`<span class="chip good">${r.perfect?'★':'✓'}</span>`:''}</span></button>`})).join('')}</div>`:''}
+ <p class="foot">★は「聞いて動かす」「日本語で動かす」「英語だけ」の各モードでミッションをすべてクリアすると付きます。会話ミッションはシーンの「実践ミッション」「英語で生活」タブからも始められます。</p>`;
  wireGo(app);
 };
 VIEWS.wscene=function(app){
+ if(RT.st){stStop(RT.st);RT.st=null}
  if(!wMeta(V.id))return go({name:'world'},true);
  const def=sceneById(V.id);
  if(!def){app.innerHTML='<p class="muted">シーンを読み込んでいます…</p>';loadScene(V.id).then(()=>{if(V.name==='wscene')render()},()=>{app.innerHTML='<p>シーンを読み込めませんでした。通信状態を確認して、もう一度開いてください。</p>'});return}
- const R=wRec(def.id);const mode=V.mode||1;
+ const R=wRec(def.id);const stories=def.stories||[];let mode=V.mode||1;if(mode>=5&&!stories.length)mode=1;
+ const story=mode>=5&&V.story?stories.find(s=>s.id===V.story):null;
  S.set.wEn=S.set.wEn??true;S.set.wJa=S.set.wJa??true;
- const W=RT.w&&RT.w.def===def&&RT.w.alive?RT.w:W_new(def);W.alive=true;RT.w=W;W.mode=mode;
- if(mode===1)W.mission=null;
- if(!W.mq||W.mqMode!==mode){W.mq=shuffle(def.missions.map((_,i)=>i));W.mi=0;W.mqMode=mode;W.mdone=0}
- app.innerHTML=`<div class="wtop"><button class="back" id="w-back">← シーン一覧</button><b>${esc(def.t)} <small class="en muted">${esc(def.en)}</small></b><span class="sp"></span>
-  <label class="tg"><input type="checkbox" id="w-en" ${S.set.wEn?'checked':''}> 英文</label><label class="tg"><input type="checkbox" id="w-ja" ${S.set.wJa?'checked':''}> 和訳</label><button class="btn ghost sm" id="w-reset">${IC.redo}最初の状態</button></div>
- <div class="tabs wmodes">${WMODES.map(m=>`<button class="tab" data-m="${m.n}" aria-selected="${m.n===mode}">${m.n>1&&R.clear[m.n]?'★ ':''}${m.k}<small>${m.d}</small></button>`).join('')}</div>
- ${mode>1?'<div class="wmis" id="w-mis"></div>':`<p class="whint">人物をタップ → 動作を選ぶ / 人物を選んでから物をタップ → 組み合わせの動作 / ドラッグで移動。家具の電源やドアは直接タップでも操作できます。</p>`}
+ // 自由・ミッションモードは前の状態を引き継ぐ。会話ミッションは毎回、最初の状態から始める
+ const W=!story&&RT.w&&RT.w.def===def&&RT.w.alive&&!RT.w.story?RT.w:W_new(def);W.alive=true;RT.w=W;W.mode=mode;
+ if(mode===1||mode>=5)W.mission=null;
+ if(mode>1&&mode<5&&(!W.mq||W.mqMode!==mode)){W.mq=shuffle(def.missions.map((_,i)=>i));W.mi=0;W.mqMode=mode;W.mdone=0}
+ const tabs=WMODES.filter(m=>!m.story||stories.length);
+ const listOnly=mode>=5&&!story;
+ app.innerHTML=`<div class="wtop"><button class="back" id="w-back">← ${story?'ミッション一覧':'シーン一覧'}</button><b>${esc(def.t)} <small class="en muted">${esc(def.en)}</small></b><span class="sp"></span>
+  ${listOnly?'':`<label class="tg"><input type="checkbox" id="w-en" ${S.set.wEn?'checked':''}> 英文</label><label class="tg"><input type="checkbox" id="w-ja" ${S.set.wJa?'checked':''}> 和訳</label><button class="btn ghost sm" id="w-reset">${IC.redo}${story?'最初から':'最初の状態'}</button>`}</div>
+ <div class="tabs wmodes">${tabs.map(m=>`<button class="tab${m.story?' tstory':''}" data-m="${m.n}" aria-selected="${m.n===mode}">${m.n>1&&m.n<5&&R.clear[m.n]?'★ ':''}${m.k}<small>${m.d}</small></button>`).join('')}</div>
+ ${listOnly?'<div id="w-slist"></div>':`
+ ${mode===1?`<p class="whint">人物をタップ → 動作を選ぶ / 人物を選んでから物をタップ → 組み合わせの動作 / ドラッグで移動。家具の電源やドアは直接タップでも操作できます。</p>`:''}
+ ${mode>1&&mode<5?'<div class="wmis" id="w-mis"></div>':''}
+ ${story?'<div class="wsgoal" id="w-sgoal"></div>':''}
  <div class="wstage" id="w-stage"></div>
+ ${story?'<div class="wtalk" id="w-talk"><div class="wlog" id="w-log" aria-live="polite"></div><div class="wnow" id="w-now"></div></div>':''}
  <div class="wmenu" id="w-menu"></div>
- <div class="wsent" id="w-card"><p class="muted" style="margin:0">ここに英文が表示されます。</p></div>
- <div class="row" style="margin-top:4px"><small class="muted">このシーンで見つけた英文:<b id="w-found">${Object.keys(R.found).length}</b></small></div>`;
+ <div class="wsent" id="w-card"><p class="muted" style="margin:0">${story?'動かすと、その動きの英文がここに出ます。':'ここに英文が表示されます。'}</p></div>
+ ${story?'':`<div class="row" style="margin-top:4px"><small class="muted">このシーンで見つけた英文:<b id="w-found">${Object.keys(R.found).length}</b></small></div>`}`}`;
  const $=s=>app.querySelector(s);
- $('#w-back').onclick=()=>{W.alive=false;go({name:'world'})};
+ RT.wLeave=()=>{W.alive=false;if(RT.st){stStop(RT.st);RT.st=null}};
+ $('#w-back').onclick=()=>{W.alive=false;if(story)go({name:'wscene',id:def.id,mode},true);else go({name:'world'})};
+ app.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{go({name:'wscene',id:def.id,mode:+b.dataset.m},true)});
+ if(listOnly){wStoryList($('#w-slist'),def,mode);return}
  $('#w-en').onchange=e=>{S.set.wEn=e.target.checked;save();showCard(W.lastD)};
  $('#w-ja').onchange=e=>{S.set.wJa=e.target.checked;save();showCard(W.lastD)};
  $('#w-reset').onclick=()=>{W.alive=false;RT.w=null;render()};
- app.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{go({name:'wscene',id:def.id,mode:+b.dataset.m},true)});
  const menu=$('#w-menu'),card=$('#w-card');
+ // モードごとの進行役
+ const ctl=story?wStoryCtl({W,def,story,mode,app,$,showMenu,doAct}):mode>1?wMissionCtl({W,def,mode,R,box:()=>$('#w-mis'),fresh}):null;
+ const role=ctl&&ctl.role?W.ents[ctl.role]:null;
  const api={
   tap(e){if(W.busy)return;
+   if(role){// 会話ミッション: 自分の役の人物で操作する
+    if(e===role){W.sel=role.id;W.tgt=null;W.draw();showMenu(cap(role.en)+'(あなた)',role.ja,selfMenu(W,role).concat(ctl.extra(role,null)),role);return}
+    W.sel=role.id;const m=comboMenu(W,role,e).concat(ctl.extra(role,e));W.tgt=e.id;W.draw();
+    showMenu(`${cap(role.en)} → ${e.en}`,`${role.ja}(あなた) と ${e.ja}`,m,role);if(e.k!=='person')sayWord(e);return}
    const sel=W.sel&&W.ents[W.sel];
    if(sel&&sel!==e&&(sel.k==='person'||sel.k==='animal')){const m=comboMenu(W,sel,e);
     if(m.length){if(e.k==='person'||e.k==='animal')m.unshift(wA(`Choose ${e.en}`,`${e.ja}を選びなおす`,async()=>{W.sel=e.id;W.draw();setTimeout(()=>{showMenu(cap(e.en),e.ja,selfMenu(W,e),e)},0);return null},{noAnim:true}));
@@ -893,8 +1183,8 @@ VIEWS.wscene=function(app){
    if(e.k==='person'||e.k==='animal'){W.sel=e.id;W.tgt=null;W.draw();showMenu(cap(e.en),`${e.ja}(ほかの人・物をタップすると組み合わせの動作)`,selfMenu(W,e),e);sayWord(e);return}
    W.sel=null;W.tgt=null;W.draw();
    const dm=directMenu(W,e);showMenu(cap(e.en),e.ja+(dm.length?'':'(人物を選んでからタップすると、動作を選べます)'),dm,null);sayWord(e)},
-  tapGround(pt){if(W.busy)return;const sel=W.sel&&W.ents[W.sel];if(sel&&(sel.k==='person'||sel.k==='animal')&&pt.y>def.floor[0]-30){doAct(()=>dropAct(W,sel,pt))}else{W.sel=null;W.draw();menu.innerHTML=''}},
-  drop(e,pt){doAct(()=>dropAct(W,e,pt))},
+  tapGround(pt){if(W.busy)return;const sel=role||(W.sel&&W.ents[W.sel]);if(sel&&(sel.k==='person'||sel.k==='animal')&&pt.y>def.floor[0]-30){doAct(()=>dropAct(W,sel,pt))}else{W.sel=null;W.draw();menu.innerHTML=''}},
+  drop(e,pt){if(role&&e!==role){W.draw();toast(`会話ミッションでは、あなたの役(${role.ja})を動かして操作します。`);return}doAct(()=>dropAct(W,e,pt))},
   onDragStart(){menu.innerHTML=''}};
  W_mount($('#w-stage'),W,api);
  function sayWord(e){if(e.en){speak(e.en.replace(/^the /,''))}}
@@ -905,24 +1195,26 @@ VIEWS.wscene=function(app){
   menu.querySelectorAll('.wact').forEach(b=>b.onclick=()=>{const a=list[+b.dataset.i];menu.innerHTML='';if(a.noAnim){a.run();return}doAct(a.run)})}
  async function doAct(fn){if(W.busy)return;W.busy=true;let evs;try{evs=await fn()}catch(err){console.error(err);evs=null}W.busy=false;W.tgt=null;W.draw();
   if(!W.alive)return;evs=(Array.isArray(evs)?evs:[evs]).filter(Boolean);
-  for(const ev of evs)onEvent(ev);
-  if(W.sel&&W.ents[W.sel]&&!W.ents[W.sel].hidden){const e=W.ents[W.sel];showMenu(cap(e.en),e.ja,selfMenu(W,e),e)}}
- function onEvent(ev){const d=describe(ev);if(!d)return;W.lastD={d,ev,mode:'noun'};(W.evlog=W.evlog||[]).push({ev,en:d.main.en,state:d.state&&d.state.en,past:d.past&&d.past.en});
+  let sp=null;for(const ev of evs)sp=onEvent(ev)||sp;
+  if(ctl&&ctl.onEvents&&evs.length){if(sp)await sp;await ctl.onEvents(evs)}
+  if(W.sel&&W.ents[W.sel]&&!W.ents[W.sel].hidden&&!W.busy&&!role){const e=W.ents[W.sel];showMenu(cap(e.en),e.ja,selfMenu(W,e),e)}}
+ function onEvent(ev){const d=describe(ev);if(!d)return null;W.lastD={d,ev,mode:'noun'};(W.evlog=W.evlog||[]).push({ev,en:d.main.en,state:d.state&&d.state.en,past:d.past&&d.past.en});
   const key=d.main.en;const isNew=!R.found[key];R.found[key]=(R.found[key]||0)+1;R.n++;
   if(d.state&&d.state.en!==key)R.found[d.state.en]=(R.found[d.state.en]||0)+1;
-  const st=wStat();if(!W.mission){st.v[d.tag]=st.v[d.tag]||[0,0];st.v[d.tag][0]++;st.v[d.tag][1]++;if(d.p){st.p[d.p]=st.p[d.p]||[0,0];st.p[d.p][0]++;st.p[d.p][1]++}}
+  const st=wStat();if(!W.mission&&!story){st.v[d.tag]=st.v[d.tag]||[0,0];st.v[d.tag][0]++;st.v[d.tag][1]++;if(d.p){st.p[d.p]=st.p[d.p]||[0,0];st.p[d.p][0]++;st.p[d.p][1]++}}
   logEv({m:'world',ok:true,r:def.id+':'+key.slice(0,40)});
   if(isNew)addXP(2);else save();
   const f=$('#w-found');if(f)f.textContent=Object.keys(R.found).length;
-  showCard(W.lastD);if(S.set.wAuto!==false)speak(d.main.en,{g:ev.a&&ev.a.pron==='he'?'m':'f'});
-  if(mode>1)checkMission(ev,d)}
+  showCard(W.lastD);const sp=S.set.wAuto!==false?speak(d.main.en,{g:ev.a&&ev.a.pron==='he'?'m':'f'}):null;
+  if(ctl&&ctl.check)ctl.check(ev,d);
+  return sp}
  function showCard(L){if(!L){return}const {d,ev}=L;const md=L.mode;const dd=describe(ev,md)||d;
   const animate=ev.a&&!ev.a.user&&(ev.a.k==='person'||ev.a.k==='animal');
   const main=dd.main,extra=[];
   if(dd.state&&dd.state.en!==main.en)extra.push(['状態',dd.state]);
   if(dd.prog&&dd.prog.en!==main.en)extra.push(['動作中',dd.prog]);
   if(dd.past)extra.push(['過去',dd.past]);
-  const enShow=S.set.wEn,jaShow=S.set.wJa&&W.mode!==4;
+  const enShow=S.set.wEn,jaShow=S.set.wJa&&W.mode!==4&&W.mode!==6;
   const fav=(S.wfav||[]).some(x=>x.en===main.en);
   card.innerHTML=`<div class="wsmain en ${enShow?'':'wblur'}" id="ws-en">${esc(main.en)}</div>
   ${jaShow?`<div class="j">${esc(main.ja)}</div>`:''}
@@ -936,45 +1228,148 @@ VIEWS.wscene=function(app){
   card.querySelectorAll('[data-sj]').forEach(b=>b.onclick=()=>{L.mode=b.dataset.sj;showCard(L);const n=describe(ev,L.mode);if(n)speak(n.main.en)});
   card.querySelector('#ws-fav').onclick=()=>{S.wfav=S.wfav||[];if(!S.wfav.some(x=>x.en===main.en)){S.wfav.push({en:main.en,ja:main.ja,sc:def.id,at:today()});if(!S.shSaved.some(x=>x.en===main.en))S.shSaved.push({en:main.en,ja:main.ja,at:today()});save();toast('マイフレーズ帳に保存しました')}showCard(L)};
   card.querySelector('#ws-say').onclick=()=>micPanel(card.querySelector('#ws-mic'),main.en,()=>{card.querySelector('#ws-mic').innerHTML=''},{skipLabel:'とじる',doneLabel:'とじる'})}
- // ---- ミッション ----
- function missionEv(m){const g=k=>m.ex[k]?(typeof m.ex[k]==='object'&&!Array.isArray(m.ex[k])?m.ex[k]:Array.isArray(m.ex[k])?W.ents[m.ex[k][0]]:W.ents[m.ex[k]]):null;
-  return {...m.ex,a:m.ex.a?g('a'):USER,o:g('o'),r:m.ex.r?g('r'):null}}
- function missionText(m){const ev=missionEv(m);const imp=(m.ex.v==='place'||m.ex.v==='light'||((m.ex.v==='open'||m.ex.v==='close'||m.ex.v==='turnon'||m.ex.v==='turnoff')&&!m.a))?imperative(ev):null;
-  const d=describe(ev);return imp&&!imp.target?{en:imp.en,ja:imp.ja,how:'command'}:{en:d.main.en,ja:d.main.ja,how:'target'}}
- function renderMission(){const box=$('#w-mis');if(!box)return;
-  if(W.mi>=W.mq.length){box.innerHTML=`<div class="wclear"><b>ステージクリア!</b> <span>「${esc(WMODES[mode-1].k)}」のミッションをすべてクリアしました。</span><div class="row" style="margin-top:6px"><button class="btn sm" id="wm-again">もう一度</button>${mode<4?`<button class="btn hl sm" id="wm-next">次のモードへ</button>`:''}</div></div>`;
-   box.querySelector('#wm-again').onclick=()=>freshWorld(shuffle(def.missions.map((_,i)=>i)),0);
-   const nx=box.querySelector('#wm-next');if(nx)nx.onclick=()=>go({name:'wscene',id:def.id,mode:mode+1},true);return}
-  const m=def.missions[W.mq[W.mi]];const tx=missionText(m);W.mission=m;W.mText=tx;
-  const head=`<span class="gtag">ミッション ${W.mi+1} / ${W.mq.length}</span>`;
-  if(mode===2)box.innerHTML=`${head}<div class="row" style="margin-top:6px"><button class="playbig sm" id="wm-play" aria-label="指示を聞く">${IC.play}</button><div><b>英語の指示を聞いて、そのとおりに動かしましょう</b><div id="wm-tx" class="en muted" style="margin-top:2px"><button class="linkbtn" id="wm-show">英文を見る(ヒント)</button></div></div></div>`;
-  if(mode===3)box.innerHTML=`${head}<div class="one" style="margin-top:6px">${esc(tx.ja)}</div><small class="muted">この場面になるように動かしてから、英語で言ってみましょう。</small>`;
-  if(mode===4)box.innerHTML=`${head}<div class="row" style="margin-top:6px"><button class="playbig sm" id="wm-play" aria-label="英語を聞く">${IC.play}</button><div class="one en">${esc(tx.en)}</div></div>`;
-  const pl=box.querySelector('#wm-play');if(pl){pl.onclick=()=>speak(tx.en);setTimeout(()=>speak(tx.en),300)}
-  const sh=box.querySelector('#wm-show');if(sh)sh.onclick=()=>{W.mHint=true;box.querySelector('#wm-tx').textContent=tx.en}}
- function checkMission(ev,d){const m=W.mission;if(!m)return;const st=wStat();const tag=VERB_TAG[m.ex.v]||m.ex.v,pp=m.ex.p;
-  if(wMatch(m,ev)){st.v[tag]=st.v[tag]||[0,0];st.v[tag][0]++;st.v[tag][1]++;if(pp){st.p[pp]=st.p[pp]||[0,0];st.p[pp][0]++;st.p[pp][1]++}
-   R.ok++;const gain=[0,0,10,12,15][mode]-(W.mHint?4:0);addXP(gain);W.mHint=false;
-   const box=$('#w-mis');const tx=W.mText;
-   box.innerHTML=`<div class="wok">${hana}<div><b class="good">ミッション成功! +${gain} XP</b><div class="en">${esc(tx.en)}</div>${mode===3?'<div id="wm-mic"></div>':''}<div class="row" style="margin-top:6px"><button class="btn hl sm" id="wm-next">つぎのミッション →</button></div></div></div>`;
-   if(mode===3)micPanel(box.querySelector('#wm-mic'),tx.how==='command'?d.main.en:tx.en,()=>{const m2=box.querySelector('#wm-mic');if(m2)m2.innerHTML=''},{skipLabel:'言わずに進む',doneLabel:'OK'});
-   box.querySelector('#wm-next').onclick=()=>{const ni=W.mi+1;if(ni>=W.mq.length){R.clear[mode]=today();addXP(30);confetti();checkBadges();save()}freshWorld(W.mq,ni)};
-  }else{const wrong=m.v.includes(ev.v);
-   if(wrong){st.v[tag]=st.v[tag]||[0,0];st.v[tag][1]++;if(pp){st.p[pp]=st.p[pp]||[0,0];st.p[pp][1]++}R.miss++;save()}
-   const box=$('#w-mis');let n=box.querySelector('.wng');if(!n){n=document.createElement('div');n.className='wng';box.appendChild(n)}
-   n.textContent=wrong?'動作は合っていますが、人・物・場所がミッションとちがうようです。もう一度聞いて(読んで)みましょう。':'まだミッションの場面になっていません(準備の動作ならそのまま続けてOK)。'}}
- // ミッションごとにシーンを最初の状態にもどす
- function freshWorld(mq,mi){W.alive=false;const N=W_new(def);Object.assign(N,{mq,mi,mqMode:mode,alive:true});RT.w=N;render()}
- if(mode>1)renderMission();
+ // ミッションごとにシーンを最初の状態にもどす(モード2〜4)
+ function fresh(mq,mi){W.alive=false;const N=W_new(def);Object.assign(N,{mq,mi,mqMode:mode,alive:true});RT.w=N;render()}
+ if(ctl&&ctl.render)ctl.render();
+ if(ctl&&ctl.start)ctl.start();
 };
 VIEWS.wbook=function(app){const L=S.wfav||[];
  app.innerHTML=`<div class="row">${backBtn('うごかす英語ワールド',{name:'world'})}</div>
  <div class="uhead"><span class="eyebrow">MY PHRASES</span><h1>マイフレーズ帳</h1><p>ワールドで保存した英文です。シャドーイングの「保存した英文」からも練習できます。</p></div>
  ${L.length?`<section class="sheet panel"><div class="row" style="margin-bottom:10px"><button class="btn hl" id="wb-sh">シャドーイングで練習</button><button class="btn ghost" id="wb-all">${IC.play}全部聞く</button></div>
  <div class="exs">${L.map((x,i)=>`<div class="ex">${sayBtn(x.en)}<div><div class="e en">${esc(x.en)}</div><div class="j">${esc(x.ja)}</div><div class="row" style="margin-top:4px"><small class="muted">${esc((wMeta(x.sc)||{}).t||'')} ・ ${esc(x.at)}</small><button class="btn ghost sm" data-del="${i}">削除</button></div></div></div>`).join('')}</div></section>`:'<section class="sheet panel"><p>まだ保存した英文はありません。ワールドで英文カードの「☆ フレーズ帳に保存」を押すと、ここに入ります。</p></section>'}
- ${wWeakHtml()}`;
+ ${wWeakHtml()}${wTalkHtml()}`;
  wireGo(app);wireSay(app);
  const sh=app.querySelector('#wb-sh');if(sh)sh.onclick=()=>startShadow({items:L.slice(-8).map(x=>({en:x.en,ja:x.ja}))});
  const al=app.querySelector('#wb-all');if(al)al.onclick=()=>speakSeq(L.map(x=>({text:x.en,g:'f',gap:600})));
  app.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{L.splice(+b.dataset.del,1);save();render()});
 };
+
+// ===== ワールド: 会話ミッションの画面(モード5「実践ミッション」・モード6「英語で生活」) =====
+// モード5: 相手の英語を聞き取り、行動や返事を選んで進める(日本語のヒントは少なめ)。自分の声で言うこともできる。
+// モード6: 英文の選択肢は出さない。自分の言葉で(声・できなければ入力で)答える。
+// どちらも、字幕・和訳・ヒントは押したときだけ出る(使った回数は記録する)。
+
+function wStoryList(el,def,mode){const stories=def.stories||[];
+ el.innerHTML=`<div class="wsintro"><b>${mode===5?'実践ミッション':'英語で生活'}</b>
+  <p>${mode===5?'登場人物の英語を聞いて、状況を判断して行動・返事をしましょう。返事は英文の選択肢から選ぶか、自分の声で言えます。日本語のヒントは少なめです。':'英文の選択肢は出ません。登場人物からの質問や依頼に、自分の言葉で答えましょう(マイクが使えないときは入力で答えられます)。'}
+  途中でトラブルが起きることもあります。</p><button class="linkbtn" data-go='{"name":"wexpr"}'>重点フレーズ10の使い方を見る</button></div>
+ <div class="wslist">${stories.map(s=>{const r=(S.wstory||{})[s.id];const me=def.ents.find(e=>e.id===s.me);
+  return `<div class="wscard"><div class="row"><b>${esc(s.t)}</b><small class="en muted">${esc(s.en)}</small><span class="sp"></span>${r&&r.clear?`<span class="chip good">${r.perfect?'★ ノーヒント':'✓ クリア'} ${r.clear}回</span>`:''}</div>
+   <div class="muted" style="margin:4px 0">あなたの役:<b>${esc(me?me.ja:'')}</b> ・ ${esc(s.desc||'')}</div>
+   <div class="row" style="flex-wrap:wrap;gap:4px">${(s.focus||[]).map(f=>`<span class="gtag en">${esc((exprById(f)||{}).en||f)}</span>`).join('')}${(s.variants||[]).length>1?`<span class="gtag">展開 ${s.variants.length}通り</span>`:''}</div>
+   <button class="btn hl sm" style="margin-top:8px" data-st="${esc(s.id)}">はじめる</button></div>`}).join('')}</div>`;
+ wireGo(el);
+ el.querySelectorAll('[data-st]').forEach(b=>b.onclick=()=>go({name:'wscene',id:def.id,mode,story:b.dataset.st}))}
+
+function wStoryCtl(c){const {W,def,story,mode,$}=c;story.scene=def.id;W.story=story.id;
+ const me=W.ents[story.me];let ST=null;const log=$('#w-log'),now=$('#w-now'),goal=$('#w-sgoal');
+ const canTTS='speechSynthesis' in window;
+ const gOf=e=>e&&e.pron==='he'?'m':'f';
+ // ---- 画面の部品 ----
+ function renderGoal(){const steps=story.steps.filter(s=>s.act||s.talk).length;const done=ST?ST.log.acts.filter(a=>a.ok!==false).length+new Set(ST.log.talks.filter(t=>t.kind!=='repeat'&&(t.ok||t.kind==='skip'||t.confirmed)).map(t=>t.step)).size:0;
+  goal.innerHTML=`<div class="row"><span class="gtag">${mode===5?'実践ミッション':'英語で生活'}</span><b>${esc(story.t)}</b><small class="en muted">${esc(story.en)}</small><span class="sp"></span><label class="tg"><input type="checkbox" id="w-sub" ${S.set.wSub?'checked':''}> 字幕を常に表示</label></div>
+  <div class="muted" style="margin-top:4px">あなたの役:<b>${esc(me.ja)}</b> ・ 目的:${esc(story.goalJa||story.desc||'')}</div>
+  <div class="wprog" aria-label="進み具合">${Array.from({length:steps},(_,i)=>`<i class="${i<done?'on':''}"></i>`).join('')}</div>`;
+  goal.querySelector('#w-sub').onchange=e=>{S.set.wSub=e.target.checked;save();log.querySelectorAll('.wl').forEach(x=>{if(S.set.wSub)reveal(x,'en')})}}
+ function lineHtml(h,name){return `<div class="wl ${h.who==='pa'?'pa':''}" data-h="${ST.log.heard.indexOf(h)}"><div class="wlw">${esc(name)}</div>
+  <div class="wlb"><div class="wle en ${h.shownNow?'':'hid'}">${h.shownNow?esc(h.en):'<span class="muted">(英文はかくしています)</span>'}</div><div class="wlj" ${h.jaShown?'':'hidden'}>${esc(h.ja||'')}</div>
+  <div class="wlbtn"><button class="say" data-rp="1" aria-label="もう一度聞く">${IC.play}</button><button class="say" data-rp="slow" aria-label="ゆっくり聞く">${IC.slow}</button>
+  <button class="linkbtn" data-rv="en">英文</button><button class="linkbtn" data-rv="ja">和訳</button></div></div></div>`}
+ function reveal(el,k){const h=ST.log.heard[+el.dataset.h];if(!h)return;
+  if(k==='en'&&!h.shownNow){h.shownNow=true;if(!h.noTTS){h.shown=true;if(!S.set.wSub)stHint(ST,'sub')}el.querySelector('.wle').classList.remove('hid');el.querySelector('.wle').textContent=h.en}
+  if(k==='ja'&&!h.jaShown){h.jaShown=true;stHint(ST,'ja');el.querySelector('.wlj').hidden=false}}
+ function wireLine(el){el.querySelectorAll('[data-rp]').forEach(b=>b.onclick=()=>{const h=ST.log.heard[+el.dataset.h];h.replays++;const w=h.who==='pa'?null:W.ents[h.who];speakLine(w,h.tts||h.en,b.dataset.rp==='slow')});
+  el.querySelectorAll('[data-rv]').forEach(b=>b.onclick=()=>reveal(el,b.dataset.rv))}
+ async function speakLine(who,en,slow){if(who){setTalking(W,who.id,true)}const off=who?talkDots(W,who):()=>{};
+  try{await speak(en,{g:gOf(who),slow})}finally{off();if(who)setTalking(W,who.id,false)}}
+ function myLine(rec){const lab={voice:'声',typed:'入力',choice:'選択'}[rec.how]||'';
+  const res=rec.kind==='repeat'?['聞き返しました','good']:rec.kind==='skip'?['言えなかったので、模範の返事で進みます(話した記録には入りません)','bad']:rec.kind==='clarify'?['一部だけ伝わりました。相手が確認しています','']:rec.kind==='unknown'?['伝わらなかったようです','bad']:rec.tone?['伝わりましたが、より自然な言い方があります','']:['伝わりました','good'];
+  const d=document.createElement('div');d.className='wl me';
+  d.innerHTML=`<div class="wlw">${esc(me.ja)}(あなた)<small class="muted"> ${lab}</small></div><div class="wlb"><div class="en">${rec.text?esc(rec.text):'<span class="muted">—</span>'}</div>
+   <div class="wres ${res[1]}">${res[0]}</div>
+   ${rec.kind==='intent'||rec.kind==='clarify'||rec.kind==='unknown'?`<div class="chips sm">${rec.how!=='choice'?`<span class="chip"><small>意味</small>${rec.kind==='intent'?(rec.ai?'通じる(AI判定)':'通じる'):rec.kind==='clarify'?'一部':'通じにくい'}</span><span class="chip"><small>英文の一致度</small>${rec.match??'—'}%</span>${rec.conf!=null?`<span class="chip"><small>認識の確信度</small>${Math.round(rec.conf*100)}%</span>`:''}`:''}</div>`:''}
+   ${rec.tone&&rec.better?`<div class="wbetter"><small>より自然:</small> <span class="en">${esc(rec.better)}</span> ${sayBtn(rec.better)}</div>`:''}
+   ${rec.kind==='skip'?`<div class="wbetter"><small>例:</small> <span class="en">${esc(rec.model)}</span> ${sayBtn(rec.model)}</div>`:''}</div>`;
+  log.appendChild(d);wireSay(d);d.scrollIntoView({block:'nearest'})}
+ // ---- 進行役(story.js)から呼ばれる画面操作 ----
+ const ui={
+  async say(who,en,ja,h,o){if(!ST||!ST.alive)return;h.noTTS=!canTTS;h.shownNow=h.shownNow||!canTTS||!!S.set.wSub;if(S.set.wSub&&!h.noTTS)h.shown=true;
+   if(o.again){const el=log.querySelector(`.wl[data-h="${ST.log.heard.indexOf(h)}"]`);if(el)el.classList.add('again')}
+   else{const tmp=document.createElement('div');tmp.innerHTML=lineHtml(h,o.think?'💭 '+(who===me?'(心の声)':cap(who.en.replace(/^the /,''))):who?cap(who.en.replace(/^the /,'')):'📢 Announcement');const el=tmp.firstElementChild;log.appendChild(el);wireLine(el);el.scrollIntoView({block:'nearest'})}
+   now.innerHTML=`<div class="muted wwait">${who?esc(cap(who.en))+' が話しています…':'アナウンス中…'}</div>`;
+   await speakLine(who,h.tts||en,o.slow);if(!o.pa)await wait(250)},
+  task(s,o={}){if(!ST.alive)return;renderGoal();const label=stTx(ST,s.act.ja),hint=stTx(ST,s.act.hint||'');
+   now.innerHTML=`${o.again?'<div class="wng">うまくいかなかったようです。相手の言ったことを確かめて、もう一度。</div>':''}
+   <div class="wtask"><b>あなたの番(行動)</b> ${mode===5?`<span>${esc(label)}</span>`:`<span id="w-tl" class="muted">状況に合わせて、${esc(me.ja)}を動かしましょう。</span>`}</div>
+   <small class="muted">${esc(me.ja)}(あなた)や、相手・物をタップすると動作を選べます。</small>
+   <div class="row" style="margin-top:6px">${mode===6?'<button class="btn ghost sm" id="w-tk">やることを見る</button>':''}${hint?'<button class="btn ghost sm" id="w-th">ヒント</button>':''}</div><div id="w-thx"></div>`;
+   const tk=now.querySelector('#w-tk');if(tk)tk.onclick=()=>{stHint(ST,'task');now.querySelector('#w-tl').textContent=label;tk.remove()};
+   const th=now.querySelector('#w-th');if(th)th.onclick=()=>{stHint(ST,'task');now.querySelector('#w-thx').innerHTML=`<div class="hintbox">${esc(hint)}</div>`;th.remove()}},
+  talk(s0,o={}){if(!ST.alive)return;const s=stResolve(ST,s0);renderGoal();const ja=stTx(ST,s.talk.ja||''),hint=stTx(ST,s.talk.hint||'');const to=s.to?W.ents[s.to]:null;
+   now.innerHTML=`${o.again?'<div class="wng" style="margin-bottom:4px">もう一度どうぞ。</div>':''}
+   <div class="wtask"><b>あなたの番(話す)</b> ${mode===5?`<span>${esc(ja)}</span>`:`<span class="muted">${to?esc(to.ja)+'に':''}英語で話しましょう。</span>`}</div>
+   ${mode===5&&s.choices.length?`<div class="wchoice">${shuffle(s.choices.map((x,i)=>i)).map(i=>`<button class="wact" data-ch="${i}"><span class="en">${esc(s.choices[i].en)}</span></button>`).join('')}</div>
+    <div class="row"><button class="btn ghost sm" id="w-own">${IC.mic}自分の声で言う</button>${hint?'<button class="btn ghost sm" id="w-hn">ヒント</button>':''}<button class="btn ghost sm" id="w-sk">わからない</button></div><div id="w-hx"></div><div id="w-ab"></div>`
+    :`<div id="w-ab"></div>`}`;
+   const send=res=>{if(ST&&ST.alive)stOnAnswer(ST,res)};
+   now.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{const ch=s.choices[+b.dataset.ch];send({choice:ch.i,text:ch.en,hint:false})});
+   const sk=now.querySelector('#w-sk');if(sk)sk.onclick=()=>send({gaveUp:true,text:''});
+   const hn=now.querySelector('#w-hn');if(hn)hn.onclick=()=>{stHint(ST,'talk');now.querySelector('#w-hx').innerHTML=`<div class="hintbox">${esc(hint)}</div>`;hn.remove()};
+   const box=()=>answerBox(now.querySelector('#w-ab'),{hintHtml:mode===6?esc(ja)+(hint?'<br>'+esc(hint):''):'',onHint:()=>stHint(ST,'talk'),placeholder:'英語で入力して Enter'}).then(r=>{if(r.hint&&ST.waiting)ST.waiting.hinted=true;send(r)});
+   const own=now.querySelector('#w-own');if(own)own.onclick=()=>{own.remove();box()};
+   if(mode===6||!s.choices.length)box();
+   if(o.offerHint){const h=now.querySelector('#ab-hint')||hn;if(h)h.classList.add('hl')}},
+  result(rec){myLine(rec)},
+  confirm(m){return new Promise(res=>{now.innerHTML=`<div class="wtask"><b>相手が確認しています</b> <span class="en">"${esc(m)}"</span> で合っていますか?</div>
+   <div class="wchoice"><button class="wact" data-y="1"><span class="en">Yes, that's right.</span><small>はい、そうです</small></button><button class="wact" data-y="0"><span class="en">No, that's not what I meant.</span><small>いいえ、ちがいます</small></button></div>`;
+   now.querySelectorAll('[data-y]').forEach(b=>b.onclick=()=>{const y=b.dataset.y==='1';const d=document.createElement('div');d.className='wl me';d.innerHTML=`<div class="wlw">${esc(me.ja)}(あなた)</div><div class="wlb en">${y?'Yes, that\'s right.':'No, that\'s not what I meant.'}</div>`;log.appendChild(d);res(y)})})},
+  finish(fb){renderGoal();$('#w-menu').innerHTML='';now.innerHTML=wFeedbackHtml(fb,mode);wireSay(now);
+   const nx=(def.stories||[]).findIndex(x=>x.id===story.id)+1;
+   now.querySelector('#fb-again').onclick=()=>{RT.stOpt=null;render()};
+   now.querySelector('#fb-list').onclick=()=>go({name:'wscene',id:def.id,mode},true);
+   const n=now.querySelector('#fb-next');if(n){if(nx<def.stories.length)n.onclick=()=>go({name:'wscene',id:def.id,mode,story:def.stories[nx].id},true);else n.remove()}
+   if(fb.goal)confetti();now.scrollIntoView({block:'start',behavior:'smooth'})}};
+ return {role:story.me,
+  extra(a,t){if(!ST||!ST.waiting)return [];const list=[...(story.acts||[]),...((ST.waiting.s&&ST.waiting.s.acts)||[])];
+   return list.filter(x=>(x.on||null)===(t?t.id:null)&&(!x.if||stCond(ST,x.if))).map(x=>wA(stTx(ST,x.en),stTx(ST,x.ja),async()=>{if(x.near&&t)await goNear(W,a,t);await stOps(ST,x.do||[]);
+    return {v:'custom',act:x.id,a,o:t||null,tx:{prog:(x.tx.prog||[]).map(s=>stTx(ST,s)),past:(x.tx.past||[]).map(s=>stTx(ST,s)),state:x.tx.state?(x.tx.state).map(s=>stTx(ST,s)):null}}}))},
+  onEvents(evs){return ST&&stOnEvents(ST,evs)},
+  async start(){const opt=RT.stOpt||{};ST=stNew(W,story,mode,ui,opt);RT.st=ST;
+   if(story.init)await stOps(ST,story.init);W.draw();renderGoal();
+   const intro=stTx(ST,story.intro||'');log.innerHTML=intro?`<div class="wintro">${esc(intro)}</div>`:'';
+   await wait(300);if(ST.alive)stRun(ST)}}}
+
+// ---- 会話後の学習フィードバック ----
+function wFeedbackHtml(fb,mode){const m=fb.metrics;const pct=v=>v==null?'—':v+'%';
+ const heard=fb.heard.filter(h=>h.who!=='me');
+ return `<div class="wfb">
+ <div class="wfbh ${fb.goal?'ok':''}">${fb.goal?(fb.perfect?'★ ノーヒントでミッション達成!':'ミッション達成!'):'ミッションは未達成です'}<small>${fb.sec}秒</small></div>
+ <div class="chips">
+  <span class="chip"><small>意味の正確性</small>${pct(m.meaning)}</span>
+  <span class="chip"><small>英文の一致度</small>${pct(m.match)}</span>
+  <span class="chip"><small>発音の目安(音声認識の確信度)</small>${m.pron==null?'声の回答なし':m.pron+'%'}</span>
+  <span class="chip ${fb.hints?'':'good'}"><small>ヒント</small>${fb.hints}回</span></div>
+ <small class="muted">意味=相手に一度で伝わった割合 / 一致度=模範の英文との文字の一致 / 確信度=ブラウザの音声認識がどれだけ確かに聞き取れたか(発音の正式な採点ではありません)。それぞれ別の指標です。</small>
+ <h4>聞き取れた内容</h4><div class="wfbl">${heard.map(h=>`<div class="ex">${sayBtn(h.en)}<div><div class="en">${esc(h.en)}</div><div class="j">${esc(h.ja||'')}</div><small class="${h.help?'':'good'}">${h.help?[h.shown?'字幕':'',h.jaShown?'和訳':'',h.asked?'聞き返し':''].filter(Boolean).join('・')+'を使って理解':'音声だけで理解'}${h.replays?` ・ 再生${h.replays}回`:''}</small></div></div>`).join('')||'<p class="muted">—</p>'}</div>
+ <h4>正しく実行できた行動</h4><ul class="wfbu">${fb.acts.filter(a=>a.ok!==false).map(a=>`<li>${esc(a.label)}${a.hint?' <small class="muted">(ヒントあり)</small>':''}</li>`).join('')||'<li class="muted">—</li>'}</ul>
+ ${fb.acts.some(a=>a.ok===false)?`<div class="muted">まちがえた行動:${fb.acts.filter(a=>a.ok===false).map(a=>esc(a.label)).join('、')}</div>`:''}
+ <h4>自分で話せた英文</h4>${fb.spoken.length?`<ul class="wfbu en">${fb.spoken.map(t=>`<li>${esc(t)}</li>`).join('')}</ul>`:`<p class="muted">${mode===5?'声で答えた英文はありません(選択肢で答えた分は「話せた」に入りません)。':'声で答えた英文はありません。'}</p>`}
+ ${fb.typed.length?`<div class="muted">入力で答えた英文:${fb.typed.map(esc).join(' / ')}</div>`:''}
+ ${fb.chose.length?`<div class="muted">選んで答えた英文:${fb.chose.map(esc).join(' / ')}</div>`:''}
+ ${fb.mistakes.filter(x=>x.kind==='talk').length?`<h4>会話で間違えた・伝わりにくかった表現</h4>${fb.mistakes.filter(x=>x.kind==='talk').map(x=>`<div class="ex">${sayBtn(x.model)}<div>${x.said?`<div><s class="muted">${esc(x.said)}</s></div>`:'<div class="muted">(言えなかった)</div>'}<div class="en"><b>${esc(x.model)}</b></div>${x.why?`<small class="muted">${esc(x.why)}</small>`:''}</div></div>`).join('')}`:''}
+ <h4>より自然な言い方・言い換え</h4>${fb.para.map(p=>`<div class="ex">${sayBtn(p.model)}<div><div class="en"><b>${esc(p.model)}</b>${p.focus?` <span class="gtag">${esc((exprById(p.focus)||{}).ja||'')}</span>`:''}</div><div class="j">${esc(p.ja||'')}</div>${p.alts.length?`<small class="en muted">ほかにも:${p.alts.map(esc).join(' / ')}</small>`:''}${p.better?`<div class="en"><small class="muted">AIの言い換え:</small> ${esc(p.better)}</div>`:''}</div></div>`).join('')||'<p class="muted">—</p>'}
+ <h4>次回復習するフレーズ</h4>${fb.review.length?`<div class="wfbl">${fb.review.map(r=>`<div class="ex">${sayBtn(r.en)}<div><div class="en">${esc(r.en)}</div><div class="j">${esc(r.ja)}</div><small class="muted">${esc(r.why)}</small></div></div>`).join('')}</div><small class="muted">「苦手リスト」(復習)に追加しました。</small>`:'<p class="muted">今回はありません。</p>'}
+ <div class="row" style="margin-top:12px"><button class="btn hl" id="fb-again">もう一度(展開が変わることがあります)</button><button class="btn ghost" id="fb-list">ミッション一覧</button>${'<button class="btn ghost" id="fb-next">次のミッション →</button>'}</div></div>`}
+
+// ---- 重点フレーズ10 ----
+VIEWS.wexpr=function(app){const t=wTalkStat();const where={};for(const s of WMAN)for(const st of s.st||[])for(const f of st.focus||[])(where[f]=where[f]||[]).push({sc:s,st});
+ app.innerHTML=`<div class="row">${backBtn('うごかす英語ワールド',{name:'world'})}</div>
+ <div class="uhead"><span class="eyebrow">KEY PHRASES</span><h1>重点フレーズ10</h1><p>会話ミッションで重点的に練習する表現です。使う場面・自然な音声・返答例を確認してから、ミッションで使ってみましょう。</p></div>
+ ${EXPR.map(x=>{const f=t.f[x.id];return `<section class="sheet panel wexp"><div class="row"><span class="gtag">${esc(x.ja)}</span><b class="en" style="font-size:20px">${esc(x.en)}</b><span class="sp"></span><small class="muted">${f?`ヒントなしで成功 ${f[0]}/${f[1]}回`:'まだ使っていません'}</small></div>
+  <p>${esc(x.use)}</p>
+  <div class="exs">${x.ex.map(([e,j])=>`<div class="ex">${sayBtn(e)}<div><div class="e en">${esc(e)}</div><div class="j">${esc(j)}</div></div></div>`).join('')}</div>
+  <div class="eyebrow" style="margin-top:6px">返答の例</div><div class="exs">${x.resp.map(([e,j])=>`<div class="ex">${sayBtn(e,'m')}<div><div class="e en">${esc(e)}</div><div class="j">${esc(j)}</div></div></div>`).join('')}</div>
+  ${(where[x.id]||[]).length?`<div class="row" style="flex-wrap:wrap;gap:6px;margin-top:8px"><small class="muted">練習できるミッション:</small>${where[x.id].map(w=>`<button class="btn ghost sm" data-go='${JSON.stringify({name:'wscene',id:w.sc.id,mode:5,story:w.st.id})}'>${esc(w.sc.t)}「${esc(w.st.t)}」</button>`).join('')}</div>`:''}
+ </section>`}).join('')}`;
+ wireGo(app);wireSay(app)};

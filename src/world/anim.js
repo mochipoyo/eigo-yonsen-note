@@ -7,6 +7,9 @@ async function moveTo(W,e,x,y,gait='walk'){
  const dur=Math.max(260,d/SPEED[gait]*1000);W.draw(dur);await wait(dur);e.moving=null;W.draw()}
 function faceTo(e,t){e.flip=t.x<e.x}
 function spotNear(W,a,t){// 相手の横に立つ位置
+ // カウンターの中にいる店員(stay)は中を移動し、客はカウンターの前から話す
+ if(a.stay&&W.ents[a.stay]){const f=W.ents[a.stay];const hw=(f.o&&f.o.w||240)/2-20;return {x:Math.max(f.x-hw,Math.min(f.x+hw,t.x+(t.k==='person'?0:0))),y:f.staffY}}
+ if(t.k==='person'&&t.stay&&W.ents[t.stay]){const f=W.ents[t.stay];return clampFloor(W,{x:t.x+(a.x<t.x?-12:12),y:(f.near?f.near.y:f.y)+14})}
  if(t.k==='fix'&&t.near)return {x:t.near.x,y:t.near.y};
  const side=a.x<t.x?-1:1;let y=t.k==='prop'&&t.at&&t.at.ref&&W.ents[t.at.ref]?W.ents[t.at.ref].y+14:t.y+2;
  if(t.k==='prop'&&t.inC){const c=W.ents[t.inC];y=c.at&&W.ents[c.at.ref]?W.ents[c.at.ref].y+14:c.y+2}

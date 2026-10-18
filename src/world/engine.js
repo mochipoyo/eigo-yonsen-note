@@ -102,6 +102,7 @@ async function dropAct(W,e,pt){const z=dropZone(W,e,pt);const P=clampFloor(W,pt)
   return nf?{v:'place',a:USER,o:e,r:nf,p:nf.near.p||'next to',stateFirst:true}:{v:'place',a:USER,o:e,r:W.ground,p:'on',stateFirst:true}}
  if(e.k==='person'){
   if(e.inside||e.swim)return null;
+  if(e.stay&&W.ents[e.stay]){const f=W.ents[e.stay];const hw=(f.o&&f.o.w||240)/2-20;await moveTo(W,e,Math.max(f.x-hw,Math.min(f.x+hw,pt.x)),f.staffY,'walk');return {v:'walk',a:e}}
   if(W.def.floors&&bandOf(W,pt.y)!==bandOf(W,e.y)&&!ents(W).some(f=>f.k==='fix'&&f.art==='crosswalk'&&inRect(pt,fixHit(f)))){const cw=ents(W).find(f=>f.art==='crosswalk');if(cw&&crossOk(W)){const act=comboMenu(W,e,cw).find(a=>a.en==='Cross the street');if(act)return act.run()}bubble(W,e,'Red light!');return null}
   if(z.kind==='sit'){await sitOn(W,e,z.r);return {v:z.r.floorSit?'sitfloor':'sit',a:e,r:z.r,p:'on'}}
   if(z.kind==='lie'){await lieOn(W,e,z.r);return {v:'lie',a:e,r:z.r,p:'on'}}
