@@ -34,8 +34,8 @@ function wStoryCtl(c){const {W,def,story,mode,$}=c;story.scene=def.id;W.story=st
   if(k==='ja'&&!h.jaShown){h.jaShown=true;stHint(ST,'ja');el.querySelector('.wlj').hidden=false}}
  function wireLine(el){el.querySelectorAll('[data-rp]').forEach(b=>b.onclick=()=>{const h=ST.log.heard[+el.dataset.h];h.replays++;const w=h.who==='pa'?null:W.ents[h.who];speakLine(w,h.tts||h.en,b.dataset.rp==='slow')});
   el.querySelectorAll('[data-rv]').forEach(b=>b.onclick=()=>reveal(el,b.dataset.rv))}
- async function speakLine(who,en,slow){if(who){setTalking(W,who.id,true)}const off=who?talkDots(W,who):()=>{};
-  try{await speak(en,{g:gOf(who),slow})}finally{off();if(who)setTalking(W,who.id,false)}}
+ async function speakLine(who,en,slow,fast){if(who){setTalking(W,who.id,true)}const off=who&&!who.hidden?talkDots(W,who):()=>{};
+  try{await speak(en,{g:gOf(who),slow,fast:fast&&!slow})}finally{off();if(who)setTalking(W,who.id,false)}}
  function myLine(rec){const lab={voice:'声',typed:'入力',choice:'選択'}[rec.how]||'';
   const res=rec.kind==='repeat'?['聞き返しました','good']:rec.kind==='skip'?['言えなかったので、模範の返事で進みます(話した記録には入りません)','bad']:rec.kind==='clarify'?['一部だけ伝わりました。相手が確認しています','']:rec.kind==='unknown'?['伝わらなかったようです','bad']:rec.tone?['伝わりましたが、より自然な言い方があります','']:['伝わりました','good'];
   const d=document.createElement('div');d.className='wl me';
@@ -51,7 +51,7 @@ function wStoryCtl(c){const {W,def,story,mode,$}=c;story.scene=def.id;W.story=st
    if(o.again){const el=log.querySelector(`.wl[data-h="${ST.log.heard.indexOf(h)}"]`);if(el)el.classList.add('again')}
    else{const tmp=document.createElement('div');tmp.innerHTML=lineHtml(h,o.think?'💭 '+(who===me?'(心の声)':cap(who.en.replace(/^the /,''))):who?cap(who.en.replace(/^the /,'')):'📢 Announcement');const el=tmp.firstElementChild;log.appendChild(el);wireLine(el);el.scrollIntoView({block:'nearest'})}
    now.innerHTML=`<div class="muted wwait">${who?esc(cap(who.en))+' が話しています…':'アナウンス中…'}</div>`;
-   await speakLine(who,h.tts||en,o.slow);if(!o.pa)await wait(250)},
+   await speakLine(who,h.tts||en,o.slow,h.fast&&!o.again);if(!o.pa)await wait(250)},
   task(s,o={}){if(!ST.alive)return;renderGoal();const label=stTx(ST,s.act.ja),hint=stTx(ST,s.act.hint||'');
    now.innerHTML=`${o.again?'<div class="wng">うまくいかなかったようです。相手の言ったことを確かめて、もう一度。</div>':''}
    <div class="wtask"><b>あなたの番(行動)</b> ${mode===5?`<span>${esc(label)}</span>`:`<span id="w-tl" class="muted">状況に合わせて、${esc(me.ja)}を動かしましょう。</span>`}</div>

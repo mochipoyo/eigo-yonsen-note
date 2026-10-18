@@ -37,7 +37,7 @@ function stEvMatch(ST,m,ev){if(!ev)return false;
   if(want&&typeof want==='object'&&!Array.isArray(want)&&'not' in want)return !val(want.not,got);
   const list=(Array.isArray(want)?want:[want]).map(x=>stId(ST,x));return list.includes(g)};
  if(m.v&&!(Array.isArray(m.v)?m.v:[m.v]).includes(ev.v))return false;
- if(m.act&&ev.act!==m.act)return false;
+ if(m.act&&ev.act!==stTx(ST,m.act))return false;
  return val(m.a,ev.a)&&val(m.o,ev.o)&&val(m.r,ev.r)}
 function stCond(ST,c,ev){if(!c)return true;const W=ST.W;
  if(c.all)return c.all.every(x=>stCond(ST,x,ev));
@@ -51,7 +51,7 @@ function stCond(ST,c,ev){if(!c)return true;const W=ST.W;
  if(c.held){const p=stEnt(ST,c.held[0]),h=stId(ST,c.held[1]);return !!p&&p.heldBy===h}
  if(c.on){const p=stEnt(ST,c.on[0]),r=stId(ST,c.on[1]);return !!p&&!p.heldBy&&((p.at&&p.at.ref===r)||p.inC===r)}
  if(c.near){const a=stEnt(ST,c.near[0]),f=stEnt(ST,c.near[1]);if(!a||!f||a.hidden)return false;const pt=f.near||f;return Math.hypot(a.x-pt.x,a.y-pt.y)<(c.r||80)}
- if(c.st){const e=stEnt(ST,c.st[0]);return !!e&&(e.st[c.st[1]]??null)===stId(ST,c.st[2])}
+ if(c.st){const e=stEnt(ST,c.st[0]);const want=typeof c.st[2]==='string'?stTx(ST,stId(ST,c.st[2])):c.st[2];return !!e&&(e.st[c.st[1]]??null)===want}
  if(c.seated){const a=stEnt(ST,c.seated);return !!a&&!!a.seat}
  if(c.inside){const a=stEnt(ST,c.inside[0]);return !!a&&a.inside===stId(ST,c.inside[1])}
  return true}
@@ -79,16 +79,17 @@ async function stOps(ST,ops){const W=ST.W;
    case 'stand':if(who.seat||who.lie){const sy=who.y+10;unseat(W,who);who.y=sy;W.draw();await wait(200)}break;
    case 'act':who.act=o.a;W.draw();await wait(o.ms||600);if(!o.keep){who.act=null;W.draw()}break;
    case 'flag':Object.assign(ST.flags,o.set);break;
+   case 'setp':Object.assign(stEnt(ST,o.id),JSON.parse(stTx(ST,JSON.stringify(o.set))));W.draw();break;
    case 'setvar':stSetVar(ST,o.k,o.v,o.other);break;
    case 'return':{const h=who.hold&&W.ents[who.hold];if(h&&to){await goNear(W,who,to);who.act='give';W.draw();await wait(350);who.act=null;who.hold=null;if(to.hold)await dropHeld(W,to);placeProp(W,h,to);W.draw(300);await wait(320)}break}
    case 'think':bubble(W,who,stTx(ST,o.say));await ST.ui.say(who,stTx(ST,o.say),stTx(ST,o.ja),stHeard(ST,who,o),{think:true});break;
    case 'wait':await wait(o.ms||500);break;
    case 'announce':await ST.ui.say(null,stTx(ST,o.say),stTx(ST,o.ja),stHeard(ST,null,o),{pa:true});break;
   }}}
-function stHeard(ST,who,s){const h={who:who?who.id:'pa',name:who?who.en:'Announcement',en:stTx(ST,s.say),tts:s.tts?stTx(ST,s.tts):null,ja:stTx(ST,s.ja),step:ST.i,shown:false,jaShown:false,replays:0,asked:0,key:!!s.key};ST.log.heard.push(h);ST.lastHeard=h;return h}
+function stHeard(ST,who,s){const h={who:who?who.id:'pa',name:who?who.en:'Announcement',fast:!!s.fast,en:stTx(ST,s.say),tts:s.tts?stTx(ST,s.tts):null,ja:stTx(ST,s.ja),step:ST.i,shown:false,jaShown:false,replays:0,asked:0,key:!!s.key};ST.log.heard.push(h);ST.lastHeard=h;return h}
 async function stSay(ST,s){const W=ST.W;const who=stEnt(ST,s.npc);const to=s.to?stEnt(ST,s.to):stEnt(ST,ST.story.me);
  if(who&&to&&!s.noFace)faceEachOther(W,who,to);if(who&&s.expr){who.expr=s.expr==='normal'?null:s.expr;W.draw()}
- const h=stHeard(ST,who,s);await ST.ui.say(who,h.en,h.ja,h,{});
+ const h=stHeard(ST,who,s);await ST.ui.say(who,h.en,h.ja,h,{slow:!!s.slow});
  if(who&&s.exprAfter){who.expr=s.exprAfter==='normal'?null:s.exprAfter;W.draw()}}
 
 // ---- 進行 ----

@@ -32,7 +32,7 @@ function speak(text,opt={}){
   if(typeof recNow!=='undefined'&&recNow)stopListen();
   const id=++speakId;const u=new SpeechSynthesisUtterance(text.replace(/____/g,'blank'));
   const p=pickVoice(opt.g||'f',opt.lang||S.set.accent);
-  if(p.voice)u.voice=p.voice;u.lang=p.lang;u.pitch=p.pitch;u.rate=(opt.slow?0.72:1)*S.set.rate;
+  if(p.voice)u.voice=p.voice;u.lang=p.lang;u.pitch=p.pitch;u.rate=(opt.slow?0.72:opt.fast?1.3:1)*S.set.rate;
   let done=false;const fin=()=>{if(done)return;done=true;clearTimeout(t);res(id===speakId)};
   u.onend=fin;u.onerror=fin;
   const t=setTimeout(fin,1500+text.length*120/u.rate);

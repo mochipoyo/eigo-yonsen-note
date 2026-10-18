@@ -27,6 +27,11 @@ const LK={// 登場人物の見た目
  swimman:{skin:'#f6d3b8',hair:'#3a2a24',hs:'short',top:'#f28b7f',bottom:'#3a8fd0',kind:'tee',shortSleeve:true},
  swimwoman:{skin:'#ffe3cf',hair:'#8a4b2a',hs:'pony',top:'#f5c542',bottom:'#f5c542',kind:'dress'},
  guest:{skin:'#f3cfb3',hair:'#2f2f3a',hs:'bob',top:'#3aa0db',bottom:'#4a4f5c',kind:'hoodie'},
+ recep:{skin:'#ffe3cf',hair:'#2b2b33',hs:'bun',top:'#7a2638',bottom:'#2b2b33',kind:'suit',skirt:true,tie:'#f5c542'},
+ traveler:{skin:'#ffe0c7',hair:'#4a3020',hs:'short',top:'#e98a4a',bottom:'#3d4a5c',kind:'hoodie'},
+ traveler2:{skin:'#fde2cf',hair:'#2b2b33',hs:'long',top:'#5aa8a0',bottom:'#3d4a5c',kind:'tee',skirt:true},
+ agent:{skin:'#f6d3b8',hair:'#3a2a24',hs:'bob',top:'#2a63c4',bottom:'#2b3550',kind:'uniform',skirt:true},
+ gstaff:{skin:'#ffe0c7',hair:'#2b2b33',hs:'short',top:'#2a63c4',bottom:'#2b3550',kind:'uniform'},
  cyclist:{skin:'#ffe0c7',hair:'#3a2a24',hs:'short',top:'#3aa0db',bottom:'#2b2f38',kind:'hoodie',bike:'#3a8a5a'},
 };
 const P=(id,en,ja,pron,look,x,y,o={})=>({id,k:'person',en,ja,pron,look,x,y,...o});
@@ -224,6 +229,18 @@ const PROP={
  tea:(st)=>`<path d="M-11 -18h22l-3 18h-16z" fill="#fff" ${ow}/><path d="M11 -14q8 0 7 6q-1 4-8 4" fill="none" stroke="${OL}" stroke-width="2"/><ellipse cx="0" cy="-18" rx="10" ry="2.4" fill="#c46a2c"/><path d="M4 -18q2 10 10 14" stroke="#ddd" stroke-width="1.2" fill="none"/><rect x="11" y="-6" width="7" height="8" rx="1" fill="#6ab04c" ${ow}/>${st.cold?'':'<path class="steam" d="M-3 -22q-3-5 0-9" stroke="#c9d3e6" stroke-width="1.8" fill="none"/>'}`,
  card:()=>`<rect x="-14" y="-10" width="28" height="18" rx="3" fill="#3d6fd0" ${ow}/><rect x="-14" y="-6" width="28" height="4" fill="#24356b"/><rect x="-10" y="1" width="8" height="4" rx="1" fill="#f5c542"/>`,
  cash:()=>`<rect x="-14" y="-8" width="28" height="12" rx="1.5" fill="#9bd18c" ${ow}/><circle cx="0" cy="-2" r="3.5" fill="none" stroke="#4e8a3e" stroke-width="1.5"/>`,
+ pizza:(st)=>`<ellipse cx="0" cy="-4" rx="24" ry="6" fill="#fff" ${ow}/>${st.eaten?'':`<path d="M-17 -7l17-11l17 11q-17 5-34 0z" fill="#f2c14e" ${ow}/><circle cx="-6" cy="-9" r="2.6" fill="#c0392b"/><circle cx="5" cy="-11" r="2.6" fill="#c0392b"/><circle cx="2" cy="-7" r="2.2" fill="#5aa83a"/>`}`,
+ salad:(st)=>`<ellipse cx="0" cy="-4" rx="22" ry="6" fill="#fff" ${ow}/>${st.eaten?'':`<path d="M-15 -6q0-12 15-12q15 0 15 12z" fill="#7cc35a" ${ow}/><circle cx="-5" cy="-11" r="3" fill="#e8463b"/><circle cx="6" cy="-10" r="3" fill="#f5c542"/><path d="M-10 -8q4-4 8 0" stroke="#4e9a3a" stroke-width="2" fill="none"/>`}`,
+ eggs:(st)=>`<path d="M-22 -2l2-12h40l2 12z" fill="#d9c7a3" ${ow}/>${[-14,-4,6,16].map((x,i)=>`<ellipse cx="${x}" cy="-15" rx="5" ry="6" fill="${st.broken&&i===1?'#fff7e0':'#fbf3e3'}" stroke="${OL}" stroke-width="1.4"/>${st.broken&&i===1?`<path d="M${x-5} -15l3-3l2 3l3-3l2 3" stroke="${OL}" stroke-width="1.4" fill="none"/><ellipse cx="${x}" cy="-9" rx="5" ry="2" fill="#f5c542"/>`:''}`).join('')}`,
+ receipt:()=>`<path d="M-8 -22h16v22l-3-2l-2.5 2l-2.5-2l-2.5 2l-2.5-2l-3 2z" fill="#fff" ${ow}/><path d="M-5 -17h10M-5 -12h8M-5 -7h10" stroke="#9aa" stroke-width="1.3"/>`,
+ keycard:()=>`<rect x="-12" y="-9" width="24" height="16" rx="2.5" fill="#f5c542" ${ow}/><rect x="-8" y="-5" width="10" height="3" fill="#8a6a1a"/><circle cx="7" cy="2" r="2.4" fill="#fff"/>`,
+ passport:()=>`<rect x="-10" y="-15" width="20" height="15" rx="2" fill="#7a2638" ${ow}/><circle cx="0" cy="-8" r="3.8" fill="none" stroke="#f5c542" stroke-width="1.4"/><path d="M-5 -3h10" stroke="#f5c542" stroke-width="1.2"/>`,
+ bpass:()=>`<rect x="-16" y="-10" width="32" height="13" rx="2" fill="#fff" ${ow}/><rect x="-16" y="-10" width="32" height="4" fill="#2a63c4"/><path d="M6 -6v9" stroke="${OL}" stroke-width="1" stroke-dasharray="2 1.5"/><path d="M-12 -2h14M-12 1h10" stroke="#9aa" stroke-width="1.2"/>`,
+ suitcase:(st)=>`<rect x="-20" y="-50" width="40" height="46" rx="6" fill="#2e8f8a" ${ow}/><path d="M-20 -36h40M-20 -20h40" stroke="#22706c" stroke-width="2"/><path d="M-7 -50v-10h14v10" fill="none" stroke="${OL}" stroke-width="3"/><circle cx="-12" cy="-2" r="3.5" fill="${OL}"/><circle cx="12" cy="-2" r="3.5" fill="${OL}"/>${st.light?'':'<rect x="-10" y="-30" width="20" height="5" rx="1" fill="#f5c542" opacity=".8"/>'}`,
+ memo:(st)=>`<rect x="-12" y="-16" width="24" height="16" rx="1.5" fill="#fff6a8" ${ow}/>${st.text?`<path d="M-8 -11h16M-8 -6h12" stroke="#2a63c4" stroke-width="1.6"/>`:'<path d="M-8 -11h16M-8 -6h16" stroke="#e8dc8a" stroke-width="1.2"/>'}`,
+ bell:()=>`<path d="M-10 0h20" stroke="${OL}" stroke-width="3"/><path d="M-8 -2q0-12 8-12q8 0 8 12z" fill="#f2c14e" ${ow}/><circle cy="-16" r="2.4" fill="#f2c14e" ${ow}/>`,
+ fan:()=>`<rect x="-3" y="-20" width="6" height="18" fill="#cfd6e2" ${ow}/><ellipse cx="0" cy="0" rx="12" ry="3" fill="#cfd6e2" ${ow}/><circle cy="-30" r="13" fill="#fff" ${ow}/><path d="M0 -30l-8-6M0 -30l8-6M0 -30l0 9" stroke="#7fa6d8" stroke-width="3"/>`,
+ jacket:()=>`<path d="M-14 0v-22l6-6h16l6 6v22z" fill="#c0392b" ${ow}/><path d="M0 -28v28" stroke="${OL}" stroke-width="1.5"/>`,
  money:()=>`<rect x="-12" y="-6" width="24" height="6" rx="1" fill="#9bd18c" ${ow}/>`,
 };
 function propSvg(type,st={}){const f=PROP[type];return `<g class="pr">${f?f(st):''}</g>`}
@@ -291,6 +308,16 @@ const FIX={
  sea:(st,o)=>`<rect x="-500" y="-160" width="1000" height="160" fill="rgba(0,0,0,0)"/>`,
  menuboard:(st,o)=>{const it=o.items||[];return `<rect x="-120" y="-130" width="240" height="130" rx="6" fill="#2f2a26" ${ow}/><text x="0" y="-104" text-anchor="middle" fill="#f5c542" font-size="17" font-weight="700" font-family="'Lexend',sans-serif">MENU</text>
   ${it.map((m,i)=>{const y=-76+i*28,out=st.out===m.id;return `<text x="-100" y="${y}" fill="${out?'#8a8079':'#f5e6c8'}" font-size="16" font-family="'Lexend',sans-serif">${esc(m.label)}</text><text x="100" y="${y}" text-anchor="end" fill="${out?'#8a8079':'#f5e6c8'}" font-size="16" font-family="'Lexend',sans-serif">${esc(m.price)}</text>${out?`<path d="M-104 ${y-5}h208" stroke="#f0eae0" stroke-width="2"/><g transform="translate(40 ${y-6}) rotate(-8)"><rect x="-44" y="-12" width="88" height="22" rx="4" fill="#d9473b" stroke="#fff" stroke-width="1.5"/><text y="4" text-anchor="middle" fill="#fff" font-size="13" font-weight="700" font-family="'Lexend',sans-serif">SOLD OUT</text></g>`:''}`}).join('')}`},
+ elevator:(st,o)=>`<rect x="-62" y="-196" width="124" height="196" fill="#c9ced8" ${ow}/><rect x="-54" y="-186" width="108" height="186" fill="#3d4352"/>
+  ${st.open?'<rect x="-50" y="-182" width="100" height="182" fill="#e9e2c9"/>':''}<rect x="${st.open?-54:-54}" y="-186" width="${st.open?10:54}" height="186" fill="#aeb6c4" ${ow}/><rect x="${st.open?44:0}" y="-186" width="${st.open?10:54}" height="186" fill="#aeb6c4" ${ow}/>
+  <rect x="-22" y="-222" width="44" height="18" rx="3" fill="#2b2f38"/><text y="-208" text-anchor="middle" fill="#7fe08a" font-size="13" font-family="'Lexend',sans-serif">${esc(st.floor||'1')}</text><circle cx="78" cy="-96" r="7" fill="#e9eef5" ${ow}/><path d="M74 -97l4-4l4 4" stroke="${OL}" stroke-width="1.6" fill="none"/>`,
+ fboard:(st,o)=>{const n=o.n||3;return `<rect x="-170" y="-${44+n*30}" width="340" height="${44+n*30}" rx="6" fill="#1d2433" ${ow}/><text x="-152" y="-${20+n*30}" fill="#f5c542" font-size="15" font-weight="700" font-family="'Lexend',sans-serif">${esc(o.title||'DEPARTURES')}</text>
+  ${Array.from({length:n},(_,i)=>{const k=i+1,y=-(n-i)*30+12,stt=String(st['s'+k]||'');const col=/DELAY|CANCEL|CHANGE/.test(stt)?'#ff8d7e':/BOARD/.test(stt)?'#7fe08a':'#cfe3ff';
+   return `<text x="-152" y="${y-12}" fill="#e6ecf6" font-size="14" font-family="'Lexend',sans-serif">${esc(st['t'+k]||'')}</text><text x="-100" y="${y-12}" fill="#e6ecf6" font-size="14" font-family="'Lexend',sans-serif">${esc(st['d'+k]||'')}</text><text x="40" y="${y-12}" fill="#e6ecf6" font-size="14" font-family="'Lexend',sans-serif">${esc(st['g'+k]?(o.gl||'Gate')+' '+st['g'+k]:'')}</text><text x="158" y="${y-12}" text-anchor="end" fill="${col}" font-size="12" font-family="'Lexend',sans-serif">${esc(stt)}</text>`}).join('')}`},
+ gatesign:(st,o)=>`<rect x="-4" y="-170" width="8" height="170" fill="#8892a6" ${ow}/><rect x="-46" y="-206" width="92" height="44" rx="6" fill="${o.c||'#2a63c4'}" ${ow}/><text y="-178" text-anchor="middle" fill="#fff" font-size="20" font-weight="700" font-family="'Lexend',sans-serif">${esc(o.label||'')}</text>`,
+ scale:(st,o)=>`<rect x="-60" y="-34" width="120" height="34" rx="3" fill="#9aa3b5" ${ow}/><rect x="-56" y="-42" width="112" height="10" rx="3" fill="#3c4250" ${ow}/><rect x="40" y="-90" width="34" height="24" rx="3" fill="#2b2f38" ${ow}/><text x="57" y="-73" text-anchor="middle" fill="${st.over?'#ff8d7e':'#7fe08a'}" font-size="11" font-family="'Lexend',sans-serif">${esc(st.kg||'0.0')}</text><path d="M57 -66v24" stroke="${OL}" stroke-width="3"/>`,
+ plant:(st,o)=>`<path d="M-20 0l-5-34h50l-5 34z" fill="#b5653a" ${ow}/><path d="M0 -34q-30-40-10-80q6 30 10 40q4-40 26-70q6 50-14 80q24-20 30-10q-14 30-42 40z" fill="#4e9a3a" ${ow}/>`,
+ signpost:(st,o)=>`<rect x="-3" y="-150" width="6" height="150" fill="#6c7385" ${ow}/><rect x="-40" y="-184" width="80" height="36" rx="5" fill="${o.c||'#1f8455'}" ${ow}/><text y="-160" text-anchor="middle" fill="#fff" font-size="16" font-weight="700" font-family="'Lexend',sans-serif">${esc(o.label||'')}</text>`,
  whiteboard:(st,o)=>`<rect x="-140" y="-150" width="280" height="150" rx="6" fill="#d9dde6" ${ow}/><rect x="-132" y="-142" width="264" height="134" fill="#fbfcff"/>${st.text?`<text x="-110" y="-90" font-family="'Lexend',sans-serif" font-size="26" fill="#2a63c4">${esc(st.text)}</text>`:'<path d="M-110 -110h120M-110 -84h170M-110 -58h90" stroke="#c9d3e6" stroke-width="5"/>'}<rect x="-120" y="-8" width="240" height="6" fill="#a3acbd" ${ow}/>`,
  cushion:(st,o)=>``,
 };
@@ -304,6 +331,8 @@ const BG={
  kitchen:()=>wallFloor('#eef4ee','#cfd8dc',{pattern:`${[...Array(26)].map((_,i)=>`<path d="M${i*40} 120v200" stroke="#dbe6db" stroke-width="2"/>`).join('')}${[...Array(6)].map((_,i)=>`<path d="M0 ${130+i*40}h1000" stroke="#dbe6db" stroke-width="2"/>`).join('')}<rect x="540" y="60" width="300" height="70" rx="4" fill="#d9c3a3" stroke="${OL}" stroke-width="2.2"/><path d="M690 60v70" stroke="${OL}" stroke-width="2"/>`}),
  bedroom:(st)=>wallFloor('#e6e1f2','#c9b49a',{pattern:`<path d="M0 0h1000v40h-1000z" fill="#d7d0ea" opacity=".6"/>`}),
  park:()=>`<defs><linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fd6ff"/><stop offset="1" stop-color="#dff3ff"/></linearGradient></defs><rect width="1000" height="600" fill="url(#sky1)"/><circle cx="880" cy="80" r="40" fill="#fff3b0"/><g fill="#fff" opacity=".95"><ellipse cx="180" cy="90" rx="60" ry="20"/><ellipse cx="220" cy="76" rx="40" ry="22"/><ellipse cx="620" cy="60" rx="50" ry="16"/></g><path d="M0 280q250-60 500 0t500-10v330h-1000z" fill="#a6d98e"/><rect y="320" width="1000" height="280" fill="#8fcf74"/><path d="M0 470q300-40 520 10t480-20v60q-240 30-480 0t-520 0z" fill="#e8d3a8" opacity=".9"/>`,
+ hotel:()=>wallFloor('#efe3cf','#c9b08a',{pattern:`<rect x="0" y="0" width="1000" height="26" fill="#7a5a3a"/>${[...Array(9)].map((_,i)=>`<rect x="${20+i*110}" y="40" width="10" height="320" fill="#e2d2b6"/>`).join('')}<g transform="translate(560 70)"><path d="M0 0v24" stroke="#b8963e" stroke-width="3"/><path d="M-60 40q60-30 120 0" fill="none" stroke="#b8963e" stroke-width="3"/>${[-48,-24,0,24,48].map(x=>`<path d="M${x} 32v14" stroke="#b8963e" stroke-width="2"/><circle cx="${x}" cy="52" r="7" fill="#fff3b0" stroke="#b8963e" stroke-width="2"/>`).join('')}</g><rect x="700" y="110" width="150" height="100" fill="#9cc3d9" stroke="#b8963e" stroke-width="6"/><path d="M700 180q40-30 80-10q40 20 70-10v50h-150z" fill="#5a8fc9"/><text x="250" y="130" text-anchor="middle" fill="#7a5a3a" font-size="26" font-weight="700" letter-spacing="6" font-family="'Lexend',sans-serif">HARBOR HOTEL</text>`}),
+ airport:()=>wallFloor('#dfe7f1','#c3ccd8',{pattern:`<rect x="0" y="40" width="1000" height="230" fill="#bcd8f1"/>${[...Array(6)].map((_,i)=>`<rect x="${i*170}" y="40" width="8" height="230" fill="#8892a6"/>`).join('')}<rect x="0" y="40" width="1000" height="8" fill="#8892a6"/><rect x="0" y="262" width="1000" height="10" fill="#8892a6"/><path d="M590 200h260q20 0 30 10l-30 6h-260z" fill="#fff" stroke="#8892a6" stroke-width="2"/><path d="M700 200l-50-50h30l60 50zM700 216l-40 40h28l50-40z" fill="#e9eef5" stroke="#8892a6" stroke-width="2"/><path d="M600 200l-20-26h16l20 26z" fill="#2a63c4"/><path d="M0 250h1000" stroke="#9aa3b5" stroke-width="2"/>`}),
  cafe:()=>wallFloor('#f2e1c8','#a8794f',{pattern:`<rect x="0" y="0" width="1000" height="30" fill="#6b4a32"/>${[...Array(5)].map((_,i)=>`<path d="M${120+i*190} 30v40" stroke="${OL}" stroke-width="2"/><path d="M${100+i*190} 70h40l-8 18h-24z" fill="#f5c542" stroke="${OL}" stroke-width="2"/><circle cx="${120+i*190}" cy="96" r="6" fill="#fff3b0"/>`).join('')}<rect x="60" y="120" width="140" height="90" rx="6" fill="#2f2a26" stroke="${OL}" stroke-width="2.2"/><text x="130" y="152" text-anchor="middle" fill="#f5e6c8" font-size="16" font-family="'Lexend',sans-serif">TODAY</text><text x="130" y="178" text-anchor="middle" fill="#f5c542" font-size="14" font-family="'Lexend',sans-serif">Latte  Cake</text>`}),
  school:()=>wallFloor('#f1ead8','#c99a63',{pattern:`<rect x="840" y="90" width="110" height="150" fill="#bfe6ff" stroke="${OL}" stroke-width="2.2"/><path d="M895 90v150M840 165h110" stroke="#fff" stroke-width="4"/>`}),
  market:()=>wallFloor('#f4f4ee','#d9dee4',{pattern:`<rect x="0" y="20" width="1000" height="34" fill="#5aa83a"/><text x="500" y="44" text-anchor="middle" fill="#fff" font-size="20" font-family="'Lexend',sans-serif" letter-spacing="6">FRESH MARKET</text>${[...Array(12)].map((_,i)=>`<rect x="${i*84}" y="330" width="42" height="270" fill="#e9edf1" opacity=".6"/>`).join('')}`}),
@@ -365,6 +394,9 @@ const VB={
   state:(S,e)=>[`${cap(e.o.en)} ${isAre(e.o)} ${e.p} ${e.r.en}.`,`${e.o.ja}は${e.r.ja}${PJ[e.p]}にあります。`]},
  give:{prog:(S,e)=>[`${S.en} ${S.be} giving ${e.o.en} to ${e.r.en}.`,`${S.ja}は${e.r.ja}に${e.o.ja}を渡しています。`],past:(S,e)=>[`${S.en} gave ${e.o.en} to ${e.r.en}.`,`${S.ja}は${e.r.ja}に${e.o.ja}を渡しました。`],
   state:(S,e)=>[`${cap(e.r.en)} has ${e.o.en}.`,`${e.r.ja}が${e.o.ja}を持っています。`]},
+ talkto:{prog:(S,e)=>[`${S.en} ${S.be} going over to talk to ${e.r.en}.`,`${S.ja}は${e.r.ja}に話しかけに行くところです。`],past:(S,e)=>[`${S.en} went over to talk to ${e.r.en}.`,`${S.ja}は${e.r.ja}に話しかけに行きました。`]},
+ ring:{prog:(S,e)=>[`${S.en} ${S.be} ringing ${e.o.en}.`,`${S.ja}は${e.o.ja}を鳴らしています。`],past:(S,e)=>[`${S.en} rang ${e.o.en}.`,`${S.ja}は${e.o.ja}を鳴らしました。`]},
+ hangup:{prog:(S,e)=>[`${S.en} ${S.be} hanging up the phone.`,`${S.ja}は電話を切っています。`],past:(S,e)=>[`${S.en} hung up the phone.`,`${S.ja}は電話を切りました。`]},
  show:{prog:(S,e)=>[`${S.en} ${S.be} showing ${e.o.en} to ${e.r.en}.`,`${S.ja}は${e.r.ja}に${e.o.ja}を見せています。`],past:(S,e)=>[`${S.en} showed ${e.o.en} to ${e.r.en}.`,`${S.ja}は${e.r.ja}に${e.o.ja}を見せました。`]},
  read:{prog:(S,e)=>e.o.lookAt?[`${S.en} ${S.be} looking at ${e.o.en}.`,`${S.ja}は${e.o.ja}を見ています。`]:[`${S.en} ${S.be} reading ${e.o.en}.`,`${S.ja}は${e.o.ja}を読んでいます。`],
   past:(S,e)=>e.o.lookAt?[`${S.en} looked at ${e.o.en}.`,`${S.ja}は${e.o.ja}を見ました。`]:[`${S.en} read ${e.o.en}.`,`${S.ja}は${e.o.ja}を読みました。`]},
@@ -439,7 +471,7 @@ function imperative(g){const v=g.v,A=g.a,O=g.o,R=g.r,p=g.p;
 // ===== ワールド: オブジェクト状態管理(配置・持つ・座る・位置と奥行き)。描画やDOMには依存しない =====
 const USER={user:true,en:'I',ja:'私',k:'user'};
 // 家具の大きさ(当たり判定用) [幅, 高さ]
-const FIXSZ={menuboard:[240,130],towel:[124,24],sea:[1000,160],whiteboard:[290,156],sofa:[250,110],chair:[56,104],table:[160,70],desk:[120,64],tv:[150,150],door:[96,186],window:[172,130],fridge:[90,192],sink:[210,100],bed:[280,112],lamp:[60,160],clock:[56,56],tree:[220,290],bench:[176,90],pond:[264,70],flowers:[124,44],bicycle:[110,70],counter:[250,104],register:[64,56],blackboard:[316,164],shelf:[204,184],gate:[124,110],train:[524,206],computer:[70,60],deskphone:[44,30],parasol:[224,200],car:[210,110],trafficlight:[50,214],crosswalk:[260,72],shop:[284,244],building:[184,320]};
+const FIXSZ={elevator:[124,196],fboard:[340,134],gatesign:[92,206],scale:[120,42],plant:[60,120],signpost:[80,184],menuboard:[240,130],towel:[124,24],sea:[1000,160],whiteboard:[290,156],sofa:[250,110],chair:[56,104],table:[160,70],desk:[120,64],tv:[150,150],door:[96,186],window:[172,130],fridge:[90,192],sink:[210,100],bed:[280,112],lamp:[60,160],clock:[56,56],tree:[220,290],bench:[176,90],pond:[264,70],flowers:[124,44],bicycle:[110,70],counter:[250,104],register:[64,56],blackboard:[316,164],shelf:[204,184],gate:[124,110],train:[524,206],computer:[70,60],deskphone:[44,30],parasol:[224,200],car:[210,110],trafficlight:[50,214],crosswalk:[260,72],shop:[284,244],building:[184,320]};
 const SPEED={walk:150,run:330};
 function W_new(def){// シーン定義から実行用の状態を作る
  const W={def,ents:{},order:[],busy:false,sel:null,ground:{en:def.ground?.en||'the floor',ja:def.ground?.ja||'床',k:'ground',id:'ground'}};
@@ -666,6 +698,7 @@ function selfMenu(W,a){const m=[];const ex=a.extra||[];
   return m}
  if(a.inside){const f=W.ents[a.inside];
   if(f.art==='train')m.push(wA('Get off the train','電車から降りる',async()=>{a.hidden=false;a.inside=null;a.x=f.x+(f.doorX||-120);a.y=f.boardY||f.y+80;W.draw();await moveTo(W,a,a.x,a.y+40);return {v:'getoff',a,r:f}}));
+  if(f.art==='elevator')m.push(wA('Get out of the elevator','エレベーターから降りる',async()=>{f.st.open=true;W.draw();await wait(300);a.hidden=false;a.inside=null;a.x=f.x;a.y=f.near.y-20;W.draw();await moveTo(W,a,f.x+40,f.near.y+30);f.st.open=false;W.draw();return {v:'exit',a,r:f}}));
   if(f.art==='shop')m.push(wA('Come out of the shop','お店から出る',async()=>{a.hidden=false;a.inside=null;a.x=f.x;a.y=f.y+16;W.draw();await moveTo(W,a,f.x+40,f.y+50);return {v:'exit',a,r:f}}));
   return m}
  if(a.swim){const f=W.ents[a.swim];m.push(wA('Come out of the sea','海から上がる',async()=>{a.swim=null;await moveTo(W,a,a.x,f.inside.shore,'walk');return {v:'exit',a,r:f}}));return m}
@@ -721,7 +754,9 @@ function comboMenu(W,a,t){const m=[];if(!t||t===a)return m;
   if(t.behind)m.push(wA(`Go behind ${t.en}`,`${t.ja}の後ろへ行く`,async()=>{await moveTo(W,a,t.behind.x,t.behind.y,'walk');return {v:'go',a,r:t,p:'behind',stateFirst:true}}));
   if(t.under&&t.underPerson&&!a.seat)m.push(wA(`Go under ${t.en}`,`${t.ja}の下へ行く`,async()=>{await moveTo(W,a,(t.under.x0+t.under.x1)/2+(Math.random()*30-15),t.under.y,'walk');return {v:'go',a,r:t,p:'under',stateFirst:true}}));
   if(t.art==='computer')m.push(wA(`Use ${t.en}`,`${t.ja}を使う`,async()=>{const ch=t.useSeat&&W.ents[t.useSeat];if(ch&&ch.seats.some(s=>!s.occ||s.occ===a.id)){if(!(a.seat&&a.seat.f===ch.id))await sitOn(W,a,ch)}else await goNear(W,a,t);t.st.on=true;a.act='type';W.draw();return {v:'use',a,o:t}}));
-  if(t.art==='deskphone')m.push(wA('Answer the phone','電話に出る',async()=>{if(!a.seat)await goNear(W,a,t);t.st.ring=false;t.st.up=true;a.act='phone';W.draw();return {v:'answer',a}}));
+  if(t.art==='elevator'&&!a.inside)m.push(wA(`Take ${t.en}`,`${t.ja}に乗る`,async()=>{await moveTo(W,a,t.x,t.near.y,'walk');t.st.open=true;W.draw();await wait(450);await moveTo(W,a,t.x,t.near.y-24,'walk');a.inside=t.id;a.hidden=true;W.draw();await wait(250);t.st.open=false;W.draw();return {v:'enter',a,r:t}}));
+  if(t.art==='deskphone'&&a.act==='phone'&&t.st.up)m.push(wA('Hang up the phone','電話を切る',async()=>{t.st.up=false;a.act=null;W.draw();return {v:'hangup',a}}));
+  if(t.art==='deskphone'&&!t.st.up)m.push(wA('Answer the phone','電話に出る',async()=>{if(!a.seat)await goNear(W,a,t);t.st.ring=false;t.st.up=true;a.act='phone';W.draw();return {v:'answer',a}}));
   if(t.art==='blackboard')m.push(wA(`Write on ${t.en}`,`${t.ja}に書く`,async()=>{await moveTo(W,a,t.near.x,t.near.y,'walk');a.flip=false;a.act='write';W.draw();await wait(500);t.st.text=t.text||'Hello!';W.bgDirty=true;W.draw();return {v:'write',a,r:t,p:'on'}}));
   if(t.art==='register'&&!a.staff)m.push(wA(`Pay at ${t.en}`,`${t.ja}でお金を払う`,async()=>{await goNear(W,a,t);a.act='give';W.draw();await wait(500);t.st.paid=true;a.act=null;W.draw();return {v:'pay',a,r:t}}));
   if(t.art==='train'&&t.st.open&&!t.st.leaving)m.push(wA('Get on the train','電車に乗る',async()=>{await moveTo(W,a,t.x+(t.doorX||-120),t.boardY||t.y+80,'walk');a.inside=t.id;a.hidden=true;if(a.hold){}W.draw();return {v:'board',a,r:t}}));
@@ -743,10 +778,12 @@ function comboMenu(W,a,t){const m=[];if(!t||t===a)return m;
   if(h&&t.cap&&h!==t&&!h.cap)m.push(wA(`Put ${h.en} ${t.cap.p==='in'?'in':'on'} ${t.en}`,`${h.ja}を${t.ja}${t.cap.p==='in'?'に入れる':'にのせる'}`,async()=>putOn(W,a,h,t,t.cap.p)));
   if(h&&h.pour&&t.liq&&!t.st.full)m.push(wA(`Pour water into ${t.en}`,`${t.ja}に水を注ぐ`,async()=>{await goNear(W,a,t);a.act='hold';W.draw();await wait(600);t.st.full=true;W.draw();return {v:'pour',a,r:t}}));
   if((can||a.hold===t.id)&&t.write)m.push(wA(`Write in ${t.en}`,`${t.ja}に書く`,async()=>{if(a.seat){t.st.open=true;a.act='write'}else{await wPick(W,a,t);t.st.open=true;a.act='read'}W.draw();await wait(400);return {v:'write_nb',a,o:t}}));
+  if(t.bell&&free(W,t))m.push(wA(`Ring ${t.en}`,`${t.ja}を鳴らす`,async()=>{await goNear(W,a,t);a.act='give';W.draw();bubble(W,t,'Ding!');await wait(450);a.act=null;W.draw();return {v:'ring',a,o:t}}));
   if((can||a.hold===t.id)&&t.openable)m.push(t.st.open?wA(`Close ${t.en}`,`${t.ja}を閉じる`,async()=>{await wPick(W,a,t);t.st.open=false;W.draw();return {v:'close',a,o:t}}):wA(`Open ${t.en}`,`${t.ja}を開く`,async()=>{await wPick(W,a,t);t.st.open=true;W.draw();return {v:'open',a,o:t}}));
  }
  if(t.k==='person'&&!t.hidden&&!t.swim){
   if(h&&!t.hold&&!h.cap)m.push(wA(`Give ${h.en} to ${t.en}`,`${t.ja}に${h.ja}を渡す`,async()=>{await goNear(W,a,t);faceTo(t,a);a.act='give';W.draw();await wait(380);a.act=null;a.hold=null;placeProp(W,h,t);t.act=null;W.draw(320);await wait(340);return {v:'give',a,o:h,r:t}}));
+  if(dist(a,t)>110&&!a.seat&&!t.inside)m.push(wA(`Talk to ${t.en}`,`${t.ja}に話しかける`,async()=>{await goNear(W,a,t);faceTo(t,a);W.draw();return {v:'talkto',a,r:t}}));
   if(h&&h.show&&t.staff)m.push(wA(`Show ${h.en} to ${t.en}`,`${t.ja}に${h.ja}を見せる`,async()=>{await goNear(W,a,t);a.act='give';W.draw();await wait(700);return {v:'show',a,o:h,r:t}}));
   if(h&&h.throw)m.push(wA(`Throw ${h.en} to ${t.en}`,`${t.ja}に${h.ja}を投げる`,async()=>{faceTo(a,t);return throwIt(W,a,h,t)}));
   if(t.staff==='order'&&W.def.order&&!a.staff)for(const oid of W.def.order){const it=W.ents[oid];if(it&&it.hidden&&!it.ordered)m.push(wA(`Order ${it.ind}`,`${it.ja}を注文する`,async()=>{await goNear(W,a,t);faceTo(t,a);W.draw();await wait(500);it.ordered=true;it.hidden=false;placeProp(W,it,W.ents[it.serveAt],'on');W.draw();return {v:'order',a,o:it}}))}
@@ -955,7 +992,7 @@ function stEvMatch(ST,m,ev){if(!ev)return false;
   if(want&&typeof want==='object'&&!Array.isArray(want)&&'not' in want)return !val(want.not,got);
   const list=(Array.isArray(want)?want:[want]).map(x=>stId(ST,x));return list.includes(g)};
  if(m.v&&!(Array.isArray(m.v)?m.v:[m.v]).includes(ev.v))return false;
- if(m.act&&ev.act!==m.act)return false;
+ if(m.act&&ev.act!==stTx(ST,m.act))return false;
  return val(m.a,ev.a)&&val(m.o,ev.o)&&val(m.r,ev.r)}
 function stCond(ST,c,ev){if(!c)return true;const W=ST.W;
  if(c.all)return c.all.every(x=>stCond(ST,x,ev));
@@ -969,7 +1006,7 @@ function stCond(ST,c,ev){if(!c)return true;const W=ST.W;
  if(c.held){const p=stEnt(ST,c.held[0]),h=stId(ST,c.held[1]);return !!p&&p.heldBy===h}
  if(c.on){const p=stEnt(ST,c.on[0]),r=stId(ST,c.on[1]);return !!p&&!p.heldBy&&((p.at&&p.at.ref===r)||p.inC===r)}
  if(c.near){const a=stEnt(ST,c.near[0]),f=stEnt(ST,c.near[1]);if(!a||!f||a.hidden)return false;const pt=f.near||f;return Math.hypot(a.x-pt.x,a.y-pt.y)<(c.r||80)}
- if(c.st){const e=stEnt(ST,c.st[0]);return !!e&&(e.st[c.st[1]]??null)===stId(ST,c.st[2])}
+ if(c.st){const e=stEnt(ST,c.st[0]);const want=typeof c.st[2]==='string'?stTx(ST,stId(ST,c.st[2])):c.st[2];return !!e&&(e.st[c.st[1]]??null)===want}
  if(c.seated){const a=stEnt(ST,c.seated);return !!a&&!!a.seat}
  if(c.inside){const a=stEnt(ST,c.inside[0]);return !!a&&a.inside===stId(ST,c.inside[1])}
  return true}
@@ -997,16 +1034,17 @@ async function stOps(ST,ops){const W=ST.W;
    case 'stand':if(who.seat||who.lie){const sy=who.y+10;unseat(W,who);who.y=sy;W.draw();await wait(200)}break;
    case 'act':who.act=o.a;W.draw();await wait(o.ms||600);if(!o.keep){who.act=null;W.draw()}break;
    case 'flag':Object.assign(ST.flags,o.set);break;
+   case 'setp':Object.assign(stEnt(ST,o.id),JSON.parse(stTx(ST,JSON.stringify(o.set))));W.draw();break;
    case 'setvar':stSetVar(ST,o.k,o.v,o.other);break;
    case 'return':{const h=who.hold&&W.ents[who.hold];if(h&&to){await goNear(W,who,to);who.act='give';W.draw();await wait(350);who.act=null;who.hold=null;if(to.hold)await dropHeld(W,to);placeProp(W,h,to);W.draw(300);await wait(320)}break}
    case 'think':bubble(W,who,stTx(ST,o.say));await ST.ui.say(who,stTx(ST,o.say),stTx(ST,o.ja),stHeard(ST,who,o),{think:true});break;
    case 'wait':await wait(o.ms||500);break;
    case 'announce':await ST.ui.say(null,stTx(ST,o.say),stTx(ST,o.ja),stHeard(ST,null,o),{pa:true});break;
   }}}
-function stHeard(ST,who,s){const h={who:who?who.id:'pa',name:who?who.en:'Announcement',en:stTx(ST,s.say),tts:s.tts?stTx(ST,s.tts):null,ja:stTx(ST,s.ja),step:ST.i,shown:false,jaShown:false,replays:0,asked:0,key:!!s.key};ST.log.heard.push(h);ST.lastHeard=h;return h}
+function stHeard(ST,who,s){const h={who:who?who.id:'pa',name:who?who.en:'Announcement',fast:!!s.fast,en:stTx(ST,s.say),tts:s.tts?stTx(ST,s.tts):null,ja:stTx(ST,s.ja),step:ST.i,shown:false,jaShown:false,replays:0,asked:0,key:!!s.key};ST.log.heard.push(h);ST.lastHeard=h;return h}
 async function stSay(ST,s){const W=ST.W;const who=stEnt(ST,s.npc);const to=s.to?stEnt(ST,s.to):stEnt(ST,ST.story.me);
  if(who&&to&&!s.noFace)faceEachOther(W,who,to);if(who&&s.expr){who.expr=s.expr==='normal'?null:s.expr;W.draw()}
- const h=stHeard(ST,who,s);await ST.ui.say(who,h.en,h.ja,h,{});
+ const h=stHeard(ST,who,s);await ST.ui.say(who,h.en,h.ja,h,{slow:!!s.slow});
  if(who&&s.exprAfter){who.expr=s.exprAfter==='normal'?null:s.exprAfter;W.draw()}}
 
 // ---- 進行 ----
@@ -1281,8 +1319,8 @@ function wStoryCtl(c){const {W,def,story,mode,$}=c;story.scene=def.id;W.story=st
   if(k==='ja'&&!h.jaShown){h.jaShown=true;stHint(ST,'ja');el.querySelector('.wlj').hidden=false}}
  function wireLine(el){el.querySelectorAll('[data-rp]').forEach(b=>b.onclick=()=>{const h=ST.log.heard[+el.dataset.h];h.replays++;const w=h.who==='pa'?null:W.ents[h.who];speakLine(w,h.tts||h.en,b.dataset.rp==='slow')});
   el.querySelectorAll('[data-rv]').forEach(b=>b.onclick=()=>reveal(el,b.dataset.rv))}
- async function speakLine(who,en,slow){if(who){setTalking(W,who.id,true)}const off=who?talkDots(W,who):()=>{};
-  try{await speak(en,{g:gOf(who),slow})}finally{off();if(who)setTalking(W,who.id,false)}}
+ async function speakLine(who,en,slow,fast){if(who){setTalking(W,who.id,true)}const off=who&&!who.hidden?talkDots(W,who):()=>{};
+  try{await speak(en,{g:gOf(who),slow,fast:fast&&!slow})}finally{off();if(who)setTalking(W,who.id,false)}}
  function myLine(rec){const lab={voice:'声',typed:'入力',choice:'選択'}[rec.how]||'';
   const res=rec.kind==='repeat'?['聞き返しました','good']:rec.kind==='skip'?['言えなかったので、模範の返事で進みます(話した記録には入りません)','bad']:rec.kind==='clarify'?['一部だけ伝わりました。相手が確認しています','']:rec.kind==='unknown'?['伝わらなかったようです','bad']:rec.tone?['伝わりましたが、より自然な言い方があります','']:['伝わりました','good'];
   const d=document.createElement('div');d.className='wl me';
@@ -1298,7 +1336,7 @@ function wStoryCtl(c){const {W,def,story,mode,$}=c;story.scene=def.id;W.story=st
    if(o.again){const el=log.querySelector(`.wl[data-h="${ST.log.heard.indexOf(h)}"]`);if(el)el.classList.add('again')}
    else{const tmp=document.createElement('div');tmp.innerHTML=lineHtml(h,o.think?'💭 '+(who===me?'(心の声)':cap(who.en.replace(/^the /,''))):who?cap(who.en.replace(/^the /,'')):'📢 Announcement');const el=tmp.firstElementChild;log.appendChild(el);wireLine(el);el.scrollIntoView({block:'nearest'})}
    now.innerHTML=`<div class="muted wwait">${who?esc(cap(who.en))+' が話しています…':'アナウンス中…'}</div>`;
-   await speakLine(who,h.tts||en,o.slow);if(!o.pa)await wait(250)},
+   await speakLine(who,h.tts||en,o.slow,h.fast&&!o.again);if(!o.pa)await wait(250)},
   task(s,o={}){if(!ST.alive)return;renderGoal();const label=stTx(ST,s.act.ja),hint=stTx(ST,s.act.hint||'');
    now.innerHTML=`${o.again?'<div class="wng">うまくいかなかったようです。相手の言ったことを確かめて、もう一度。</div>':''}
    <div class="wtask"><b>あなたの番(行動)</b> ${mode===5?`<span>${esc(label)}</span>`:`<span id="w-tl" class="muted">状況に合わせて、${esc(me.ja)}を動かしましょう。</span>`}</div>

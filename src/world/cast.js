@@ -22,6 +22,11 @@ const LK={// 登場人物の見た目
  swimman:{skin:'#f6d3b8',hair:'#3a2a24',hs:'short',top:'#f28b7f',bottom:'#3a8fd0',kind:'tee',shortSleeve:true},
  swimwoman:{skin:'#ffe3cf',hair:'#8a4b2a',hs:'pony',top:'#f5c542',bottom:'#f5c542',kind:'dress'},
  guest:{skin:'#f3cfb3',hair:'#2f2f3a',hs:'bob',top:'#3aa0db',bottom:'#4a4f5c',kind:'hoodie'},
+ recep:{skin:'#ffe3cf',hair:'#2b2b33',hs:'bun',top:'#7a2638',bottom:'#2b2b33',kind:'suit',skirt:true,tie:'#f5c542'},
+ traveler:{skin:'#ffe0c7',hair:'#4a3020',hs:'short',top:'#e98a4a',bottom:'#3d4a5c',kind:'hoodie'},
+ traveler2:{skin:'#fde2cf',hair:'#2b2b33',hs:'long',top:'#5aa8a0',bottom:'#3d4a5c',kind:'tee',skirt:true},
+ agent:{skin:'#f6d3b8',hair:'#3a2a24',hs:'bob',top:'#2a63c4',bottom:'#2b3550',kind:'uniform',skirt:true},
+ gstaff:{skin:'#ffe0c7',hair:'#2b2b33',hs:'short',top:'#2a63c4',bottom:'#2b3550',kind:'uniform'},
  cyclist:{skin:'#ffe0c7',hair:'#3a2a24',hs:'short',top:'#3aa0db',bottom:'#2b2f38',kind:'hoodie',bike:'#3a8a5a'},
 };
 const P=(id,en,ja,pron,look,x,y,o={})=>({id,k:'person',en,ja,pron,look,x,y,...o});
