@@ -73,6 +73,7 @@ function torso(look,dy){const y0=-102+dy,y1=-48+dy,c=look.top,b=look.bottom,sk=l
  if(look.kind==='suit')s+=`<path d="M-6 ${y0-1}l6 9l6-9" fill="#fff" ${ow}/><path d="M0 ${y0+6}l-3 5l3 22l3-22z" fill="${look.tie||'#c0392b'}" ${ow}/><path d="M-19 ${y0+4}l14 18M19 ${y0+4}l-14 18" stroke="${shade(c,-.3)}" stroke-width="2.2" fill="none"/>`;
  if(look.kind==='apron')s+=`<path d="M-12 ${y0+8}h24v${y1-y0+4}h-24z" fill="#fdfdf7" ${ow}/><path d="M-12 ${y0+22}h24" stroke="${look.apron||'#8a5a3c'}" stroke-width="3"/>`;
  if(look.kind==='school')s+=`<path d="M-8 ${y0}l8 12l8-12" fill="#fff" ${ow}/><path d="M-6 ${y0+8}l6 8l6-8" fill="${look.tie||'#2b4c8c'}" ${ow}/>`;
+ if(look.kind==='coat')s+=`<path d="M-21 ${y0+4}q0-8 8-8h26q8 0 8 8v${y1-y0+6}h-42z" fill="#fbfcff" ${ow}/><path d="M-6 ${y0-1}l6 12l6-12" fill="${look.top2||'#7fa6d8'}" ${ow}/><path d="M-4 ${y0+2}l-6 18M4 ${y0+2}l6 18" stroke="#c3ccd8" stroke-width="2" fill="none"/><rect x="6" y="${y0+18}" width="9" height="6" fill="#e9eef5" stroke="#c3ccd8" stroke-width="1.2"/>`;
  if(look.kind==='uniform')s+=`<path d="M-19 ${y0+20}h38" stroke="${shade(c,-.35)}" stroke-width="2"/><circle cx="0" cy="${y0+12}" r="2" fill="#f5c542"/><circle cx="0" cy="${y0+30}" r="2" fill="#f5c542"/>`;
  if(look.kind==='hoodie')s+=`<path d="M-14 ${y0+2}q14 12 28 0" fill="none" stroke="${shade(c,-.3)}" stroke-width="2.2"/><path d="M-4 ${y0+8}v10M4 ${y0+8}v10" stroke="#fff" stroke-width="1.8"/>`;
  if(look.skirt||look.kind==='dress')s+=`<path d="M-21 ${y1-6}h42l8 26h-58z" fill="${look.kind==='dress'?c:b}" ${ow}/>`;
@@ -88,7 +89,7 @@ function legsSvg(look,mode,h){const b=look.skirt||look.kind==='dress'?look.skin:
 function personSvg(look,pose='stand',expr='normal',o={}){
  const P=POSE[pose]||POSE.stand;const h=o.h??40;
  const dy=P.legs==='sit'?HIP-h:P.legs==='ride'?-6:P.swim?40:0;
- const sleeve=['suit','uniform','school','hoodie'].includes(look.kind)&&!look.shortSleeve;
+ const sleeve=['suit','uniform','school','hoodie','coat'].includes(look.kind)&&!look.shortSleeve;
  const shoulderY=-96+dy;
  let s='';
  if(P.legs==='ride')s+=bikeSvg(look.bike||'#e05a47');
@@ -180,6 +181,26 @@ const PROP={
  bell:()=>`<path d="M-10 0h20" stroke="${OL}" stroke-width="3"/><path d="M-8 -2q0-12 8-12q8 0 8 12z" fill="#f2c14e" ${ow}/><circle cy="-16" r="2.4" fill="#f2c14e" ${ow}/>`,
  fan:()=>`<rect x="-3" y="-20" width="6" height="18" fill="#cfd6e2" ${ow}/><ellipse cx="0" cy="0" rx="12" ry="3" fill="#cfd6e2" ${ow}/><circle cy="-30" r="13" fill="#fff" ${ow}/><path d="M0 -30l-8-6M0 -30l8-6M0 -30l0 9" stroke="#7fa6d8" stroke-width="3"/>`,
  jacket:()=>`<path d="M-14 0v-22l6-6h16l6 6v22z" fill="#c0392b" ${ow}/><path d="M0 -28v28" stroke="${OL}" stroke-width="1.5"/>`,
+ shoes:(st)=>`<path d="M-22 0q0-10 8-12l12-2q4 6 14 6q8 0 8 8z" fill="${st.c||'#5a3d2b'}" ${ow}/><path d="M-2 0q0-10 8-12l12-2q4 6 14 6q8 0 8 8z" fill="${st.c||'#5a3d2b'}" opacity=".85" ${ow}/>`,
+ slippers:(st)=>`<ellipse cx="-10" cy="-4" rx="12" ry="5" fill="#8fd1a8" ${ow}/><ellipse cx="12" cy="-4" rx="12" ry="5" fill="#8fd1a8" ${ow}/><path d="M-14 -6q4-6 10 0M8 -6q4-6 10 0" stroke="#fff" stroke-width="3" fill="none"/>`,
+ gift:(st)=>`<rect x="-16" y="-26" width="32" height="26" fill="#e74c3c" ${ow}/><path d="M0 -26v26M-16 -14h32" stroke="#f5c542" stroke-width="4"/><path d="M0 -26q-12-12-12-2q4 4 12 2q12 2 12-2q0-10-12 2" fill="#f5c542" ${ow}/>`,
+ umbrella:(st)=>st.open?`<path d="M-30 -40q30-30 60 0z" fill="#2a63c4" ${ow}/><path d="M0 -40v40q0 4-6 4" stroke="${OL}" stroke-width="2.5" fill="none"/>`:`<path d="M-3 -44l6 0l3 38q0 6-6 6z" fill="#2a63c4" ${ow}/><path d="M0 -6q0 6-6 6" stroke="${OL}" stroke-width="2.5" fill="none"/>`,
+ toothbrush:(st)=>`<rect x="-14" y="-6" width="28" height="5" rx="2" fill="#3498db" ${ow}/><rect x="8" y="-11" width="8" height="5" fill="#fff" ${ow}/>`,
+ medicine:(st)=>`<rect x="-14" y="-22" width="28" height="22" rx="2" fill="#fff" ${ow}/><rect x="-14" y="-22" width="28" height="7" fill="${st.c||'#1f8455'}"/><path d="M-4 -9h8M0 -13v8" stroke="#e74c3c" stroke-width="2.4"/>`,
+ paper:(st)=>`<rect x="-11" y="-26" width="22" height="26" fill="#fff" ${ow}/><path d="M-7 -20h14M-7 -15h14M-7 -10h10" stroke="#9aa" stroke-width="1.3"/>${st.signed?'<path d="M-6 -4q4-4 8 0t6 0" stroke="#2a63c4" stroke-width="1.6" fill="none"/>':''}`,
+ box:(st)=>`<rect x="-${st.big?26:18}" y="-${st.big?40:26}" width="${st.big?52:36}" height="${st.big?40:26}" fill="#c9965a" ${ow}/><path d="M0 -${st.big?40:26}v${st.big?40:26}" stroke="#a0754e" stroke-width="3"/>${st.label?`<rect x="-10" y="-${st.big?30:20}" width="20" height="10" fill="#fff"/>`:''}`,
+ letter:(st)=>`<rect x="-16" y="-14" width="32" height="14" fill="#fffaf0" ${ow}/><path d="M-16 -14l16 9l16-9" stroke="${OL}" stroke-width="1.6" fill="none"/>${st.stamp?'<rect x="8" y="-12" width="6" height="7" fill="#e74c3c"/>':''}`,
+ tray:(st)=>`<path d="M-28 -2h56l-4 -6h-48z" fill="#9aa3b5" ${ow}/>`,
+ laptop:(st)=>`<path d="M-20 0h40l4 -4h-48z" fill="#9aa3b5" ${ow}/><rect x="-17" y="-26" width="34" height="22" rx="2" fill="#3c4250" ${ow}/><rect x="-14" y="-23" width="28" height="16" fill="${st.on?'#cfe9ff':'#2b2f38'}"/>`,
+ blanket:(st)=>`<path d="M-20 0v-16q0-6 6-6h28q6 0 6 6v16z" fill="#5a8fc9" ${ow}/><path d="M-20 -10h40" stroke="#fff" stroke-width="2" opacity=".7"/>`,
+ meal:(st)=>`<rect x="-24" y="-8" width="48" height="8" rx="2" fill="#9aa3b5" ${ow}/>${st.eaten?'':`<ellipse cx="-8" cy="-12" rx="10" ry="5" fill="${st.c||'#f2c14e'}" ${ow}/><rect x="6" y="-16" width="12" height="8" rx="2" fill="#7cc35a" ${ow}/>`}`,
+ map:(st)=>`<path d="M-16 -2l10-4l10 4l12-4v-18l-12 4l-10-4l-10 4z" fill="#fffaf0" ${ow}/><path d="M-6 -24v18M4 -20v18" stroke="#c9d3e6" stroke-width="1.4"/><circle cx="8" cy="-12" r="2.4" fill="#e74c3c"/>`,
+ carkey:(st)=>`<rect x="-12" y="-10" width="14" height="10" rx="4" fill="#2b2f38" ${ow}/><path d="M2 -5h12l3 3l-3 2" stroke="#c9ced8" stroke-width="3" fill="none"/>`,
+ shirt:(st)=>`<path d="M-16 0v-22l-8 4l-4-10l14-6h28l14 6l-4 10l-8-4v22z" fill="${st.c||'#2a63c4'}" ${ow}/>`,
+ popcorn:(st)=>`<path d="M-12 0l-4-24h32l-4 24z" fill="#fff" ${ow}/><path d="M-8 -24v24M0 -24v24M8 -24v24" stroke="#e74c3c" stroke-width="3"/>${[-10,-3,4,11].map((x,i)=>`<circle cx="${x}" cy="${-28-(i%2)*4}" r="5" fill="#fbe8a6" ${ow}/>`).join('')}`,
+ dumbbell:(st)=>`<rect x="-14" y="-8" width="28" height="4" fill="#5a6b8c"/><rect x="-20" y="-14" width="8" height="16" rx="2" fill="#2b2f38" ${ow}/><rect x="12" y="-14" width="8" height="16" rx="2" fill="#2b2f38" ${ow}/>`,
+ badge:(st)=>`<rect x="-12" y="-16" width="24" height="16" rx="2" fill="#fff" ${ow}/><rect x="-12" y="-16" width="24" height="5" fill="#1f8455"/><path d="M-8 -6h16" stroke="#9aa" stroke-width="1.4"/>`,
+ headset:(st)=>`<path d="M-14 -6q0-20 14-20q14 0 14 20" stroke="${OL}" stroke-width="3" fill="none"/><rect x="-18" y="-10" width="8" height="12" rx="3" fill="#3c4250" ${ow}/><rect x="10" y="-10" width="8" height="12" rx="3" fill="#3c4250" ${ow}/>`,
  money:()=>`<rect x="-12" y="-6" width="24" height="6" rx="1" fill="#9bd18c" ${ow}/>`,
 };
 function propSvg(type,st={}){const f=PROP[type];return `<g class="pr">${f?f(st):''}</g>`}

@@ -61,7 +61,7 @@ async function stOps(ST,ops){const W=ST.W;
  for(const o of ops){if(!ST.alive)return;if(o.if&&!stCond(ST,o.if))continue;
   const who=o.who&&stEnt(ST,o.who),what=o.what&&stEnt(ST,o.what),to=o.to&&stEnt(ST,o.to);
   switch(o.op){
-   case 'pos':who.x=o.x;who.y=o.y??who.y;if(o.flip!=null)who.flip=o.flip;W.draw();break;
+   case 'pos':if(who.k==='prop'){if(who.heldBy){const h=W.ents[who.heldBy];if(h&&h.hold===who.id)h.hold=null;who.heldBy=null}who.inC=null;who.at={p:'on',ref:'ground'};who.depth=null}who.x=o.x;who.y=o.y??who.y;if(o.flip!=null)who.flip=o.flip;W.draw();break;
    case 'seat':{const f=to;const s=f.seats.find(s=>!s.occ);if(s)seatPerson(who,f,s);W.draw();break}
    case 'walk':if(o.x!=null){await moveTo(W,who,o.x,o.y??who.y,o.gait||'walk')}else if(to){if(to.k==='fix'&&to.near){await moveTo(W,who,to.near.x+(o.dx||0),to.near.y+(o.dy||0),o.gait||'walk');faceTo(who,to)}else await goNear(W,who,to)}W.draw();break;
    case 'enter':who.hidden=false;who.x=o.fromX??(who.x0>500?1040:-40);who.y=o.y??who.y0;W.draw();await wait(30);await moveTo(W,who,o.x??who.x0,o.y??who.y0,'walk');break;

@@ -21,6 +21,7 @@ function selfMenu(W,a){const m=[];const ex=a.extra||[];
   return m}
  if(a.inside){const f=W.ents[a.inside];
   if(f.art==='train')m.push(wA('Get off the train','電車から降りる',async()=>{a.hidden=false;a.inside=null;a.x=f.x+(f.doorX||-120);a.y=f.boardY||f.y+80;W.draw();await moveTo(W,a,a.x,a.y+40);return {v:'getoff',a,r:f}}));
+  if(f.room)m.push(wA(`Come out of ${f.en}`,`${f.ja}から出る`,async()=>{f.st.open=true;W.draw();await wait(250);a.hidden=false;a.inside=null;a.x=f.x;a.y=(f.near?f.near.y:f.y)+6;W.draw();await moveTo(W,a,f.x+50,a.y+20);f.st.open=false;W.draw();return {v:'exit',a,r:f}}));
   if(f.art==='elevator')m.push(wA('Get out of the elevator','エレベーターから降りる',async()=>{f.st.open=true;W.draw();await wait(300);a.hidden=false;a.inside=null;a.x=f.x;a.y=f.near.y-20;W.draw();await moveTo(W,a,f.x+40,f.near.y+30);f.st.open=false;W.draw();return {v:'exit',a,r:f}}));
   if(f.art==='shop')m.push(wA('Come out of the shop','お店から出る',async()=>{a.hidden=false;a.inside=null;a.x=f.x;a.y=f.y+16;W.draw();await moveTo(W,a,f.x+40,f.y+50);return {v:'exit',a,r:f}}));
   return m}
@@ -46,6 +47,7 @@ function selfMenu(W,a){const m=[];const ex=a.extra||[];
   if(h.write)m.push(wA('Write in the notebook','ノートに書く',async()=>{h.st.open=true;a.act=a.seat?'write':'read';W.draw();await wait(400);return {v:'write_nb',a,o:h}}));
   if(!a.seat&&!a.lie)m.push(wA('Put it down',`${h.ja}を床に置く`,async()=>{await dropHeld(W,a);return {v:'putdown',a,o:h,ground:W.ground.en.replace(/^the /,''),groundja:W.ground.ja}}));
  }
+ if(h&&h.use)m.push(...useMenu(W,a,h,true));
  if(a.worn){const w=W.ents[a.worn];m.push(wA('Take off','外す',async()=>{a.look=Object.assign({},a.look,{[w.wear]:false});w.hidden=false;a.worn=null;placeProp(W,w,a);W.draw();return {v:'takeoff',a,o:w}}))}
  if(a.seat){const f=W.ents[a.seat.f];const tv=ents(W).find(t=>t.art==='tv'&&t.st.on);if(tv&&f.art==='sofa')m.push(wA('Watch TV','テレビを見る',async()=>{a.act=null;faceTo(a,tv);W.draw();return {v:'watch',a}}))}
  return m}
@@ -77,6 +79,7 @@ function comboMenu(W,a,t){const m=[];if(!t||t===a)return m;
   if(t.behind)m.push(wA(`Go behind ${t.en}`,`${t.ja}の後ろへ行く`,async()=>{await moveTo(W,a,t.behind.x,t.behind.y,'walk');return {v:'go',a,r:t,p:'behind',stateFirst:true}}));
   if(t.under&&t.underPerson&&!a.seat)m.push(wA(`Go under ${t.en}`,`${t.ja}の下へ行く`,async()=>{await moveTo(W,a,(t.under.x0+t.under.x1)/2+(Math.random()*30-15),t.under.y,'walk');return {v:'go',a,r:t,p:'under',stateFirst:true}}));
   if(t.art==='computer')m.push(wA(`Use ${t.en}`,`${t.ja}を使う`,async()=>{const ch=t.useSeat&&W.ents[t.useSeat];if(ch&&ch.seats.some(s=>!s.occ||s.occ===a.id)){if(!(a.seat&&a.seat.f===ch.id))await sitOn(W,a,ch)}else await goNear(W,a,t);t.st.on=true;a.act='type';W.draw();return {v:'use',a,o:t}}));
+  if(t.room&&!a.inside&&!(t.room.need&&!t.room.need.every(k=>t.st[k])))m.push(wA(`Go into ${t.en}`,`${t.ja}に入る`,async()=>{await moveTo(W,a,t.x,(t.near?t.near.y:t.y+20),'walk');t.st.open=true;W.draw();await wait(300);a.inside=t.id;a.hidden=true;if(a.hold&&t.room.drop)await dropHeld(W,a);t.st.open=false;W.draw();return {v:'enter',a,r:t}}));
   if(t.art==='elevator'&&!a.inside)m.push(wA(`Take ${t.en}`,`${t.ja}に乗る`,async()=>{await moveTo(W,a,t.x,t.near.y,'walk');t.st.open=true;W.draw();await wait(450);await moveTo(W,a,t.x,t.near.y-24,'walk');a.inside=t.id;a.hidden=true;W.draw();await wait(250);t.st.open=false;W.draw();return {v:'enter',a,r:t}}));
   if(t.art==='deskphone'&&a.act==='phone'&&t.st.up)m.push(wA('Hang up the phone','電話を切る',async()=>{t.st.up=false;a.act=null;W.draw();return {v:'hangup',a}}));
   if(t.art==='deskphone'&&!t.st.up)m.push(wA('Answer the phone','電話に出る',async()=>{if(!a.seat)await goNear(W,a,t);t.st.ring=false;t.st.up=true;a.act='phone';W.draw();return {v:'answer',a}}));
@@ -112,6 +115,7 @@ function comboMenu(W,a,t){const m=[];if(!t||t===a)return m;
   if(t.staff==='order'&&W.def.order&&!a.staff)for(const oid of W.def.order){const it=W.ents[oid];if(it&&it.hidden&&!it.ordered)m.push(wA(`Order ${it.ind}`,`${it.ja}を注文する`,async()=>{await goNear(W,a,t);faceTo(t,a);W.draw();await wait(500);it.ordered=true;it.hidden=false;placeProp(W,it,W.ents[it.serveAt],'on');W.draw();return {v:'order',a,o:it}}))}
   if(t.staff==='order'&&W.def.payStaff&&!a.staff&&W.def.order&&W.def.order.some(id=>W.ents[id].ordered)&&!a.paid)m.push(wA('Pay','お金を払う',async()=>{await goNear(W,a,t);a.act='give';W.draw();await wait(500);a.act=null;a.paid=true;W.draw();return {v:'pay',a}}));
  }
+ if(t.k==='fix'||t.k==='prop')m.push(...useMenu(W,a,t,false));
  if(t.k==='animal'&&h&&h.throw)m.push(wA(`Throw ${h.en} to ${t.en}`,`${t.ja}に${h.ja}を投げる`,async()=>{faceTo(a,t);return throwIt(W,a,h,t)}));
  return m}
 function animalCombo(W,a,t){const m=[];
@@ -121,6 +125,17 @@ function animalCombo(W,a,t){const m=[];
  if(t.animalOn)m.push(wA(`Jump onto ${t.en}`,`${t.ja}に飛び乗る`,async()=>{const s=t.animalOn;await moveTo(W,a,s.x-40,s.y+30,'walk');a.x=s.x;a.y=s.y;a.on=t.id;a.z=s.depth;W.draw(350);await wait(380);return {v:'jumpon',a,r:t}}));
  if(t.near)m.push(wA(`Run to ${t.en}`,`${t.ja}へ走る`,async()=>{a.z=null;await moveTo(W,a,t.near.x+(a.x<t.near.x?-20:20),t.near.y+6,'run');return {v:'run',a,r:t,state:{v:'go',p:t.near.p||'next to',r:t}}}));
  return m}
+// ---- 家具・物ごとの専用の動作(シーンのデータの use で定義する) ----
+// use:[{id, en, ja, how:'near'|'sit'|'pick'|'none', held:手に持っているときだけ, need:{状態}, pose, ms, keep, set:{状態の変化}, bub:'吹き出し', tx:{prog:[英,日],past:[英,日],state:[英,日]}}]
+// 英文は tx の文型で作る({S}=主語 {be}=be動詞 {Sja}=主語の日本語 {poss}=所有格)
+function useMenu(W,a,t,held){if(a.k!=='person')return [];
+ return (t.use||[]).filter(u=>!!u.held===held&&(!u.need||Object.entries(u.need).every(([k,v])=>(t.st[k]??false)===v))&&(!u.staff||!!a.staff)&&(!u.guest||!a.staff)&&(!u.hold||a.hold===u.hold))
+  .map(u=>wA(u.en,u.ja,async()=>{
+   if(!held){if(u.how==='sit'&&t.seats){if(!(a.seat&&a.seat.f===t.id))await sitOn(W,a,t)}else if(u.how==='pick'&&t.k==='prop')await wPick(W,a,t);else if(u.how!=='none'&&!(a.seat&&u.how==='seat'))await goNear(W,a,t)}
+   if(u.pose){a.act=u.pose;W.draw();await wait(u.ms||700);if(!u.keep){a.act=null}}
+   if(u.set){Object.assign(t.st,u.set);if(t.k==='fix')W.bgDirty=true}
+   if(u.bub)bubble(W,t,u.bub);W.draw();
+   return {v:'custom',act:u.id,a,o:t,tx:u.tx}}))}
 async function sitOn(W,a,f){const s=f.seats.find(s=>!s.occ)||f.seats[0];
  await moveTo(W,a,s.x+(s.face===-1?18:-18),s.y+16,'walk');seatPerson(a,f,s);W.draw();await wait(250)}
 async function lieOn(W,a,f){const s=f.seats.find(s=>!s.occ)||f.seats[0];await moveTo(W,a,s.x,s.y+20,'walk');seatPerson(a,f,s);a.seat=null;a.lie={f:f.id,h:f.lieH||56,s};s.occ=a.id;a.x=f.lieAt.x;a.y=f.lieAt.y;a.standAt={x:f.lieAt.x+60,y:f.lieAt.y+30};if(a.hold)await dropHeld(W,a);W.draw();await wait(250)}
