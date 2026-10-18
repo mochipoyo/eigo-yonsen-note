@@ -40,7 +40,7 @@ WSC.add({id:'negotiation',t:'商談',en:'Business Negotiation',cat:'business',bg
     intents:[I('p',[U.sorry.concat(['difficult','can not','cannot']),['three','3']],"I'm afraid five percent is difficult. How about three percent?",{main:true,ja:'あいにく5%は難しいです。3%ではいかがでしょうか。',alts:["Sorry, we can't do five. Would three percent work for you?"]}),
      I('ok5',[['five percent is fine','ok five','we can do five']],'OK, five percent.',{tone:'wrong',retry:true,why:'値引きは最大3%までです。',do:[{op:'think',who:'me',say:'No, three percent is our limit.',ja:'(だめだ、3%が限度)'}]})],
     choices:[{en:"I'm afraid five percent is difficult. How about three percent?",i:'p'},{en:'OK, five percent.',i:'ok5'}]},
-   SAY('client','I see. But why is your price higher than other companies'?','なるほど。でも、なぜ御社の価格はほかの会社より高いのですか。',{key:true}),
+   SAY('client','I see. But why is your price higher than other companies\'?','なるほど。でも、なぜ御社の価格はほかの会社より高いのですか。',{key:true}),
    {id:'why',focus:'reason',talk:{ja:'理由を説明しよう(長持ちする・サポートがある 等)',hint:'The reason is that our product lasts twice as long.'},to:'client',
     intents:[I('r',[U.reason.concat(['because']),['last*','quality','longer','support','durable','warranty','better','twice']],'The reason is that our product lasts twice as long.',{main:true,ja:'理由は、当社の製品は2倍長持ちするからです。',alts:['Because our product comes with free support for three years.']}),
      I('dunno',[['do not know','dont know','not sure']],"I'm not sure.",{tone:'wrong',retry:true,why:'自社製品の強みを理由として説明しましょう。',reply:[{say:'Hmm. That makes it hard to decide.',ja:'うーん。それでは決めにくいですね。',expr:'confused',exprAfter:'normal'}]})],
