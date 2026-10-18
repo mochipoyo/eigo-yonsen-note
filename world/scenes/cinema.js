@@ -1,0 +1,62 @@
+// ===== シーン 30 映画館 =====
+// 会話ミッションの t は自動テスト用の手順([相手,動作の名前の先頭]。'self' は自分の役、'@変数' はそのときの品)
+(()=>{
+const MV=[{id:'cats',en:'Space Cats',ja:'スペース・キャッツ',u:['space cats','space cat']},{id:'train',en:'The Last Train',ja:'ラスト・トレイン',u:['last train']}];
+const SH=[{id:'s730',say:'seven thirty',ja:'7時30分',u:['seven thirty','7 30','730','7:30']},{id:'s800',say:'eight o\'clock',ja:'8時',u:['eight','8']}];
+WSC.add({id:'cinema',t:'映画館',en:'Movie Theater',cat:'social',bg:'cinema',floor:[430,580],ground:{en:'the floor',ja:'床'},
+ ents:[
+  {id:'p1',k:'fix',art:'poster',o:{title:'SPACE CATS',sub:'7:30 / 9:15',c:'#2f2a4a',c2:'#f5c542'},en:'the Space Cats poster',ja:'「スペース・キャッツ」のポスター',x:470,y:300,wall:true,near:{x:470,y:460,p:'in front of'},hit:{x0:415,x1:525,y0:130,y1:290},
+   use:[{id:'look',en:'Look at the poster',ja:'ポスターを見る',tx:{prog:['{S} {be} looking at the movie poster.','{Sja}は映画のポスターを見ています。'],past:['{S} looked at the movie poster.','{Sja}は映画のポスターを見ました。']}}]},
+  {id:'p2',k:'fix',art:'poster',o:{title:'THE LAST TRAIN',sub:'8:00 / 10:00',c:'#5a2a3a',c2:'#ff8d7e'},en:'The Last Train poster',ja:'「ラスト・トレイン」のポスター',x:610,y:300,wall:true,near:{x:610,y:460,p:'in front of'},hit:{x0:555,x1:665,y0:130,y1:290}},
+  {id:'counter',k:'fix',art:'counter',o:{w:220,c:'#b03a3a'},en:'the ticket counter',ja:'チケット売り場',x:190,y:450,staffY:425,surf:{x0:90,x1:290,y:350,front:452},near:{x:210,y:488,p:'in front of'}},
+  {id:'snack',k:'fix',art:'counter',o:{w:150,c:'#f5c542'},en:'the snack bar',ja:'売店',x:820,y:450,surf:{x0:750,x1:890,y:350,front:452},near:{x:800,y:488,p:'in front of'}},
+  {id:'door',k:'fix',art:'curtain',o:{c:'#3c3460',label:'SCREEN 3'},en:'Screen 3',ja:'3番スクリーン',x:960,y:470,st:{open:false},room:{},near:{x:930,y:500,p:'in front of'},hit:{x0:900,x1:1000,y0:240,y1:470}},
+  {id:'popcorn',k:'prop',art:'popcorn',en:'the popcorn',ind:'some popcorn',ja:'ポップコーン',food:true,at:{p:'on',ref:'snack'},x:800,small:true},
+  {id:'tickets',k:'prop',art:'ticket',en:'the tickets',ind:'two tickets',ja:'チケット',plural:true,hidden:true,x:0,small:true},
+  P('clerk','the clerk','係員','he',LK.clerk2,190,425,{staff:'desk',stay:'counter'}),
+  P('me','the woman','女性','she',LK.traveler2,560,540),
+  P('pal','the friend','友だち','he',LK.friend,640,550),
+ ],
+ missions:[
+  {t:[['me','p1','Look at']],v:['custom'],act:'look',ex:{v:'custom',act:'look',a:'me',tx:{prog:['{S} {be} looking at the movie poster.','{Sja}は映画のポスターを見ています。']}}},
+  {t:[['me','popcorn','Pick up']],v:['pickup'],o:'popcorn',ex:{v:'pickup',a:'me',o:'popcorn'}},
+  {t:[['pal','popcorn','Eat']],v:['eat'],o:'popcorn',ex:{v:'eat',a:'pal',o:'popcorn'}},
+  {t:[['me','door','Go into']],v:['enter'],r:'door',ex:{v:'enter',a:'me',r:'door'}},
+  {t:[['me','clerk','Talk to']],v:['talkto'],r:'clerk',ex:{v:'talkto',a:'me',r:'clerk'}},
+  {t:[['pal','snack','Walk to']],v:['walk'],a:'pal',r:'snack',ex:{v:'walk',a:'pal',r:'snack'}},
+  {t:[['pal','self','Wave']],v:['wave'],a:'pal',ex:{v:'wave',a:'pal'}},
+ ],
+ stories:[
+ {id:'cinema-tickets',t:'映画のチケットを買う',en:'Buy movie tickets',me:'me',desc:'見たい映画と時間を伝えてチケットを買う。満席なら別の回を提案される。スクリーンも確かめる。',goalJa:'2人分のチケットを買って、スクリーンに入る',
+  focus:['could','howabout','doyoumean'],
+  intro:'あなたは友だちと映画を見に来ました。見たい映画: {mv.en}({sh.ja}の回)。',
+  vars:{mv:MV,sh:SH},
+  variants:[{id:'normal',w:1},{id:'full',w:1}],
+  steps:[
+   {id:'go',t:[['clerk','Talk to']],act:{ja:'チケット売り場へ行く',hint:'係員をタップして「Talk to the clerk」'},ev:{v:'talkto',r:'clerk'}},
+   SAY('clerk','Hi. Which movie would you like to see?','こんにちは。どの映画をご覧になりますか。',{key:true}),
+   {id:'buy',focus:'could',talk:{ja:'映画・時間・枚数を伝えよう',hint:'Could I have two tickets for {mv.en} at {sh.say}, please?'},to:'clerk',
+    intents:[I('b',[['{mv.u}'],['two','2','tickets'],['{sh.u}']],'Could I have two tickets for {mv.en} at {sh.say}, please?',{main:true,ja:'{mv.ja}、{sh.ja}の回を2枚お願いします。',alts:['Two tickets for {mv.en} at {sh.say}, please.']}),
+     I('b0',[['{mv.u}']],'{mv.en}, please.',{retry:true,ja:'{mv.ja}をお願いします。',reply:[{say:'Sure. Which showing, and how many tickets?',ja:'はい。何時の回で、何枚ですか。'}]})],
+    choices:[{en:'Could I have two tickets for {mv.en} at {sh.say}, please?',i:'b'},{en:'{mv.en}, please.',i:'b0'}]},
+   {if:{variant:'full'},npc:'clerk',say:"I'm afraid the {sh.say} show is sold out. How about the next one at ten?",ja:'あいにく{sh.ja}の回は満席です。次の10時の回はいかがですか。',expr:'sorry',exprAfter:'normal',key:true},
+   {if:{variant:'full'},id:'next',focus:'howabout',talk:{ja:'次の回でいいか答えよう',hint:"That's fine. Two for ten o'clock, please."},to:'clerk',
+    intents:[I('ok',[U.yes.concat(['that is fine','thats fine','ten','10','sounds good'])],"That's fine. Two for ten o'clock, please.",{main:true,ja:'大丈夫です。10時の回を2枚お願いします。',not:[['no']]})],choices:[{en:"That's fine. Two for ten o'clock, please.",i:'ok'}]},
+   SAY('clerk','Where would you like to sit, in the middle or near the front?','お席は真ん中と前方、どちらがよろしいですか。',{key:true}),
+   {id:'seat',talk:{ja:'座りたい場所を伝えよう',hint:'In the middle, please.'},to:'clerk',
+    intents:[I('m',[['middle','center','centre']],'In the middle, please.',{main:true,ja:'真ん中でお願いします。'}),I('f',[['front']],'Near the front, please.',{ja:'前のほうでお願いします。'})],
+    other:{say:'Sorry, middle or front?',ja:'すみません、真ん中と前方どちらに?'},choices:[{en:'In the middle, please.',i:'m'},{en:'Near the front, please.',i:'f'}]},
+   SAY('clerk',"That's twenty-four dollars.",'24ドルになります。',{key:true}),
+   {id:'pay',t:[['clerk','Pay']],act:{ja:'代金を払う',hint:'係員をタップして「Pay for the tickets」'},ev:{v:'custom',act:'pay'},done:{flag:'paid'},
+    acts:[{id:'pay',on:'clerk',near:true,en:'Pay for the tickets',ja:'チケット代を払う',do:[{op:'act',who:'me',a:'give',ms:500},{op:'flag',set:{paid:true}}],tx:{prog:['{S} {be} paying for the tickets.','{Sja}はチケット代を払っています。'],past:['{S} paid for the tickets.','{Sja}はチケット代を払いました。']}}]},
+   DO({op:'show',id:'tickets'},{op:'place',what:'tickets',to:'clerk'},{op:'give',who:'clerk',what:'tickets',to:'me'}),
+   SAY('clerk',"Here you are. It's on Screen three, at the end of the hall.",'どうぞ。3番スクリーンで、廊下の突き当たりです。',{key:true}),
+   {id:'dym',focus:'doyoumean',talk:{ja:'スクリーンの番号を確かめよう',hint:'Do you mean Screen three?'},to:'clerk',
+    intents:[I('d',[U.doyoumean.concat(['so','right','just to confirm']),['three','3']],'Do you mean Screen three?',{main:true,ja:'3番スクリーンということですか。',reply:[{say:"That's right. Enjoy the movie!",ja:'そうです。映画をお楽しみください!'}]}),
+     I('ok',[U.thanks.concat(['i see','got it'])],'Thank you.',{ja:'ありがとう。'})],
+    choices:[{en:'Do you mean Screen three?',i:'d'},{en:'Thank you.',i:'ok'}]},
+   {id:'in',t:[['door','Go into']],act:{ja:'スクリーンに入る',hint:'「SCREEN 3」の入口をタップして「Go into Screen 3」'},ev:{v:'enter',r:'door'},done:{inside:['me','door']}},
+  ],
+  goal:{all:[{flag:'paid'},{inside:['me','door']}]}},
+ ]});
+})();

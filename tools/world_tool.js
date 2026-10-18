@@ -18,6 +18,7 @@ fs.mkdirSync(path.join(outDir,'thumbs'),{recursive:true});
 const man=[];
 for(const id of order){const d=defs[id];if(!d)continue;
  const svg=vm.runInContext(`wThumb(WSC.defs[${JSON.stringify(id)}])`,ctx);
+ if(/&(?!amp;|lt;|gt;|quot;|#\d+;|#x[0-9a-f]+;|apos;)/i.test(svg))errs.push('thumb '+id+': エスケープされていない & があります(SVGとして読めません)');
  fs.writeFileSync(path.join(outDir,'thumbs',id+'.svg'),svg);
  man.push({id,t:d.t,en:d.en,cat:d.cat||'daily',n:(d.missions||[]).length,st:(d.stories||[]).map(x=>({id:x.id,t:x.t,en:x.en,me:(d.ents.find(e=>e.id===x.me)||{}).ja||'',focus:x.focus||[]}))})}
 // データの検査(英文テンプレート・会話の判定など)。world.js に wCheck があれば使う

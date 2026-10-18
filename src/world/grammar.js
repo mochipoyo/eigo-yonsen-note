@@ -2,12 +2,13 @@
 // 1) 文の形の検査: 文頭の大文字・文末記号・a/an・同じ語の重複・置きかえ忘れの {..}
 // 2) 会話ミッションの検査: 模範の英文・ほかの言い方・選択肢が、それぞれ自分の意図として受け取られるか(正しい言い方を不正解にしないため)
 // 3) 参照の検査: 登場人物・物・変数が存在するか
-const A_OK=/^(a|an) (one|once|uni|use[drs]?|usual|euro|user|united|university|hour|honest|honor|heir)/i;
+const A_OK=/^(a|an) (one|once|uni|use[drs]?|usual|euro|user|united|university|hour|honest|honor|heir|suv|sos|mba|fbi|x)/i;
 function wLint(t,where){const e=[];if(!t)return e;const s=String(t).trim();
  if(/\{[\w.]+\}/.test(s))e.push(`${where}: 置きかえ忘れ ${s}`);
  if(/  /.test(s))e.push(`${where}: 空白が2つ "${s}"`);
  if(/^[a-z]/.test(s)&&!/^(iPhone|e\.g\.)/.test(s))e.push(`${where}: 文頭が小文字 "${s}"`);
  if(!/[.?!"')…]$/.test(s))e.push(`${where}: 文末記号なし "${s}"`);
+ if(/[^.]\b\w{2,}[.?!] [a-z]/.test(s.replace(/\b(a\.m|p\.m|e\.g|Mr|Ms|Mrs|Dr)\./g,'')))e.push(`${where}: 文の途中で小文字始まり "${s}"`);
  const w=s.toLowerCase().replace(/[^a-z0-9' ]/g,' ').split(/\s+/).filter(Boolean);
  for(let i=0;i+1<w.length;i++){if(w[i]===w[i+1]&&!['that','had','very','bye'].includes(w[i]))e.push(`${where}: 同じ語の重複 "${w[i]} ${w[i+1]}" in "${s}"`);
   if(w[i]==='a'&&/^[aeio]/.test(w[i+1])&&!A_OK.test('a '+w[i+1]))e.push(`${where}: a + 母音 "${s}"`);

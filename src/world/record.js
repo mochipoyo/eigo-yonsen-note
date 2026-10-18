@@ -8,7 +8,7 @@ function wWeakHtml(){const st=wStat();const rows=(o,lab)=>Object.entries(o).filt
   <div><b>前置詞</b>${pp.map(x=>`<div class="en">${esc(x.k)} <small class="muted">${Math.round(x.r*100)}%(${x.n}回)</small></div>`).join('')||'<div class="muted">—</div>'}</div></div></section>`}
 function wMatch(m,ev){const id=x=>x&&x.id;const inL=(v,x)=>Array.isArray(v)?v.includes(x):v===x;
  if(!m.v.includes(ev.v))return false;if(m.a&&id(ev.a)!==m.a)return false;if(m.o&&!inL(m.o,id(ev.o)))return false;
- if(m.r&&!inL(m.r,id(ev.r)))return false;if(m.p&&ev.p!==m.p)return false;return true}
+ if(m.r&&!inL(m.r,id(ev.r)))return false;if(m.p&&ev.p!==m.p)return false;if(m.act&&ev.act!==m.act)return false;return true}
 // ---- 連続型ミッション(会話)の記録 ----
 // 途中でやめても、それまでの発話・行動の記録は残る(1回答えるたびに保存する)。
 function wsRec(id){S.wstory=S.wstory||{};return S.wstory[id]=S.wstory[id]||{runs:0,clear:0,perfect:0,last:null,var:{},mode:{},best:null}}
