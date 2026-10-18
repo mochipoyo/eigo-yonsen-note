@@ -81,7 +81,7 @@ function comboMenu(W,a,t){const m=[];if(!t||t===a)return m;
   if(t.art==='computer')m.push(wA(`Use ${t.en}`,`${t.ja}を使う`,async()=>{const ch=t.useSeat&&W.ents[t.useSeat];if(ch&&ch.seats.some(s=>!s.occ||s.occ===a.id)){if(!(a.seat&&a.seat.f===ch.id))await sitOn(W,a,ch)}else await goNear(W,a,t);t.st.on=true;a.act='type';W.draw();return {v:'use',a,o:t}}));
   if(t.room&&!a.inside&&!(t.room.need&&!t.room.need.every(k=>t.st[k])))m.push(wA(`Go into ${t.en}`,`${t.ja}に入る`,async()=>{await moveTo(W,a,t.x,(t.near?t.near.y:t.y+20),'walk');t.st.open=true;W.draw();await wait(300);a.inside=t.id;a.hidden=true;if(a.hold&&t.room.drop)await dropHeld(W,a);t.st.open=false;W.draw();return {v:'enter',a,r:t}}));
   if(t.art==='elevator'&&!a.inside)m.push(wA(`Take ${t.en}`,`${t.ja}に乗る`,async()=>{await moveTo(W,a,t.x,t.near.y,'walk');t.st.open=true;W.draw();await wait(450);await moveTo(W,a,t.x,t.near.y-24,'walk');a.inside=t.id;a.hidden=true;W.draw();await wait(250);t.st.open=false;W.draw();return {v:'enter',a,r:t}}));
-  if(t.art==='deskphone'&&a.act==='phone'&&t.st.up)m.push(wA('Hang up the phone','電話を切る',async()=>{t.st.up=false;a.act=null;W.draw();return {v:'hangup',a}}));
+  if(t.art==='deskphone'&&t.st.up)m.push(wA('Hang up the phone','電話を切る',async()=>{t.st.up=false;a.act=null;W.draw();return {v:'hangup',a}}));
   if(t.art==='deskphone'&&!t.st.up)m.push(wA('Answer the phone','電話に出る',async()=>{if(!a.seat)await goNear(W,a,t);t.st.ring=false;t.st.up=true;a.act='phone';W.draw();return {v:'answer',a}}));
   if(t.art==='blackboard')m.push(wA(`Write on ${t.en}`,`${t.ja}に書く`,async()=>{await moveTo(W,a,t.near.x,t.near.y,'walk');a.flip=false;a.act='write';W.draw();await wait(500);t.st.text=t.text||'Hello!';W.bgDirty=true;W.draw();return {v:'write',a,r:t,p:'on'}}));
   if(t.art==='register'&&!a.staff)m.push(wA(`Pay at ${t.en}`,`${t.ja}でお金を払う`,async()=>{await goNear(W,a,t);a.act='give';W.draw();await wait(500);t.st.paid=true;a.act=null;W.draw();return {v:'pay',a,r:t}}));
@@ -134,7 +134,7 @@ function animalCombo(W,a,t){const m=[];
 function useMenu(W,a,t,held){if(a.k!=='person')return [];
  return (t.use||[]).filter(u=>!!u.held===held&&(!u.need||Object.entries(u.need).every(([k,v])=>(t.st[k]??false)===v))&&(!u.staff||!!a.staff)&&(!u.guest||!a.staff)&&(!u.hold||a.hold===u.hold))
   .map(u=>wA(u.en,u.ja,async()=>{
-   if(!held){if(u.how==='sit'&&t.seats){if(!(a.seat&&a.seat.f===t.id))await sitOn(W,a,t)}else if(u.how==='pick'&&t.k==='prop')await wPick(W,a,t);else if(u.how!=='none'&&!(a.seat&&u.how==='seat'))await goNear(W,a,t)}
+   if(!held){if(u.how==='seat'&&t.useSeat&&W.ents[t.useSeat]){const ch=W.ents[t.useSeat];if(!(a.seat&&a.seat.f===ch.id))await sitOn(W,a,ch)}else if(u.how==='sit'&&t.seats){if(!(a.seat&&a.seat.f===t.id))await sitOn(W,a,t)}else if(u.how==='pick'&&t.k==='prop')await wPick(W,a,t);else if(u.how!=='none'&&!(a.seat&&u.how==='seat'))await goNear(W,a,t)}
    if(u.pose){a.act=u.pose;W.draw();await wait(u.ms||700);if(!u.keep){a.act=null}}
    if(u.set){Object.assign(t.st,u.set);if(t.k==='fix')W.bgDirty=true}
    if(u.bub)bubble(W,t,u.bub);W.draw();
