@@ -6,7 +6,7 @@ const DUE=[{id:'d14',say:'October thirtieth',ja:'10月30日',u:['thirtieth','30'
 WSC.add({id:'library',t:'図書館',en:'Library',cat:'daily',bg:'library',floor:[430,580],ground:{en:'the floor',ja:'床'},
  ents:[
   {id:'tall',k:'fix',art:'tallshelf',en:'the bookshelf',ja:'本棚',x:130,y:450,near:{x:170,y:480,p:'in front of'}},
-  {id:'shelf',k:'fix',art:'shelf',o:{books:true},en:'the new books shelf',ja:'新着本の棚',x:340,y:460,surf:{x0:260,x1:420,y:360,front:461},near:{x:340,y:490,p:'in front of'}},
+  {id:'shelf',k:'fix',art:'shelf',o:{books:true},en:'the new arrivals shelf',ja:'新着本の棚',x:340,y:460,surf:{x0:260,x1:420,y:360,front:461},near:{x:340,y:490,p:'in front of'}},
   {id:'desk',k:'fix',art:'counter',o:{w:220,c:'#7a5a3a'},en:'the front desk',ja:'カウンター',x:820,y:450,staffY:425,surf:{x0:720,x1:920,y:350,front:452},near:{x:800,y:488,p:'in front of'}},
   {id:'table',k:'fix',art:'table',o:{w:170,h:62,c:'#b07a48'},en:'the table',ja:'机',x:570,y:540,surf:{x0:495,x1:645,y:474,front:541}},
   {id:'chair1',k:'fix',art:'chair',o:{face:1},en:'the chair',ja:'いす',x:470,y:546,seats:[{x:472,y:548,h:40,face:1}]},
@@ -52,7 +52,7 @@ WSC.add({id:'library',t:'図書館',en:'Library',cat:'daily',bg:'library',floor:
     intents:[I('y',[U.yes.concat(['reserve','please','when will it be back'])],'Yes, please. When will it be back?',{main:true,ja:'はい、お願いします。いつ戻ってきますか。',not:[['no']]}),
      I('n',[U.no],'No, thank you.',{tone:'wrong',retry:true,why:'その本を読みたいので、予約しましょう。',do:[{op:'think',who:'stu',say:'But I really want to read it...',ja:'(でも、どうしても読みたい…)'}]})],
     choices:[{en:'Yes, please. When will it be back?',i:'y'},{en:'No, thank you.',i:'n'}]},
-   {if:{variant:'out'},npc:'lib',say:"It should be back by {due.say}. We'll email you when it arrives.",ja:'{due.ja}までには戻る予定です。届いたらメールでお知らせします。',key:true},
+   {if:{variant:'out'},npc:'lib',say:"It should be back by {due.say}. We'll email you when it's ready for pickup.",ja:'{due.ja}までには戻る予定です。受け取れるようになったらメールでお知らせします。',key:true},
    {if:{variant:'normal'},npc:'lib',say:'Sure. May I see your library card?','ja':'はい。図書館カードを拝見できますか。',key:true},
    {if:{variant:'normal'},id:'card',t:[['lib','Show your library card']],act:{ja:'図書館カードを見せる',hint:'司書をタップして「Show your library card」'},ev:{v:'custom',act:'showcard'},
     acts:[{id:'showcard',on:'lib',near:true,en:'Show your library card',ja:'図書館カードを見せる',do:[{op:'act',who:'stu',a:'give',ms:600}],tx:{prog:['{S} {be} showing {poss} library card to the librarian.','{Sja}は司書に図書館カードを見せています。'],past:['{S} showed {poss} library card to the librarian.','{Sja}は司書に図書館カードを見せました。']}}]},
@@ -63,7 +63,7 @@ WSC.add({id:'library',t:'図書館',en:'Library',cat:'daily',bg:'library',floor:
      I('ok',[U.thanks.concat(['i see','got it','great'])],'Great. Thank you.',{ja:'わかりました。ありがとう。'})],
     choices:[{en:'Do you mean {due.say}?',i:'d'},{en:'Great. Thank you.',i:'ok'}]},
    {if:{variant:'out'},do:[{op:'flag',set:{reserved:true}}]},
-   SAY('lib','You\'re welcome. Have a nice day.','どういたしまして。よい一日を。',{expr:'happy'}),
+   SAY('lib','Enjoy the book. Have a nice day.','本を楽しんでくださいね。よい一日を。',{expr:'happy'}),
   ],
   goal:{any:[{all:[{flag:'lent'},{held:['@bk','stu']}]},{flag:'reserved'}]}},
  ]});

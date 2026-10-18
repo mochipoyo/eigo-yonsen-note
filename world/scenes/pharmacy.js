@@ -28,7 +28,7 @@ WSC.add({id:'pharmacy',t:'薬局',en:'Pharmacy',cat:'daily',bg:'pharmacy',floor:
  stories:[
  {id:'pharm-medicine',t:'薬を買って、飲み方を確かめる',en:'Buy medicine',me:'cust',desc:'症状を伝えて薬をすすめてもらい、飲み方を確認して買う。運転する日は注意が必要なことも。',goalJa:'症状に合った薬を買い、飲み方を確認する',
   focus:['could','doyoumean','sayagain','howabout'],
-  intro:'あなたは旅行先の薬局にいます。症状: {sym.jp}。',
+  intro:'あなたは旅行先の薬局にいます。症状: {sym.jp}。午後はレンタカーを運転する予定です。',
   vars:{sym:SYM},
   variants:[{id:'normal',w:1},{id:'drive',w:1}],
   steps:[

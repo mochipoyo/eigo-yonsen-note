@@ -58,7 +58,7 @@ WSC.add({id:'gym',t:'ジム',en:'Gym',cat:'social',bg:'gym',floor:[430,580],grou
     intents:[I('m',[['would you mind if','do you mind if','mind if i','is it ok if','can i use','could i use','may i use','are you using'],['use','dumbbell*','these','this']],'Excuse me. Would you mind if I used these dumbbells?',{main:true,ja:'すみません、このダンベルを使ってもかまいませんか。',alts:['Excuse me. Are you using these dumbbells?']}),
      I('take',[['i will take','i am taking','give me']],"I'm taking these.",{tone:'rude',better:'Excuse me. Would you mind if I used these dumbbells?',why:'人のそばにある物は、ひと言ことわってから使いましょう。Would you mind if I ...? はていねいな頼み方です。',reply:[{say:'Uh... sure.',ja:'えっと…どうぞ。',expr:'confused',exprAfter:'normal'}]})],
     choices:[{en:'Excuse me. Would you mind if I used these dumbbells?',i:'m'},{en:"I'm taking these.",i:'take'}]},
-   {if:{variant:'share'},npc:'member',say:"Not at all. Go ahead. I'm finished.",ja:'どうぞどうぞ。もう終わりましたから。',expr:'happy',exprAfter:'normal',key:true},
+   {if:{variant:'share'},npc:'member',say:"Go ahead. I'm finished.",ja:'どうぞ。もう終わりましたから。',expr:'happy',exprAfter:'normal',key:true},
    {if:{variant:'share'},id:'db',t:[['db1','Pick up']],act:{ja:'ダンベルを持つ',hint:'ダンベルをタップして「Pick up the dumbbells」'},ev:{v:['pickup','takeout'],o:'db1'},done:{held:['db1','me']}},
    {id:'thx',talk:{ja:'お礼を言おう',hint:'Thanks a lot!'},to:'trainer',intents:[I('t',[U.thanks],'Thanks a lot!',{main:true,ja:'ありがとう!'})],choices:[{en:'Thanks a lot!',i:'t'}]},
   ],

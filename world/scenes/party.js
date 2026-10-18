@@ -26,7 +26,7 @@ WSC.add({id:'party',t:'パーティー',en:'Party',cat:'social',bg:'party',floor
  stories:[
  {id:'party-talk',t:'パーティーで初対面の人と話す',en:'Small talk at a party',me:'me',desc:'紹介された人とあいさつし、名前を聞き返し、自分の意見と理由を話し、誘いにこたえる。',goalJa:'初めて会う人とあいさつして話し、ケーキを食べる',
   focus:['sayagain','ithink','howabout'],
-  intro:'あなたは留学生です。友だちのミアのパーティーに来ました。',
+  intro:'あなたは留学生のケンです。友だちのミアのパーティーに来ました。',
   vars:{nm:NM},
   variants:[{id:'normal',w:1},{id:'noisy',w:2}],
   steps:[
@@ -39,9 +39,9 @@ WSC.add({id:'party',t:'パーティー',en:'Party',cat:'social',bg:'party',floor
     intents:[I('a',[['say that again','name again','say your name','repeat','pardon','did not catch','didnt catch','sorry'],['name','again','catch','that']],'Sorry, could you say your name again?',{main:true,ja:'すみません、お名前をもう一度言っていただけますか。',alts:["Sorry, I didn't catch your name."],reply:[{say:"Sure! It's {nm.en}.",ja:'もちろん!{nm.ja}です。',slow:true}]}),
      I('guess',[['nice to meet you']],'Nice to meet you.',{tone:'unnatural',better:'Sorry, could you say your name again?',why:'名前が聞き取れなかったら、その場で聞き返すのが自然です(あとで聞くほうが気まずい)。',reply:[{say:'By the way, my name is {nm.en}.',ja:'ちなみに、私の名前は{nm.ja}です。'}]})],
     choices:[{en:'Sorry, could you say your name again?',i:'a'},{en:'Nice to meet you.',i:'guess'}]},
-   {id:'greet',talk:{ja:'あいさつして、自己紹介しよう',hint:"Nice to meet you, {nm.en}. I'm Ken."},to:'new',
-    intents:[I('g',[['nice to meet you','pleased to meet you','good to meet you','my name is','i am','im']],"Nice to meet you, {nm.en}. I'm Ken.",{main:true,ja:'はじめまして、{nm.ja}さん。ケンです。',alts:['Nice to meet you too. My name is Ken.']})],
-    choices:[{en:"Nice to meet you, {nm.en}. I'm Ken.",i:'g'}]},
+   {id:'greet',talk:{ja:'あいさつして、自己紹介しよう',hint:"Nice to meet you too, {nm.en}. I'm Ken."},to:'new',
+    intents:[I('g',[['nice to meet you','pleased to meet you','good to meet you','my name is','i am','im']],"Nice to meet you too, {nm.en}. I'm Ken.",{main:true,ja:'はじめまして、{nm.ja}さん。ケンです。',alts:['Nice to meet you too. My name is Ken.']})],
+    choices:[{en:"Nice to meet you too, {nm.en}. I'm Ken.",i:'g'}]},
    SAY('new','So, how do you know Mia?','それで、ミアとはどういう知り合い?',{key:true}),
    {id:'know',talk:{ja:'ミアとの関係を答えよう(同じ語学学校のクラスメート)',hint:"We're classmates at the language school."},to:'new',
     intents:[I('k',[['classmate*','same class','school','friend*','met','study together','work together']],"We're classmates at the language school.",{main:true,ja:'語学学校のクラスメートなんです。'})],
