@@ -1,20 +1,5 @@
-// ===== うごかす英語ワールド: アクション(できる動作の一覧・アニメーション・出来事の記録) =====
+// ===== ワールド: アクション判定(いまできる動作だけを一覧にし、実行して出来事を返す) =====
 // 自然に成り立たない動作は一覧に出さない。各 run() は出来事 ev(または配列)を返す。
-async function moveTo(W,e,x,y,gait='walk'){
- if(e.k==='person'&&(e.seat||e.lie)){const sy=e.y+10;unseat(W,e);e.y=sy;W.draw();await wait(220)}
- if(e.k==='animal'&&e.on){e.on=null}
- e.act=null;const d=Math.hypot(x-e.x,y-e.y);if(d<4){return}
- e.flip=x<e.x;e.moving=gait;W.draw();e.x=x;e.y=y;
- const dur=Math.max(260,d/SPEED[gait]*1000);W.draw(dur);await wait(dur);e.moving=null;W.draw()}
-function faceTo(e,t){e.flip=t.x<e.x}
-function spotNear(W,a,t){// 相手の横に立つ位置
- if(t.k==='fix'&&t.near)return {x:t.near.x,y:t.near.y};
- const side=a.x<t.x?-1:1;let y=t.k==='prop'&&t.at&&t.at.ref&&W.ents[t.at.ref]?W.ents[t.at.ref].y+14:t.y+2;
- if(t.k==='prop'&&t.inC){const c=W.ents[t.inC];y=c.at&&W.ents[c.at.ref]?W.ents[c.at.ref].y+14:c.y+2}
- if(t.k==='fix'&&!t.near)y=t.y+14;
- const off=t.k==='fix'?(FIXSZ[t.art]||[100])[0]/2+26:t.k==='prop'?36:58;
- return clampFloor(W,{x:t.x+side*off,y})}
-async function goNear(W,a,t){const s=spotNear(W,a,t);await moveTo(W,a,s.x,s.y,'walk');faceTo(a,t);W.draw();await wait(120)}
 async function wPick(W,a,p){// 持ち上げる(まだ持っていなければ)
  if(a.hold===p.id)return;if(a.hold)await dropHeld(W,a);await goNear(W,a,p);
  if(p.heldBy&&p.heldBy!==a.id){const o=W.ents[p.heldBy];o.hold=null}
@@ -116,7 +101,7 @@ function comboMenu(W,a,t){const m=[];if(!t||t===a)return m;
   if((can||a.hold===t.id)&&t.openable)m.push(t.st.open?wA(`Close ${t.en}`,`${t.ja}を閉じる`,async()=>{await wPick(W,a,t);t.st.open=false;W.draw();return {v:'close',a,o:t}}):wA(`Open ${t.en}`,`${t.ja}を開く`,async()=>{await wPick(W,a,t);t.st.open=true;W.draw();return {v:'open',a,o:t}}));
  }
  if(t.k==='person'&&!t.hidden&&!t.swim){
-  if(h&&!t.hold&&!h.cap)m.push(wA(`Give ${h.en} to ${t.en}`,`${t.ja}に${h.ja}を渡す`,async()=>{await goNear(W,a,t);faceTo(t,a);a.act='give';W.draw();await wait(450);a.act=null;a.hold=null;placeProp(W,h,t);W.draw();return {v:'give',a,o:h,r:t}}));
+  if(h&&!t.hold&&!h.cap)m.push(wA(`Give ${h.en} to ${t.en}`,`${t.ja}に${h.ja}を渡す`,async()=>{await goNear(W,a,t);faceTo(t,a);a.act='give';W.draw();await wait(380);a.act=null;a.hold=null;placeProp(W,h,t);t.act=null;W.draw(320);await wait(340);return {v:'give',a,o:h,r:t}}));
   if(h&&h.show&&t.staff)m.push(wA(`Show ${h.en} to ${t.en}`,`${t.ja}に${h.ja}を見せる`,async()=>{await goNear(W,a,t);a.act='give';W.draw();await wait(700);return {v:'show',a,o:h,r:t}}));
   if(h&&h.throw)m.push(wA(`Throw ${h.en} to ${t.en}`,`${t.ja}に${h.ja}を投げる`,async()=>{faceTo(a,t);return throwIt(W,a,h,t)}));
   if(t.staff==='order'&&W.def.order&&!a.staff)for(const oid of W.def.order){const it=W.ents[oid];if(it&&it.hidden&&!it.ordered)m.push(wA(`Order ${it.ind}`,`${it.ja}を注文する`,async()=>{await goNear(W,a,t);faceTo(t,a);W.draw();await wait(500);it.ordered=true;it.hidden=false;placeProp(W,it,W.ents[it.serveAt],'on');W.draw();return {v:'order',a,o:it}}))}

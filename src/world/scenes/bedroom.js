@@ -1,0 +1,25 @@
+// ===== シーン 03 寝室 =====
+WSC.add({id:'bedroom',t:'寝室',en:'Bedroom',bg:'bedroom',floor:[400,575],ground:{en:'the floor',ja:'床'},darkOnLampOff:true,
+ ents:[
+  {id:'window',k:'fix',art:'window',o:{night:true},en:'the window',ja:'窓',x:480,y:250,wall:true,toggle:'open',st:{open:false},near:{x:480,y:420,p:'next to'},hit:{x0:400,x1:560,y0:118,y1:256}},
+  {id:'clock',k:'fix',art:'clock',en:'the clock',ja:'時計',x:660,y:150,wall:true},
+  {id:'bed',k:'fix',art:'bed',o:{c:'#f4a7a7'},en:'the bed',ja:'ベッド',x:290,y:520,lieOn:true,sitToo:true,lieH:58,seats:[{x:360,y:522,h:56,face:1}],lieAt:{x:262,y:522},surf:{x0:180,x1:250,y:462,front:523},animalOn:{x:380,y:462,depth:524},hit:{x0:150,x1:430,y0:405,y1:525}},
+  {id:'lamp',k:'fix',art:'lamp',en:'the light',ja:'電気',x:560,y:470,toggle:'on',st:{on:true},near:{x:620,y:480,p:'next to'}},
+  {id:'desk',k:'fix',art:'desk',o:{w:150},en:'the desk',ja:'机',x:820,y:505,surf:{x0:755,x1:885,y:441,front:506},under:{x0:770,x1:870,y:495}},
+  {id:'chair',k:'fix',art:'chair',o:{face:1},en:'the chair',ja:'いす',x:715,y:512,seats:[{x:718,y:514,h:40,face:1}]},
+  {id:'pillow',k:'prop',art:'pillow',en:'the pillow',ind:'a pillow',ja:'枕',at:{p:'on',ref:'bed'},x:210},
+  {id:'book',k:'prop',art:'book',en:'the book',ind:'a book',ja:'本',read:true,at:{p:'on',ref:'desk'},x:850,small:true},
+  P('man','the man','男性','he',LK.man,500,560),
+  P('woman','the woman','女性','she',LK.woman,900,470),
+  {id:'cat',k:'animal',art:'cat',en:'the cat',ja:'猫',x:640,y:560},
+ ],
+ missions:[
+  {t:[['man','bed','Lie on']],v:['lie'],a:'man',r:'bed',ex:{v:'lie',a:'man',r:'bed',p:'on'}},
+  {t:[['woman','bed','Sit on'],['woman','self','Stand up']],v:['stand'],a:'woman',ex:{v:'stand',a:'woman'}},
+  {t:[['direct','lamp','Turn off']],v:['turnoff'],o:'lamp',ex:{v:'turnoff',a:'woman',o:'lamp'}},
+  {t:[['direct','lamp','Turn off'],['direct','lamp','Turn on']],v:['turnon'],o:'lamp',ex:{v:'turnon',a:'man',o:'lamp'}},
+  {t:[['woman','book','Pick up']],v:['pickup'],o:'book',ex:{v:'pickup',a:'woman',o:'book'}},
+  {t:[['cat','bed','Jump onto']],v:['jumpon'],a:'cat',r:'bed',ex:{v:'jumpon',a:'cat',r:'bed'}},
+  {t:[['drag','pillow','desk']],v:['put','place'],o:'pillow',r:'desk',p:'on',ex:{v:'place',o:'pillow',r:'desk',p:'on'}},
+  {t:[['man','bed','Lie on'],['man','self','Sleep']],v:['sleep'],a:'man',ex:{v:'sleep',a:'man',r:'bed',p:'on'}},
+ ]});

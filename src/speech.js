@@ -27,6 +27,9 @@ let speakId=0;
 function speak(text,opt={}){
  return new Promise(res=>{
   if(!('speechSynthesis'in window)){toast('このブラウザは読み上げに未対応です');return res(false)}
+  // 二重再生を防ぐ: 再生中・待ち行列があれば止めてから話す。マイクで聞いている間は聞き取りを止める(自分の声を拾わないように)
+  if(speechSynthesis.speaking||speechSynthesis.pending)speechSynthesis.cancel();
+  if(typeof recNow!=='undefined'&&recNow)stopListen();
   const id=++speakId;const u=new SpeechSynthesisUtterance(text.replace(/____/g,'blank'));
   const p=pickVoice(opt.g||'f',opt.lang||S.set.accent);
   if(p.voice)u.voice=p.voice;u.lang=p.lang;u.pitch=p.pitch;u.rate=(opt.slow?0.72:1)*S.set.rate;

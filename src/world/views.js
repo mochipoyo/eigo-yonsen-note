@@ -1,21 +1,17 @@
-// ===== うごかす英語ワールド: 画面 =====
+// ===== ワールド: 画面(シーン一覧・シーン・フレーズ帳) =====
 const WMODES=[{n:1,k:'自由に動かす',d:'動かすと英文が出る'},{n:2,k:'聞いて動かす',d:'英語の指示どおりに'},{n:3,k:'日本語で動かす',d:'動かして英語で言う'},{n:4,k:'英語だけ',d:'日本語なし'}];
-function wRec(id){S.world=S.world||{};return S.world[id]=S.world[id]||{found:{},clear:{},n:0,miss:0,ok:0}}
-function wStat(){S.wstat=S.wstat||{v:{},p:{}};return S.wstat}
-function wThumb(def){// シーン一覧用の小さな絵
- const W=W_new(def);const list=W.order.map(id=>W.ents[id]).sort((a,b)=>layout(W,a).d-layout(W,b).d);
- return `<svg viewBox="0 0 1000 600" class="wthumb" aria-hidden="true">${bgSvg(def.bg)}${list.map(e=>{const l=layout(W,e);if(l.hidden)return '';const fl=(e.k==='person'||e.k==='animal')&&e.flip?' scale(-1 1)':'';return `<g transform="translate(${l.x} ${l.y})${fl}">${artFor(W,e)}</g>`}).join('')}</svg>`}
-const WT={};// サムネイルのキャッシュ
 VIEWS.world=function(app){
  const done=id=>{const r=(S.world||{})[id];return r?Object.keys(r.clear||{}).length:0};
  app.innerHTML=`<div class="row">${backBtn('ホーム',{name:'home'})}<span class="sp"></span><button class="btn ghost sm" data-go='{"name":"wbook"}'>マイフレーズ帳(${(S.wfav||[]).length})</button></div>
  <div class="uhead"><span class="eyebrow">INTERACTIVE ENGLISH WORLD</span><h1>うごかす英語ワールド</h1><p>人や物をタップ・ドラッグして動かすと、その動きを表す英文が表示され、読み上げられます。動きと英語を直接むすびつけて覚えましょう。</p></div>
- <div class="wgrid">${SCENES.map((s,i)=>`<button class="wcardsel" data-go='${JSON.stringify({name:'wscene',id:s.id})}'><div class="wth">${WT[s.id]||(WT[s.id]=wThumb(s))}</div><div class="wcap"><span class="no">${String(i+1).padStart(2,'0')}</span><b>${esc(s.t)}</b><small class="en">${esc(s.en)}</small><span class="sp"></span><span class="stars">${[2,3,4].map(m=>`<span class="${(S.world||{})[s.id]&&S.world[s.id].clear[m]?'on':''}">★</span>`).join('')}</span></div><small class="muted">見つけた英文 ${Object.keys(((S.world||{})[s.id]||{}).found||{}).length} ・ ミッション ${s.missions.length}</small></button>`).join('')}</div>
+ <div class="wgrid">${WMAN.map((s,i)=>`<button class="wcardsel" data-go='${JSON.stringify({name:'wscene',id:s.id})}'><div class="wth"><img src="world/thumbs/${s.id}.svg?v=${WORLD.v}" alt="" loading="lazy" width="1000" height="600"></div><div class="wcap"><span class="no">${String(i+1).padStart(2,'0')}</span><b>${esc(s.t)}</b><small class="en">${esc(s.en)}</small><span class="sp"></span><span class="stars">${[2,3,4].map(m=>`<span class="${(S.world||{})[s.id]&&S.world[s.id].clear[m]?'on':''}">★</span>`).join('')}</span></div><small class="muted">見つけた英文 ${Object.keys(((S.world||{})[s.id]||{}).found||{}).length} ・ ミッション ${s.n}</small></button>`).join('')}</div>
  <p class="foot">★は「聞いて動かす」「日本語で動かす」「英語だけ」の各モードでミッションをすべてクリアすると付きます。</p>`;
  wireGo(app);
 };
 VIEWS.wscene=function(app){
- const def=sceneById(V.id);if(!def)return go({name:'world'},true);
+ if(!wMeta(V.id))return go({name:'world'},true);
+ const def=sceneById(V.id);
+ if(!def){app.innerHTML='<p class="muted">シーンを読み込んでいます…</p>';loadScene(V.id).then(()=>{if(V.name==='wscene')render()},()=>{app.innerHTML='<p>シーンを読み込めませんでした。通信状態を確認して、もう一度開いてください。</p>'});return}
  const R=wRec(def.id);const mode=V.mode||1;
  S.set.wEn=S.set.wEn??true;S.set.wJa=S.set.wJa??true;
  const W=RT.w&&RT.w.def===def&&RT.w.alive?RT.w:W_new(def);W.alive=true;RT.w=W;W.mode=mode;
@@ -123,18 +119,10 @@ VIEWS.wbook=function(app){const L=S.wfav||[];
  app.innerHTML=`<div class="row">${backBtn('うごかす英語ワールド',{name:'world'})}</div>
  <div class="uhead"><span class="eyebrow">MY PHRASES</span><h1>マイフレーズ帳</h1><p>ワールドで保存した英文です。シャドーイングの「保存した英文」からも練習できます。</p></div>
  ${L.length?`<section class="sheet panel"><div class="row" style="margin-bottom:10px"><button class="btn hl" id="wb-sh">シャドーイングで練習</button><button class="btn ghost" id="wb-all">${IC.play}全部聞く</button></div>
- <div class="exs">${L.map((x,i)=>`<div class="ex">${sayBtn(x.en)}<div><div class="e en">${esc(x.en)}</div><div class="j">${esc(x.ja)}</div><div class="row" style="margin-top:4px"><small class="muted">${esc((sceneById(x.sc)||{}).t||'')} ・ ${esc(x.at)}</small><button class="btn ghost sm" data-del="${i}">削除</button></div></div></div>`).join('')}</div></section>`:'<section class="sheet panel"><p>まだ保存した英文はありません。ワールドで英文カードの「☆ フレーズ帳に保存」を押すと、ここに入ります。</p></section>'}
+ <div class="exs">${L.map((x,i)=>`<div class="ex">${sayBtn(x.en)}<div><div class="e en">${esc(x.en)}</div><div class="j">${esc(x.ja)}</div><div class="row" style="margin-top:4px"><small class="muted">${esc((wMeta(x.sc)||{}).t||'')} ・ ${esc(x.at)}</small><button class="btn ghost sm" data-del="${i}">削除</button></div></div></div>`).join('')}</div></section>`:'<section class="sheet panel"><p>まだ保存した英文はありません。ワールドで英文カードの「☆ フレーズ帳に保存」を押すと、ここに入ります。</p></section>'}
  ${wWeakHtml()}`;
  wireGo(app);wireSay(app);
  const sh=app.querySelector('#wb-sh');if(sh)sh.onclick=()=>startShadow({items:L.slice(-8).map(x=>({en:x.en,ja:x.ja}))});
  const al=app.querySelector('#wb-all');if(al)al.onclick=()=>speakSeq(L.map(x=>({text:x.en,g:'f',gap:600})));
  app.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{L.splice(+b.dataset.del,1);save();render()});
 };
-function wWeakHtml(){const st=wStat();const rows=(o,lab)=>Object.entries(o).filter(([k,v])=>v[1]>=2).map(([k,v])=>({k,r:v[0]/v[1],n:v[1]})).sort((a,b)=>a.r-b.r).slice(0,5);
- const vv=rows(st.v),pp=rows(st.p);if(!vv.length&&!pp.length)return '';
- return `<section class="sheet panel"><h3 class="eyebrow">ミッションの成績(苦手な動詞・前置詞)</h3><div class="row" style="align-items:flex-start;gap:24px">
-  <div><b>動詞</b>${vv.map(x=>`<div class="en">${esc(x.k)} <small class="muted">${Math.round(x.r*100)}%(${x.n}回)</small></div>`).join('')||'<div class="muted">—</div>'}</div>
-  <div><b>前置詞</b>${pp.map(x=>`<div class="en">${esc(x.k)} <small class="muted">${Math.round(x.r*100)}%(${x.n}回)</small></div>`).join('')||'<div class="muted">—</div>'}</div></div></section>`}
-function wMatch(m,ev){const id=x=>x&&x.id;const inL=(v,x)=>Array.isArray(v)?v.includes(x):v===x;
- if(!m.v.includes(ev.v))return false;if(m.a&&id(ev.a)!==m.a)return false;if(m.o&&!inL(m.o,id(ev.o)))return false;
- if(m.r&&!inL(m.r,id(ev.r)))return false;if(m.p&&ev.p!==m.p)return false;return true}

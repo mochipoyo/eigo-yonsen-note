@@ -1,4 +1,4 @@
-// ===== うごかす英語ワールド: イラスト(SVG)=====
+// ===== ワールド: キャラクター描画(人物・動物・小物のSVG) =====
 // すべてオリジナルのベクター画。原点 (0,0) は足元(床に接する点)、+x が向いている方向。
 const OL='#3b2b2a';// 線の色
 const ow=`stroke="${OL}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"`;
@@ -36,14 +36,22 @@ function face(look,expr,dy){const cy=-138+dy,x=3;// 少し右(前)を向いた�
  const eyes=expr==='happy'?`<path d="M${x-15} ${cy+2}q5 -7 10 0M${x+5} ${cy+2}q5 -7 10 0" fill="none" stroke="${OL}" stroke-width="2.6" stroke-linecap="round"/>`
   :expr==='sleep'?`<path d="M${x-15} ${cy+1}q5 5 10 0M${x+5} ${cy+1}q5 5 10 0" fill="none" stroke="${OL}" stroke-width="2.4" stroke-linecap="round"/>`
   :[-10,10].map(o=>`<ellipse cx="${x+o}" cy="${cy}" rx="5.6" ry="7.4" fill="#fff" stroke="${OL}" stroke-width="1.6"/><ellipse cx="${x+o+1}" cy="${cy+1}" rx="${expr==='surprised'?2.6:4}" ry="${expr==='surprised'?3.2:5.6}" fill="${ir}"/><ellipse cx="${x+o+1}" cy="${cy+2.5}" rx="2.2" ry="2.6" fill="${shade(ir,-.4)}"/><circle cx="${x+o+2.4}" cy="${cy-2.2}" r="1.7" fill="#fff"/>`).join('');
- const brow=`<path d="M${x-15} ${cy-11}q5 -3 9 -1M${x+6} ${cy-12}q5 -2 9 1" fill="none" stroke="${shade(look.hair,-.3)}" stroke-width="2" stroke-linecap="round"/>`;
+ const bc=shade(look.hair,-.3);
+ const brow=expr==='sorry'?`<path d="M${x-15} ${cy-9}q5 -1 9 -5M${x+6} ${cy-14}q5 4 9 5" fill="none" stroke="${bc}" stroke-width="2" stroke-linecap="round"/>`
+  :expr==='angry'?`<path d="M${x-15} ${cy-14}q5 1 9 4M${x+6} ${cy-10}q5 -3 9 -4" fill="none" stroke="${bc}" stroke-width="2.3" stroke-linecap="round"/>`
+  :expr==='confused'?`<path d="M${x-15} ${cy-11}q5 -3 9 -1M${x+6} ${cy-16}q5 -3 9 1" fill="none" stroke="${bc}" stroke-width="2" stroke-linecap="round"/>`
+  :`<path d="M${x-15} ${cy-11}q5 -3 9 -1M${x+6} ${cy-12}q5 -2 9 1" fill="none" stroke="${bc}" stroke-width="2" stroke-linecap="round"/>`;
  const mouth=expr==='happy'?`<path d="M${x-5} ${cy+14}q5 7 10 0z" fill="#c4544f" stroke="${OL}" stroke-width="1.6"/>`
   :expr==='surprised'?`<ellipse cx="${x}" cy="${cy+16}" rx="3.2" ry="4" fill="#c4544f" stroke="${OL}" stroke-width="1.5"/>`
   :expr==='sleep'?`<path d="M${x-3} ${cy+15}q3 2 6 0" fill="none" stroke="${OL}" stroke-width="1.8"/>`
+  :expr==='sorry'||expr==='angry'?`<path d="M${x-4} ${cy+16}q4 -4 8 0" fill="none" stroke="${OL}" stroke-width="1.8" stroke-linecap="round"/>`
+  :expr==='confused'?`<path d="M${x-5} ${cy+15}q2.5 -3 5 0t5 0" fill="none" stroke="${OL}" stroke-width="1.8" stroke-linecap="round"/>`
   :`<path d="M${x-4} ${cy+14}q4 4 8 0" fill="none" stroke="${OL}" stroke-width="1.8" stroke-linecap="round"/>`;
+ // 話している間は口が開いたり閉じたりする(.talking のときだけ CSS で切りかえる)
+ const mouthO=expr==='sleep'?'':`<g class="m-o" opacity="0"><path d="M${x-5} ${cy+13}q5 -2 10 0q-1 8-5 8q-4 0-5-8z" fill="#b8473f" stroke="${OL}" stroke-width="1.5"/></g>`;
  const glasses=look.glasses?`<g fill="none" stroke="#2c2c2c" stroke-width="1.8"><circle cx="${x-10}" cy="${cy}" r="8"/><circle cx="${x+10}" cy="${cy}" r="8"/><path d="M${x-2} ${cy}h4"/></g>`:'';
  const shades=look.shades?`<g><path d="M${x-20} ${cy-6}h40v4l-4 8q-6 3-12 0l-4-6-4 6q-6 3-12 0l-4-8z" fill="#1f2330" stroke="${OL}" stroke-width="1.5"/><path d="M${x-14} ${cy-3}l5 0" stroke="#6b7bb0" stroke-width="2"/></g>`:'';
- return `${look.shades?'':eyes}${look.shades?'':brow}<ellipse cx="${x-17}" cy="${cy+9}" rx="5" ry="3" fill="#f39a9a" opacity=".55"/><ellipse cx="${x+17}" cy="${cy+9}" rx="5" ry="3" fill="#f39a9a" opacity=".55"/>${mouth}${glasses}${shades}`}
+ return `${look.shades?'':eyes}${look.shades?'':brow}<ellipse cx="${x-17}" cy="${cy+9}" rx="5" ry="3" fill="#f39a9a" opacity=".55"/><ellipse cx="${x+17}" cy="${cy+9}" rx="5" ry="3" fill="#f39a9a" opacity=".55"/><g class="m-c">${mouth}</g>${mouthO}${glasses}${shades}`}
 function hairBack(look,dy){const c=look.hair,cy=-138+dy;
  switch(look.hs){
   case 'long':return `<path d="M-34 ${cy-6}q-4 50 6 66h56q10-16 6-66z" fill="${shade(c,-.15)}" ${ow}/>`;
@@ -97,7 +105,7 @@ function personSvg(look,pose='stand',expr='normal',o={}){
  let cls='fig'+(P.walk===1?' walking':P.walk===2?' running':'')+(P.jump?' jumping':'')+(P.swim?' swimming':'');
  const k=look.k||1;
  const inner=P.lie?`<g transform="rotate(-90) translate(0 0)">${s}</g>`:s;
- return `<g class="${cls}" transform="scale(${k})">${P.lie||P.swim?'':`<ellipse cx="0" cy="0" rx="${P.legs==='ride'?54:22}" ry="5" fill="#000" opacity=".12"/>`}${inner}</g>`}
+ return `<g class="${cls}" transform="scale(${k})" style="--k:${k}">${P.lie||P.swim?'':`<ellipse cx="0" cy="0" rx="${P.legs==='ride'?54:22}" ry="5" fill="#000" opacity=".12"/>`}${inner}</g>`}
 function bikeSvg(c){return `<g class="bike"><g class="wheel" style="transform-origin:-34px -20px"><circle cx="-34" cy="-20" r="19" fill="none" stroke="${OL}" stroke-width="4"/><path d="M-34 -39v38M-53 -20h38" stroke="#888" stroke-width="1.2"/></g><g class="wheel" style="transform-origin:34px -20px"><circle cx="34" cy="-20" r="19" fill="none" stroke="${OL}" stroke-width="4"/><path d="M34 -39v38M15 -20h38" stroke="#888" stroke-width="1.2"/></g><path d="M-34 -20l18-30h34l16 30M-16 -50l12 30l22-30M-4 -20l-12-30M26 -66l-8 16" fill="none" stroke="${c}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-22 -56h16" stroke="${OL}" stroke-width="5" stroke-linecap="round"/><path d="M22 -68h10" stroke="${OL}" stroke-width="4" stroke-linecap="round"/></g>`}
 
 // ---------------- 動物 ----------------

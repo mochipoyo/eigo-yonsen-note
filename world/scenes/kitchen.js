@@ -1,0 +1,26 @@
+// ===== シーン 02 キッチン =====
+WSC.add({id:'kitchen',t:'キッチン',en:'Kitchen',bg:'kitchen',floor:[395,575],ground:{en:'the floor',ja:'床'},
+ ents:[
+  {id:'fridge',k:'fix',art:'fridge',en:'the fridge',ja:'冷蔵庫',x:110,y:350,toggle:'open',st:{open:false},inside:{x0:80,x1:140,y:228,depth:351,needOpen:true},near:{x:200,y:410,p:'next to'},hit:{x0:64,x1:160,y0:158,y1:354}},
+  {id:'sink',k:'fix',art:'sink',en:'the sink',ja:'流し台',x:420,y:350,inside:{x0:340,x1:410,y:276,depth:351},near:{x:400,y:410,p:'in front of'},hit:{x0:316,x1:524,y0:250,y1:356}},
+  {id:'table',k:'fix',art:'table',o:{w:210,h:62,c:'#c58a52',cloth:'#f6f0e6'},en:'the table',ja:'テーブル',x:690,y:505,surf:{x0:600,x1:780,y:439,front:506},under:{x0:620,x1:760,y:495}},
+  {id:'chair1',k:'fix',art:'chair',o:{face:1},en:'the chair',ja:'いす',x:545,y:512,seats:[{x:548,y:514,h:40,face:1}]},
+  {id:'chair2',k:'fix',art:'chair',o:{face:-1},en:'the other chair',ja:'もう一つのいす',x:835,y:512,seats:[{x:832,y:514,h:40,face:-1}]},
+  {id:'plate',k:'prop',art:'plate',en:'the plate',ind:'a plate',ja:'皿',cap:{p:'on',slots:[[0,-8],[10,-10],[-10,-10]]},at:{p:'on',ref:'table'},x:660,small:true},
+  {id:'glass',k:'prop',art:'glass',en:'the glass',ind:'a glass',ja:'コップ',liq:'water',liqja:'水',st:{full:false},at:{p:'on',ref:'table'},x:740,small:true},
+  {id:'bottle',k:'prop',art:'bottle',en:'the bottle',ind:'a bottle',ja:'水のボトル',pour:true,at:{p:'on',ref:'table'},x:620,small:true},
+  {id:'apple',k:'prop',art:'apple',en:'the apple',ind:'an apple',ja:'リンゴ',food:true,vanish:true,at:{p:'in',ref:'fridge'},small:true},
+  {id:'banana',k:'prop',art:'banana',en:'the banana',ind:'a banana',ja:'バナナ',food:true,vanish:true,at:{p:'in',ref:'fridge'},small:true},
+  P('mother','the mother','お母さん','she',LK.mother,300,470),
+  P('father','the father','お父さん','he',LK.father,900,440),
+  P('girl','the girl','女の子','she',LK.girl,470,560,{extra:['jump']}),
+ ],
+ missions:[
+  {t:[['mother','fridge','Open']],v:['open'],o:'fridge',ex:{v:'open',a:'mother',o:'fridge'}},
+  {t:[['mother','fridge','Open'],['mother','apple','Take']],v:['takeout'],o:'apple',ex:{v:'takeout',a:'mother',o:'apple',r:'fridge'}},
+  {t:[['mother','fridge','Open'],['mother','apple','Take'],['mother','plate','Put the apple']],v:['put','place'],o:'apple',r:'plate',p:'on',ex:{v:'place',o:'apple',r:'plate',p:'on'}},
+  {t:[['father','bottle','Pick up'],['father','glass','Pour']],v:['pour'],r:'glass',ex:{v:'pour',a:'father',r:'glass'}},
+  {t:[['girl','chair1','Sit on']],v:['sit'],a:'girl',r:['chair1','chair2'],ex:{v:'sit',a:'girl',r:'chair1',p:'on'}},
+  {t:[['drag','plate','sink']],v:['put','place'],o:'plate',r:'sink',p:'in',ex:{v:'put',a:'father',o:'plate',r:'sink',p:'in'}},
+  {t:[['girl','fridge','Open'],['girl','banana','Eat']],v:['eat'],o:'banana',ex:{v:'eat',a:'girl',o:'banana'}},
+ ]});

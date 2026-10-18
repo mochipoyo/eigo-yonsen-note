@@ -346,7 +346,7 @@ code{font-family:var(--f-num);font-size:.9em;background:color-mix(in srgb,var(--
 .wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
 .wcardsel{border:1.5px solid var(--line);background:var(--sheet);border-radius:var(--r);padding:0;overflow:hidden;text-align:left;display:flex;flex-direction:column;transition:transform .12s,border-color .12s}
 .wcardsel:hover{transform:translateY(-2px);border-color:var(--ink)}
-.wth{aspect-ratio:5/3;background:#f6efe2;overflow:hidden}.wthumb{width:100%;height:100%;display:block}
+.wth{aspect-ratio:5/3;background:#f6efe2;overflow:hidden}.wthumb,.wth img{width:100%;height:100%;display:block;object-fit:cover}
 .wcap{display:flex;align-items:center;gap:8px;padding:8px 12px 0}.wcap .no{font-family:var(--f-num);font-size:12px;color:var(--muted)}
 .wcardsel>small{padding:0 12px 10px}
 .wtop{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -362,6 +362,11 @@ code{font-family:var(--f-num);font-size:.9em;background:color-mix(in srgb,var(--
 .walking .lgB,.walking .armF{animation:wlk .45s ease-in-out infinite alternate}.walking .lgF,.walking .armB{animation:wlk .45s ease-in-out infinite alternate-reverse}
 .running .lgB,.running .armF{animation:run .26s ease-in-out infinite alternate}.running .lgF,.running .armB{animation:run .26s ease-in-out infinite alternate-reverse}
 .walking>*:not(ellipse),.running>*:not(ellipse){animation:bobw .45s ease-in-out infinite alternate}
+/* ワールド: 話している人の口・吹き出し・タップしやすさ */
+.went.talking .m-o{animation:mOpen .28s steps(1) infinite}.went.talking .m-c{animation:mClose .28s steps(1) infinite}
+@keyframes mOpen{0%{opacity:0}50%{opacity:1}}@keyframes mClose{0%{opacity:1}50%{opacity:0}}
+.went .hitpad{fill:transparent}
+.tdots circle{animation:tdot 1s infinite}.tdots circle:nth-child(2){animation-delay:.15s}.tdots circle:nth-child(3){animation-delay:.3s}@keyframes tdot{50%{opacity:.25}}
 @keyframes wlk{from{transform:rotate(-20deg)}to{transform:rotate(20deg)}}
 @keyframes run{from{transform:rotate(-34deg)}to{transform:rotate(34deg)}}
 @keyframes bobw{to{transform:translateY(-3px)}}

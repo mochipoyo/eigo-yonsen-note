@@ -1,0 +1,28 @@
+// ===== シーン 06 学校 =====
+WSC.add({id:'school',t:'学校',en:'Classroom',bg:'school',floor:[420,580],ground:{en:'the floor',ja:'床'},
+ ents:[
+  {id:'board',k:'fix',art:'blackboard',en:'the blackboard',ja:'黒板',x:470,y:300,wall:true,text:'Good morning!',near:{x:330,y:430,p:'in front of'},hit:{x0:314,x1:626,y0:136,y1:302}},
+  {id:'chair1',k:'fix',art:'chair',o:{face:1},owner:'ken',base:'chair',baseja:'いす',en:'Ken\'s chair',ja:'ケンのいす',x:250,y:470,seats:[{x:250,y:472,h:40,face:1}]},
+  {id:'chair2',k:'fix',art:'chair',o:{face:1},owner:'mia',base:'chair',baseja:'いす',en:'Mia\'s chair',ja:'ミアのいす',x:500,y:470,seats:[{x:500,y:472,h:40,face:1}]},
+  {id:'chair3',k:'fix',art:'chair',o:{face:1},owner:'sora',base:'chair',baseja:'いす',en:'Sora\'s chair',ja:'ソラのいす',x:750,y:470,seats:[{x:750,y:472,h:40,face:1}]},
+  {id:'desk1',k:'fix',art:'desk',owner:'ken',base:'desk',baseja:'机',en:'Ken\'s desk',ja:'ケンの机',x:270,y:520,surf:{x0:215,x1:325,y:456,front:521},under:{x0:225,x1:315,y:512}},
+  {id:'desk2',k:'fix',art:'desk',owner:'mia',base:'desk',baseja:'机',en:'Mia\'s desk',ja:'ミアの机',x:520,y:520,surf:{x0:465,x1:575,y:456,front:521},under:{x0:475,x1:565,y:512}},
+  {id:'desk3',k:'fix',art:'desk',owner:'sora',base:'desk',baseja:'机',en:'Sora\'s desk',ja:'ソラの机',x:770,y:520,surf:{x0:715,x1:825,y:456,front:521},under:{x0:725,x1:815,y:512}},
+  {id:'notebook',k:'prop',art:'notebook',en:'the notebook',ind:'a notebook',ja:'ノート',write:true,openable:true,at:{p:'on',ref:'desk1'},x:280,small:true},
+  {id:'book',k:'prop',art:'book',en:'the textbook',ind:'a textbook',ja:'教科書',read:true,at:{p:'on',ref:'desk2'},x:530,small:true},
+  {id:'pen',k:'prop',art:'pen',en:'the pen',ind:'a pen',ja:'ペン',at:{p:'on',ref:'desk3'},x:790,small:true},
+  {id:'bag',k:'prop',art:'schoolbag',en:'the bag',ind:'a bag',ja:'かばん',x:880,y:570,small:true},
+  P('teacher','the teacher','先生','she',LK.teacher,130,450),
+  P('ken','Ken','ケン','he',LK.ken,330,570,{extra:['raise']}),
+  P('mia','Mia','ミア','she',LK.mia,590,570,{extra:['raise']}),
+  P('sora','Sora','ソラ','he',LK.sora,930,560,{extra:['raise','run']}),
+ ],
+ missions:[
+  {t:[['ken','chair1','Sit on']],v:['sit'],a:'ken',ex:{v:'sit',a:'ken',r:'chair1',p:'on'}},
+  {t:[['mia','self','Raise']],v:['raise'],a:'mia',ex:{v:'raise',a:'mia'}},
+  {t:[['ken','notebook','Open']],v:['open'],o:'notebook',ex:{v:'open',a:'ken',o:'notebook'}},
+  {t:[['teacher','board','Write on']],v:['write'],a:'teacher',ex:{v:'write',a:'teacher',r:'board',p:'on'}},
+  {t:[['mia','book','Pick up'],['mia','teacher','Give']],v:['give'],o:'book',r:'teacher',ex:{v:'give',a:'mia',o:'book',r:'teacher'}},
+  {t:[['sora','bag','Pick up'],['sora','desk3','Put the bag under']],v:['put','place'],o:'bag',p:'under',ex:{v:'put',a:'sora',o:'bag',r:'desk3',p:'under'}},
+  {t:[['ken','notebook','Write in']],v:['write_nb'],o:'notebook',ex:{v:'write_nb',a:'ken',o:'notebook'}},
+ ]});
