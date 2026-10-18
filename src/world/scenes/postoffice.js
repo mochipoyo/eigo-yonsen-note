@@ -51,7 +51,7 @@ WSC.add({id:'postoffice',t:'郵便局',en:'Post Office',cat:'daily',bg:'postoffi
    {if:{variant:'big'},id:'sea',focus:'howabout',talk:{ja:'提案を受けよう',hint:"OK. By sea is fine."},to:'clerk',
     intents:[I('ok',[U.yes.concat(['sea','that is fine','thats fine','sounds good'])],'OK. By sea is fine.',{main:true,setVar:{how:'sea'},ja:'わかりました。船便でいいです。',not:[['no','not']]})],choices:[{en:'OK. By sea is fine.',i:'ok'}]},
    {id:'long',focus:'doyoumean',talk:{ja:'届くまでの日数を確かめよう',hint:'So it will take {how.days}?'},to:'clerk',
-    intents:[I('d',[U.doyoumean.concat(['so','will it take','how long','right']),['week','month*','day*','how long']],'So it will take {how.days}?',{main:true,ja:'では、{how.daysja}かかるということですね。',alts:['How long will it take?'],reply:[{say:"That's right. It takes {how.days}.",ja:'そうです。{how.daysja}かかります。'}]}),
+    intents:[I('d',[U.doyoumean.concat(['so','will it take','how long','right']),['week','month*','day*','how long']],'So it will take {how.days}?',{main:true,ja:'では、{how.daysja}かかるということですね。',alts:['How long will it take?'],reply:[{say:"It takes {how.days}.",ja:'{how.daysja}かかります。'}]}),
      I('ok',[U.thanks.concat(['i see','got it','ok'])],'OK, thank you.',{ja:'わかりました。'})],
     choices:[{en:'So it will take {how.days}?',i:'d'},{en:'OK, thank you.',i:'ok'}]},
    SAY('clerk','Please fill out this customs form.','こちらの税関の用紙にご記入ください。',{key:true}),

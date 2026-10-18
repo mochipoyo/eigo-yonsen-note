@@ -50,7 +50,7 @@ WSC.add({id:'entrance',t:'玄関',en:'Entrance',cat:'daily',bg:'entrance',floor:
      I('yes',[['yes','yeah','yep']],'Yes.',{tone:'wrong',retry:true,not:[['yes of course','yes sure','yes no problem','yes that is fine','thats fine','yes ok','no problem','fine']],why:'Would you mind ...? に Yes と答えると「いやです」の意味になります。引き受けるなら Not at all. / No problem. です。',reply:[{say:"Oh... you'd rather keep them on?",ja:'あら…靴のままがいいの?',expr:'confused',exprAfter:'normal'}]})],
     choices:[{en:'Not at all.',i:'ok'},{en:'Yes.',i:'yes'}]},
    {id:'shoes',t:[['rack','Take off your shoes']],act:{ja:'靴箱のところで靴をぬぐ',hint:'靴箱をタップして「Take off your shoes」'},ev:{v:'custom',act:'shoesoff'},done:{st:['rack','shoes',true]}},
-   {if:{variant:'rain'},npc:'host',say:'Oh, your umbrella is wet. Could you put it on the shoe rack, too?',ja:'あら、かさがぬれているわね。それも靴箱の上に置いてくれる?',key:true},
+   {if:{variant:'rain'},npc:'host',say:'Oh, your umbrella is wet. Could you leave it by the shoe rack?',ja:'あら、かさがぬれているわね。靴箱のそばに置いておいてくれる?',key:true},
    {if:{variant:'rain'},id:'umb',t:[['rack','Put the umbrella on']],act:{ja:'かさを靴箱の上に置く',hint:'靴箱をタップして「Put the umbrella on the shoe rack」'},ev:{v:'put',o:'umbrella',r:'rack'},done:{on:['umbrella','rack']}},
    {id:'giftt',talk:{ja:'おみやげを渡すときの一言',hint:'This is a small gift for you.'},to:'host',
     intents:[I('g',[['gift','present','for you','something for you','souvenir']],'This is a small gift for you.',{main:true,ja:'ささやかですが、おみやげです。',alts:['I brought something for you.']})],
@@ -61,7 +61,7 @@ WSC.add({id:'entrance',t:'玄関',en:'Entrance',cat:'daily',bg:'entrance',floor:
    {id:'drink',focus:'could',talk:{ja:'飲み物をお願いしよう',hint:'Yes, please. Could I have {drk.en}?'},to:'host',
     intents:DRK.map(d=>I('d_'+d.id,[U.req.concat(['yes']),d.u],`Yes, please. Could I have ${d.en}?`,{main:d.id==='water',setVar:{drk:d.id},ja:`はい、${d.ja}をいただけますか。`,alts:[`${d.en.replace('some ','')}, please.`.replace(/^./,c=>c.toUpperCase())]})).concat([I('no',[['no thank you','no thanks','i am fine','im fine']],"No, thank you. I'm fine.",{ja:'いいえ、大丈夫です。'})]),
     choices:[{en:'Yes, please. Could I have some water?',i:'d_water'},{en:'Yes, please. Could I have some tea?',i:'d_tea'},{en:"No, thank you. I'm fine.",i:'no'}]},
-   SAY('host',"Sure! Come into the living room.",'いいわよ!リビングへどうぞ。',{expr:'happy'}),
+   SAY('host',"OK! Come into the living room.",'じゃあ、リビングへどうぞ!',{expr:'happy'}),
   ],
   goal:{all:[{st:['rack','shoes',true]},{held:['gift','host']}]}},
  ]});

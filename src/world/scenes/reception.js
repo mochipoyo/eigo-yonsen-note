@@ -1,7 +1,7 @@
 // ===== シーン 34 会社の受付 =====
 // 会話ミッションの t は自動テスト用の手順([相手,動作の名前の先頭]。'self' は自分の役、'@変数' はそのときの品)
 (()=>{
-const VS=[{id:'brown',name:'David Brown',last:'Brown',co:'Greenfield',ja:'グリーンフィールド社のブラウン様',u:['brown','david']},{id:'park',name:'Sarah Park',last:'Park',co:'Blue Ocean',ja:'ブルーオーシャン社のパーク様',u:['park','sarah']}];
+const VS=[{id:'brown',name:'David Brown',last:'Brown',co:'Greenfield',ja:'グリーンフィールド社のブラウン様',u:['brown','david']},{id:'park',name:'Daniel Park',last:'Park',co:'Blue Ocean',ja:'ブルーオーシャン社のパーク様',u:['park','daniel']}];
 WSC.add({id:'reception',t:'会社の受付',en:'Reception',cat:'business',bg:'reception',floor:[430,580],ground:{en:'the floor',ja:'床'},
  ents:[
   {id:'logo',k:'fix',art:'logowall',o:{label:'SKYTECH',c:'#1f8455'},en:'the company logo',ja:'会社のロゴ',x:300,y:260,wall:true},
@@ -58,7 +58,7 @@ WSC.add({id:'reception',t:'会社の受付',en:'Reception',cat:'business',bg:'re
     choices:[{en:'Ms. Tanaka will be right down. Please have a seat.',i:'t'}]},
    {if:{variant:'late'},id:'wait',focus:'wouldmind',talk:{ja:'遅れることを伝えて、待ってもらえるかていねいに聞こう',hint:'Ms. Tanaka will be about ten minutes late. Would you mind waiting on the sofa?'},to:'vis',
     intents:[I('w',[['late','ten minutes','delayed','a few minutes'],['would you mind','could you','please','wait*']],'Ms. Tanaka will be about ten minutes late. Would you mind waiting on the sofa?',{main:true,ja:'田中は10分ほど遅れるそうです。ソファでお待ちいただいてもよろしいですか。',alts:["I'm afraid Ms. Tanaka is running about ten minutes late. Could you wait here, please?"]}),
-     I('late0',[['late','ten minutes']],'She is late.',{tone:'unnatural',better:'Ms. Tanaka will be about ten minutes late. Would you mind waiting on the sofa?',why:'遅れることだけでなく、どうしてほしいかをていねいにお願いしましょう。',reply:[{say:'Oh, I see. Should I wait here?',ja:'そうですか。ここで待てばいいですか。'}]})],
+     I('late0',[['late','ten minutes']],'She is late.',{tone:'unnatural',retry:true,better:'Ms. Tanaka will be about ten minutes late. Would you mind waiting on the sofa?',why:'遅れることだけでなく、どうしてほしいかをていねいにお願いしましょう。',reply:[{say:'Oh, I see. Should I wait here?',ja:'そうですか。ここで待てばいいですか。'}]})],
     choices:[{en:'Ms. Tanaka will be about ten minutes late. Would you mind waiting on the sofa?',i:'w'},{en:'She is late.',i:'late0'}]},
    {if:{variant:'late'},npc:'vis',say:"Not at all. Thank you.",ja:'かまいませんよ。ありがとう。',key:true},
    {id:'badge',t:[['badge','Pick up'],['vis','Give']],act:{ja:'来客用バッジを渡す',hint:'バッジを持って、来客をタップ「Give the visitor badge」'},ev:{v:'give',o:'badge',r:'vis'},done:{held:['badge','vis']}},

@@ -34,7 +34,7 @@ WSC.add({id:'hospital',t:'病院',en:'Clinic',cat:'daily',bg:'hospital',floor:[4
  stories:[
  {id:'hosp-visit',t:'症状を伝える',en:'Tell the doctor your symptoms',me:'pat',desc:'受付で手続きをして、医師に症状といつからかを伝え、薬の飲み方を確かめる。',goalJa:'受付をすませ、症状と期間を伝え、薬の飲み方を確認して処方せんを受け取る',
   focus:['problem','doyoumean','afraid','could'],
-  intro:'あなたは体調が悪くて病院に来ました。症状: {sym.jp}({since.ja})。',
+  intro:'あなたはリーです。体調が悪くて病院に来ました。症状: {sym.jp}({since.ja})。',
   vars:{sym:SYM,since:SINCE},
   variants:[{id:'normal',w:1},{id:'nocard',w:1}],
   init:[{op:'hide',id:'card',if:{variant:'nocard'}},{op:'pos',who:'pat',x:560,y:560}],

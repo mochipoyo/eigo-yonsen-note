@@ -41,7 +41,7 @@ WSC.add({id:'touristinfo',t:'観光案内所',en:'Tourist Information',cat:'trav
      I('b_'+p.id,[p.u],`${p.en[0].toUpperCase()+p.en.slice(1)}.`,{setVar:{pl:p.id},tone:'unnatural',better:`I think ${p.en} sounds great because ${p.why}.`,why:'理由をそえると、相手もおすすめの情報を足しやすくなります。'})]),
     choices:[{en:'I think the castle sounds great because I love history.',i:'w_castle'},{en:'I think the art museum sounds great because I love paintings.',i:'w_museum'},{en:'The castle.',i:'b_castle'}]},
    DO({op:'setvar',k:'alt',other:'pl'}),
-   {if:{all:[{variant:'closed'},{var:['pl','museum']}]},npc:'guide',say:"Oh, I'm afraid the art museum is closed on Mondays. How about the castle instead?",ja:'あ、あいにく美術館は月曜日休館なんです。代わりにお城はいかがですか。',expr:'sorry',exprAfter:'normal',key:true},
+   {if:{all:[{variant:'closed'},{var:['pl','museum']}]},npc:'guide',say:"Oh, I'm afraid the art museum is closed today. How about the castle instead?",ja:'あ、あいにく美術館は今日は休館なんです。代わりにお城はいかがですか。',expr:'sorry',exprAfter:'normal',key:true},
    {if:{all:[{variant:'closed'},{var:['pl','castle']}]},npc:'guide',say:"Oh, I'm afraid the castle is closed today for repairs. How about the art museum instead?",ja:'あ、あいにくお城は今日、修理のため閉まっているんです。代わりに美術館はいかがですか。',expr:'sorry',exprAfter:'normal',key:true},
    {if:{variant:'closed'},id:'alt',focus:'howabout',talk:{ja:'提案を受けよう',hint:'Sure, that sounds good.'},to:'guide',
     intents:[I('ok',[U.yes.concat(['sounds good','that is fine','thats fine','great','why not'])],'Sure, that sounds good.',{main:true,setVar:{pl:'@alt'},ja:'はい、いいですね。',not:[['no']]})],choices:[{en:'Sure, that sounds good.',i:'ok'}]},

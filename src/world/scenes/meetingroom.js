@@ -1,7 +1,7 @@
 // ===== シーン 33 会議室 =====
 // 会話ミッションの t は自動テスト用の手順([相手,動作の名前の先頭]。'self' は自分の役、'@変数' はそのときの品)
 (()=>{
-const OP=[{id:'ads',en:'spend more on online ads',ja:'ネット広告にもっとお金をかける',why:'our product is not well known yet',whyja:'まだ製品があまり知られていない',u:['ads','advertising','advertise','online','promotion']},{id:'price',en:'lower our prices a little',ja:'少し値下げする',why:'our prices are higher than our competitors',whyja:'競合より価格が高い',u:['lower','price*','cheaper','discount']}];
+const OP=[{id:'ads',en:'spend more on online ads',ja:'ネット広告にもっとお金をかける',why:'our product is not well known yet',whyja:'まだ製品があまり知られていない',u:['ads','advertising','advertise','online','promotion']},{id:'price',en:'lower our prices a little',ja:'少し値下げする',why:'our prices are higher than our competitors\' prices',whyja:'競合より価格が高い',u:['lower','price*','cheaper','discount']}];
 WSC.add({id:'meetingroom',t:'会議室',en:'Meeting Room',cat:'business',bg:'meetingroom',floor:[430,580],ground:{en:'the floor',ja:'床'},
  ents:[
   {id:'screen',k:'fix',art:'screen',o:{w:300,h:170,chart:true,fs:18},st:{text:'SALES Q3'},en:'the screen',ja:'スクリーン',x:380,y:290,wall:true,hit:{x0:230,x1:530,y0:120,y1:290}},
@@ -38,7 +38,7 @@ WSC.add({id:'meetingroom',t:'会議室',en:'Meeting Room',cat:'business',bg:'mee
    {id:'op',focus:'ithink',talk:{ja:'どちらがよいか、理由と一緒に意見を言おう',hint:'I think we should {op.en} because {op.why}.'},to:'boss',
     intents:OP.flatMap(o=>[I('o_'+o.id,[U.think,o.u,U.reason],`I think we should ${o.en} because ${o.why}.`,{main:o.id==='ads',setVar:{op:o.id},ja:`${o.whyja}ので、${o.ja}べきだと思います。`}),
      I('ob_'+o.id,[o.u],`${o.en[0].toUpperCase()+o.en.slice(1)}.`,{setVar:{op:o.id},tone:'unnatural',better:`I think we should ${o.en} because ${o.why}.`,why:'会議では I think ... because ... と、意見と理由をセットで言うと説得力が出ます。'})]),
-    choices:[{en:'I think we should spend more on online ads because our product is not well known yet.',i:'o_ads'},{en:'I think we should lower our prices a little because our prices are higher than our competitors.',i:'o_price'},{en:'Spend more on online ads.',i:'ob_ads'}]},
+    choices:[{en:'I think we should spend more on online ads because our product is not well known yet.',i:'o_ads'},{en:'I think we should lower our prices a little because our prices are higher than our competitors\' prices.',i:'o_price'},{en:'Spend more on online ads.',i:'ob_ads'}]},
    {if:{variant:'disagree'},npc:'ryo',say:"Hmm, I'm not so sure. Why do you think that's the best option?",ja:'うーん、どうかな。どうしてそれが一番いいと思うの?',key:true},
    {if:{variant:'disagree'},id:'why',focus:'reason',talk:{ja:'理由をくわしく説明しよう',hint:'The reason is that {op.why}.'},to:'ryo',
     intents:[I('r',[U.reason.concat(['because']),['{op.u}','known','competitor*','higher','customer*','people']],'The reason is that {op.why}.',{main:true,ja:'理由は、{op.whyja}からです。',alts:['Because {op.why}.']}),
@@ -47,7 +47,7 @@ WSC.add({id:'meetingroom',t:'会議室',en:'Meeting Room',cat:'business',bg:'mee
    {if:{variant:'mis'},npc:'ryo',say:'So you mean we should cut the marketing budget?',ja:'つまり、マーケティング予算を減らすべきってこと?',key:true},
    {if:{variant:'mis'},id:'fix',focus:'whatimean',talk:{ja:'誤解されている。言い換えて伝え直そう',hint:'No, what I mean is, we should {op.en}.'},to:'ryo',
     intents:[I('f',[U.mean.concat(['no','not']),['{op.u}','should']],'No, what I mean is, we should {op.en}.',{main:true,ja:'いいえ、つまり、{op.ja}べきだということです。',not:[['yes that is right','yes exactly']]}),
-     I('yes',[['yes','yeah','right','exactly']],'Yes.',{tone:'wrong',retry:true,not:[['no','not']],why:'言いたいことと逆の意味で受け取られています。その場で言い換えて直しましょう。',do:[{op:'think',who:'me',say:"Wait, that's not what I meant.",ja:'(待って、そういう意味じゃない)'}]})],
+     I('yes',[['yes','yeah','right','exactly']],'Yes.',{tone:'wrong',retry:true,not:[['no','not']],why:'言いたいことと違う意味で受け取られています。その場で言い換えて直しましょう。',do:[{op:'think',who:'me',say:"Wait, that's not what I meant.",ja:'(待って、そういう意味じゃない)'}]})],
     choices:[{en:'No, what I mean is, we should {op.en}.',i:'f'},{en:'Yes.',i:'yes'}]},
    SAY('boss',"Good idea. Could you prepare a plan by Friday?",'いい考えだ。金曜日までに計画を用意してくれるかな?',{expr:'happy',exprAfter:'normal',key:true}),
    {id:'plan',talk:{ja:'引き受けよう(必要なら日にちを確かめる)',hint:"Sure. I'll have it ready by Friday. / Do you mean this Friday?"},to:'boss',

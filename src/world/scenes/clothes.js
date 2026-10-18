@@ -35,7 +35,7 @@ WSC.add({id:'clothes',t:'洋服店',en:'Clothing Store',cat:'social',bg:'clothes
    {id:'go',t:[['clerk','Talk to']],act:{ja:'店員に話しかける',hint:'店員をタップして「Talk to the sales clerk」'},ev:{v:'talkto',r:'clerk'}},
    {id:'try',focus:'could',talk:{ja:'試着していいか聞こう',hint:'Excuse me. Could I try this on?'},to:'clerk',
     intents:[I('t',[['try this on','try it on','try on','fitting room']],'Excuse me. Could I try this on?',{main:true,ja:'すみません、これを試着してもいいですか。',alts:['Where is the fitting room?']}),
-     I('buy',[['buy','how much','take it']],"I'd like to buy this.",{ja:'これを買いたいです。',tone:'unnatural',better:'Excuse me. Could I try this on?',why:'サイズが合うか分からないときは、先に試着を頼むと安心です。',reply:[{say:'Sure. Would you like to try it on first?',ja:'はい。先に試着なさいますか。'}]})],
+     I('buy',[['buy','how much','take it']],"I'd like to buy this.",{ja:'これを買いたいです。',tone:'unnatural',better:'Excuse me. Could I try this on?',why:'英語としては自然な言い方ですが、ここでは順番の問題です。サイズが合うか分からないときは、買う前に試着を頼むと安心です。',reply:[{say:'Sure. Would you like to try it on first?',ja:'はい。先に試着なさいますか。'}]})],
     choices:[{en:'Excuse me. Could I try this on?',i:'t'},{en:"I'd like to buy this.",i:'buy'}]},
    SAY('clerk',"Of course. The fitting room is over there.",'もちろんです。試着室はあちらです。',{key:true}),
    {id:'in',t:[['fit','Go into']],act:{ja:'試着室に入る',hint:'試着室をタップして「Go into the fitting room」'},ev:{v:'enter',r:'fit'},done:{inside:['cust','fit']}},
