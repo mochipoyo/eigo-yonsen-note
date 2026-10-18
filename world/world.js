@@ -387,6 +387,7 @@ const FIX={
  podium:(st,o)=>`<path d="M-36 0l6-100h60l6 100z" fill="#7a5a3a" ${ow}/><path d="M-44 -100h88l-6-16h-76z" fill="#9a7450" ${ow}/><rect x="-14" y="-70" width="28" height="20" rx="3" fill="#f5c542" ${ow}/><path d="M10 -116l14-24" stroke="${OL}" stroke-width="3"/><circle cx="26" cy="-142" r="5" fill="${OL}"/>`,
  logowall:(st,o)=>`<rect x="-120" y="-90" width="240" height="90" rx="6" fill="${o.c||'#1f8455'}" ${ow}/><text y="-36" text-anchor="middle" font-size="26" font-weight="700" fill="#fff" letter-spacing="4" font-family="'Lexend',sans-serif">${esc(o.label||'')}</text>`,
  wallswitch:(st,o)=>`<rect x="-22" y="-60" width="44" height="60" rx="5" fill="#f4f6fb" ${ow}/><circle cx="0" cy="-38" r="8" fill="${st.on?'#e74c3c':'#c3ccd8'}" ${ow}/><text y="-10" text-anchor="middle" font-size="9" fill="${OL}" font-family="sans-serif">${esc(o.label||'')}</text>`,
+ trashcan:(st,o)=>`<path d="M-20 0l-4-50h48l-4 50z" fill="#8892a6" ${ow}/><rect x="-26" y="-58" width="52" height="9" rx="3" fill="#6c7385" ${ow}/><path d="M-8 -40v32M0 -40v32M8 -40v32" stroke="#6c7385" stroke-width="2"/>`,
  whiteboard:(st,o)=>`<rect x="-140" y="-150" width="280" height="150" rx="6" fill="#d9dde6" ${ow}/><rect x="-132" y="-142" width="264" height="134" fill="#fbfcff"/>${st.text?`<text x="-110" y="-90" font-family="'Lexend',sans-serif" font-size="26" fill="#2a63c4">${esc(st.text)}</text>`:'<path d="M-110 -110h120M-110 -84h170M-110 -58h90" stroke="#c9d3e6" stroke-width="5"/>'}<rect x="-120" y="-8" width="240" height="6" fill="#a3acbd" ${ow}/>`,
  cushion:(st,o)=>``,
 };
@@ -565,12 +566,13 @@ function imperative(g){const v=g.v,A=g.a,O=g.o,R=g.r,p=g.p;
 // 1) 文の形の検査: 文頭の大文字・文末記号・a/an・同じ語の重複・置きかえ忘れの {..}
 // 2) 会話ミッションの検査: 模範の英文・ほかの言い方・選択肢が、それぞれ自分の意図として受け取られるか(正しい言い方を不正解にしないため)
 // 3) 参照の検査: 登場人物・物・変数が存在するか
-const A_OK=/^(a|an) (one|once|uni|use[drs]?|usual|euro|user|united|university|hour|honest|honor|heir)/i;
+const A_OK=/^(a|an) (one|once|uni|use[drs]?|usual|euro|user|united|university|hour|honest|honor|heir|suv|sos|mba|fbi|x)/i;
 function wLint(t,where){const e=[];if(!t)return e;const s=String(t).trim();
  if(/\{[\w.]+\}/.test(s))e.push(`${where}: 置きかえ忘れ ${s}`);
  if(/  /.test(s))e.push(`${where}: 空白が2つ "${s}"`);
  if(/^[a-z]/.test(s)&&!/^(iPhone|e\.g\.)/.test(s))e.push(`${where}: 文頭が小文字 "${s}"`);
  if(!/[.?!"')…]$/.test(s))e.push(`${where}: 文末記号なし "${s}"`);
+ if(/[^.]\b\w{2,}[.?!] [a-z]/.test(s.replace(/\b(a\.m|p\.m|e\.g|Mr|Ms|Mrs|Dr)\./g,'')))e.push(`${where}: 文の途中で小文字始まり "${s}"`);
  const w=s.toLowerCase().replace(/[^a-z0-9' ]/g,' ').split(/\s+/).filter(Boolean);
  for(let i=0;i+1<w.length;i++){if(w[i]===w[i+1]&&!['that','had','very','bye'].includes(w[i]))e.push(`${where}: 同じ語の重複 "${w[i]} ${w[i+1]}" in "${s}"`);
   if(w[i]==='a'&&/^[aeio]/.test(w[i+1])&&!A_OK.test('a '+w[i+1]))e.push(`${where}: a + 母音 "${s}"`);
@@ -633,7 +635,7 @@ function wCheckAll(order){const errors=[],rep=[];let nIntent=0,nChoice=0,nLine=0
 // ===== ワールド: オブジェクト状態管理(配置・持つ・座る・位置と奥行き)。描画やDOMには依存しない =====
 const USER={user:true,en:'I',ja:'私',k:'user'};
 // 家具の大きさ(当たり判定用) [幅, 高さ]
-const FIXSZ={wallswitch:[44,60],shoerack:[140,56],coathook:[160,90],bathtub:[240,80],basin:[100,110],mirror:[100,120],towelrack:[120,60],curtain:[128,200],tallshelf:[180,230],mailbox:[52,130],xray:[260,150],detector:[116,212],planeseat:[290,120],bin:[300,60],cart:[80,110],ac:[160,44],mapboard:[220,150],ticketmachine:[72,150],linemap:[260,110],atm:[88,170],rack:[180,170],salonchair:[70,120],poster:[110,160],theaterseats:[290,96],screen:[300,170],treadmill:[160,128],dumbrack:[140,60],balloons:[80,212],podium:[88,140],logowall:[240,90],elevator:[124,196],fboard:[340,134],gatesign:[92,206],scale:[120,42],plant:[60,120],signpost:[80,184],menuboard:[240,130],towel:[124,24],sea:[1000,160],whiteboard:[290,156],sofa:[250,110],chair:[56,104],table:[160,70],desk:[120,64],tv:[150,150],door:[96,186],window:[172,130],fridge:[90,192],sink:[210,100],bed:[280,112],lamp:[60,160],clock:[56,56],tree:[220,290],bench:[176,90],pond:[264,70],flowers:[124,44],bicycle:[110,70],counter:[250,104],register:[64,56],blackboard:[316,164],shelf:[204,184],gate:[124,110],train:[524,206],computer:[70,60],deskphone:[44,30],parasol:[224,200],car:[210,110],trafficlight:[50,214],crosswalk:[260,72],shop:[284,244],building:[184,320]};
+const FIXSZ={trashcan:[52,58],wallswitch:[44,60],shoerack:[140,56],coathook:[160,90],bathtub:[240,80],basin:[100,110],mirror:[100,120],towelrack:[120,60],curtain:[128,200],tallshelf:[180,230],mailbox:[52,130],xray:[260,150],detector:[116,212],planeseat:[290,120],bin:[300,60],cart:[80,110],ac:[160,44],mapboard:[220,150],ticketmachine:[72,150],linemap:[260,110],atm:[88,170],rack:[180,170],salonchair:[70,120],poster:[110,160],theaterseats:[290,96],screen:[300,170],treadmill:[160,128],dumbrack:[140,60],balloons:[80,212],podium:[88,140],logowall:[240,90],elevator:[124,196],fboard:[340,134],gatesign:[92,206],scale:[120,42],plant:[60,120],signpost:[80,184],menuboard:[240,130],towel:[124,24],sea:[1000,160],whiteboard:[290,156],sofa:[250,110],chair:[56,104],table:[160,70],desk:[120,64],tv:[150,150],door:[96,186],window:[172,130],fridge:[90,192],sink:[210,100],bed:[280,112],lamp:[60,160],clock:[56,56],tree:[220,290],bench:[176,90],pond:[264,70],flowers:[124,44],bicycle:[110,70],counter:[250,104],register:[64,56],blackboard:[316,164],shelf:[204,184],gate:[124,110],train:[524,206],computer:[70,60],deskphone:[44,30],parasol:[224,200],car:[210,110],trafficlight:[50,214],crosswalk:[260,72],shop:[284,244],building:[184,320]};
 const SPEED={walk:150,run:330};
 function W_new(def){// シーン定義から実行用の状態を作る
  const W={def,ents:{},order:[],busy:false,sel:null,ground:{en:def.ground?.en||'the floor',ja:def.ground?.ja||'床',k:'ground',id:'ground'}};
@@ -925,6 +927,9 @@ function comboMenu(W,a,t){const m=[];if(!t||t===a)return m;
   if(t.art==='blackboard')m.push(wA(`Write on ${t.en}`,`${t.ja}に書く`,async()=>{await moveTo(W,a,t.near.x,t.near.y,'walk');a.flip=false;a.act='write';W.draw();await wait(500);t.st.text=t.text||'Hello!';W.bgDirty=true;W.draw();return {v:'write',a,r:t,p:'on'}}));
   if(t.art==='register'&&!a.staff)m.push(wA(`Pay at ${t.en}`,`${t.ja}でお金を払う`,async()=>{await goNear(W,a,t);a.act='give';W.draw();await wait(500);t.st.paid=true;a.act=null;W.draw();return {v:'pay',a,r:t}}));
   if(t.art==='train'&&t.st.open&&!t.st.leaving)m.push(wA('Get on the train','電車に乗る',async()=>{await moveTo(W,a,t.x+(t.doorX||-120),t.boardY||t.y+80,'walk');a.inside=t.id;a.hidden=true;if(a.hold){}W.draw();return {v:'board',a,r:t}}));
+  if(t.art==='detector')m.push(wA(`Walk through ${t.en}`,`${t.ja}を通る`,async()=>{const side=a.x>t.x?-1:1;await moveTo(W,a,t.x-side*80,t.y+10,'walk');await moveTo(W,a,t.x,t.y+10,'walk');
+   if(t.st.metal){t.st.beep=true;bubble(W,t,'Beep! Beep!');W.draw();await wait(500);await moveTo(W,a,t.x-side*80,t.y+10,'walk');return {v:'custom',act:'beep',a,o:t,tx:{prog:['The metal detector is beeping.','金属探知機が鳴っています。'],past:['The metal detector beeped.','金属探知機が鳴りました。']}}}
+   t.st.beep=false;await moveTo(W,a,t.x+side*90,t.y+10,'walk');t.st.passed=true;W.draw();return {v:'gothrough',a,r:t}}));
   if(t.art==='gate')m.push(wA(`Go through ${t.en}`,`${t.ja}を通る`,async()=>{const side=a.x>t.x?-1:1;await moveTo(W,a,t.x-side*90,t.y+14,'walk');t.st.open=true;W.draw();await moveTo(W,a,t.x+side*120,t.y+14,'walk');t.st.passed=true;t.st.open=false;W.draw();return {v:'gothrough',a,r:t}}));
   if(t.art==='shop'&&bandOf(W,a.y)===bandOf(W,t.y+12))m.push(wA(`Go into ${t.en}`,`${t.ja}に入る`,async()=>{await moveTo(W,a,t.x,t.y+12,'walk');t.st.open=true;W.draw();await wait(300);a.inside=t.id;a.hidden=true;t.st.open=false;W.draw();return {v:'enter',a,r:t}}));
   if(t.inside&&t.inside.person==='swim')m.push(wA(`Swim in ${t.en}`,`${t.ja}で泳ぐ`,async()=>{await moveTo(W,a,Math.max(t.inside.x0+40,Math.min(t.inside.x1-40,a.x)),t.inside.shore,'walk');a.swim=t.id;if(a.hold)await dropHeld(W,a);await moveTo(W,a,a.x+(a.flip?-60:60),t.inside.y,'walk');a.swim=t.id;W.draw();return {v:'swim',a,r:t}}));

@@ -103,6 +103,7 @@ const FIX={
  podium:(st,o)=>`<path d="M-36 0l6-100h60l6 100z" fill="#7a5a3a" ${ow}/><path d="M-44 -100h88l-6-16h-76z" fill="#9a7450" ${ow}/><rect x="-14" y="-70" width="28" height="20" rx="3" fill="#f5c542" ${ow}/><path d="M10 -116l14-24" stroke="${OL}" stroke-width="3"/><circle cx="26" cy="-142" r="5" fill="${OL}"/>`,
  logowall:(st,o)=>`<rect x="-120" y="-90" width="240" height="90" rx="6" fill="${o.c||'#1f8455'}" ${ow}/><text y="-36" text-anchor="middle" font-size="26" font-weight="700" fill="#fff" letter-spacing="4" font-family="'Lexend',sans-serif">${esc(o.label||'')}</text>`,
  wallswitch:(st,o)=>`<rect x="-22" y="-60" width="44" height="60" rx="5" fill="#f4f6fb" ${ow}/><circle cx="0" cy="-38" r="8" fill="${st.on?'#e74c3c':'#c3ccd8'}" ${ow}/><text y="-10" text-anchor="middle" font-size="9" fill="${OL}" font-family="sans-serif">${esc(o.label||'')}</text>`,
+ trashcan:(st,o)=>`<path d="M-20 0l-4-50h48l-4 50z" fill="#8892a6" ${ow}/><rect x="-26" y="-58" width="52" height="9" rx="3" fill="#6c7385" ${ow}/><path d="M-8 -40v32M0 -40v32M8 -40v32" stroke="#6c7385" stroke-width="2"/>`,
  whiteboard:(st,o)=>`<rect x="-140" y="-150" width="280" height="150" rx="6" fill="#d9dde6" ${ow}/><rect x="-132" y="-142" width="264" height="134" fill="#fbfcff"/>${st.text?`<text x="-110" y="-90" font-family="'Lexend',sans-serif" font-size="26" fill="#2a63c4">${esc(st.text)}</text>`:'<path d="M-110 -110h120M-110 -84h170M-110 -58h90" stroke="#c9d3e6" stroke-width="5"/>'}<rect x="-120" y="-8" width="240" height="6" fill="#a3acbd" ${ow}/>`,
  cushion:(st,o)=>``,
 };
