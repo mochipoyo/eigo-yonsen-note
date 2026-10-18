@@ -1,4 +1,4 @@
-// ===== うごかす英語ワールド: イラスト(SVG)=====
+// ===== ワールド: キャラクター描画(人物・動物・小物のSVG) =====
 // すべてオリジナルのベクター画。原点 (0,0) は足元(床に接する点)、+x が向いている方向。
 const OL='#3b2b2a';// 線の色
 const ow=`stroke="${OL}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"`;
@@ -36,14 +36,22 @@ function face(look,expr,dy){const cy=-138+dy,x=3;// 少し右(前)を向いた�
  const eyes=expr==='happy'?`<path d="M${x-15} ${cy+2}q5 -7 10 0M${x+5} ${cy+2}q5 -7 10 0" fill="none" stroke="${OL}" stroke-width="2.6" stroke-linecap="round"/>`
   :expr==='sleep'?`<path d="M${x-15} ${cy+1}q5 5 10 0M${x+5} ${cy+1}q5 5 10 0" fill="none" stroke="${OL}" stroke-width="2.4" stroke-linecap="round"/>`
   :[-10,10].map(o=>`<ellipse cx="${x+o}" cy="${cy}" rx="5.6" ry="7.4" fill="#fff" stroke="${OL}" stroke-width="1.6"/><ellipse cx="${x+o+1}" cy="${cy+1}" rx="${expr==='surprised'?2.6:4}" ry="${expr==='surprised'?3.2:5.6}" fill="${ir}"/><ellipse cx="${x+o+1}" cy="${cy+2.5}" rx="2.2" ry="2.6" fill="${shade(ir,-.4)}"/><circle cx="${x+o+2.4}" cy="${cy-2.2}" r="1.7" fill="#fff"/>`).join('');
- const brow=`<path d="M${x-15} ${cy-11}q5 -3 9 -1M${x+6} ${cy-12}q5 -2 9 1" fill="none" stroke="${shade(look.hair,-.3)}" stroke-width="2" stroke-linecap="round"/>`;
+ const bc=shade(look.hair,-.3);
+ const brow=expr==='sorry'?`<path d="M${x-15} ${cy-9}q5 -1 9 -5M${x+6} ${cy-14}q5 4 9 5" fill="none" stroke="${bc}" stroke-width="2" stroke-linecap="round"/>`
+  :expr==='angry'?`<path d="M${x-15} ${cy-14}q5 1 9 4M${x+6} ${cy-10}q5 -3 9 -4" fill="none" stroke="${bc}" stroke-width="2.3" stroke-linecap="round"/>`
+  :expr==='confused'?`<path d="M${x-15} ${cy-11}q5 -3 9 -1M${x+6} ${cy-16}q5 -3 9 1" fill="none" stroke="${bc}" stroke-width="2" stroke-linecap="round"/>`
+  :`<path d="M${x-15} ${cy-11}q5 -3 9 -1M${x+6} ${cy-12}q5 -2 9 1" fill="none" stroke="${bc}" stroke-width="2" stroke-linecap="round"/>`;
  const mouth=expr==='happy'?`<path d="M${x-5} ${cy+14}q5 7 10 0z" fill="#c4544f" stroke="${OL}" stroke-width="1.6"/>`
   :expr==='surprised'?`<ellipse cx="${x}" cy="${cy+16}" rx="3.2" ry="4" fill="#c4544f" stroke="${OL}" stroke-width="1.5"/>`
   :expr==='sleep'?`<path d="M${x-3} ${cy+15}q3 2 6 0" fill="none" stroke="${OL}" stroke-width="1.8"/>`
+  :expr==='sorry'||expr==='angry'?`<path d="M${x-4} ${cy+16}q4 -4 8 0" fill="none" stroke="${OL}" stroke-width="1.8" stroke-linecap="round"/>`
+  :expr==='confused'?`<path d="M${x-5} ${cy+15}q2.5 -3 5 0t5 0" fill="none" stroke="${OL}" stroke-width="1.8" stroke-linecap="round"/>`
   :`<path d="M${x-4} ${cy+14}q4 4 8 0" fill="none" stroke="${OL}" stroke-width="1.8" stroke-linecap="round"/>`;
+ // 話している間は口が開いたり閉じたりする(.talking のときだけ CSS で切りかえる)
+ const mouthO=expr==='sleep'?'':`<g class="m-o" opacity="0"><path d="M${x-5} ${cy+13}q5 -2 10 0q-1 8-5 8q-4 0-5-8z" fill="#b8473f" stroke="${OL}" stroke-width="1.5"/></g>`;
  const glasses=look.glasses?`<g fill="none" stroke="#2c2c2c" stroke-width="1.8"><circle cx="${x-10}" cy="${cy}" r="8"/><circle cx="${x+10}" cy="${cy}" r="8"/><path d="M${x-2} ${cy}h4"/></g>`:'';
  const shades=look.shades?`<g><path d="M${x-20} ${cy-6}h40v4l-4 8q-6 3-12 0l-4-6-4 6q-6 3-12 0l-4-8z" fill="#1f2330" stroke="${OL}" stroke-width="1.5"/><path d="M${x-14} ${cy-3}l5 0" stroke="#6b7bb0" stroke-width="2"/></g>`:'';
- return `${look.shades?'':eyes}${look.shades?'':brow}<ellipse cx="${x-17}" cy="${cy+9}" rx="5" ry="3" fill="#f39a9a" opacity=".55"/><ellipse cx="${x+17}" cy="${cy+9}" rx="5" ry="3" fill="#f39a9a" opacity=".55"/>${mouth}${glasses}${shades}`}
+ return `${look.shades?'':eyes}${look.shades?'':brow}<ellipse cx="${x-17}" cy="${cy+9}" rx="5" ry="3" fill="#f39a9a" opacity=".55"/><ellipse cx="${x+17}" cy="${cy+9}" rx="5" ry="3" fill="#f39a9a" opacity=".55"/><g class="m-c">${mouth}</g>${mouthO}${glasses}${shades}`}
 function hairBack(look,dy){const c=look.hair,cy=-138+dy;
  switch(look.hs){
   case 'long':return `<path d="M-34 ${cy-6}q-4 50 6 66h56q10-16 6-66z" fill="${shade(c,-.15)}" ${ow}/>`;
@@ -97,7 +105,7 @@ function personSvg(look,pose='stand',expr='normal',o={}){
  let cls='fig'+(P.walk===1?' walking':P.walk===2?' running':'')+(P.jump?' jumping':'')+(P.swim?' swimming':'');
  const k=look.k||1;
  const inner=P.lie?`<g transform="rotate(-90) translate(0 0)">${s}</g>`:s;
- return `<g class="${cls}" transform="scale(${k})">${P.lie||P.swim?'':`<ellipse cx="0" cy="0" rx="${P.legs==='ride'?54:22}" ry="5" fill="#000" opacity=".12"/>`}${inner}</g>`}
+ return `<g class="${cls}" transform="scale(${k})" style="--k:${k}">${P.lie||P.swim?'':`<ellipse cx="0" cy="0" rx="${P.legs==='ride'?54:22}" ry="5" fill="#000" opacity=".12"/>`}${inner}</g>`}
 function bikeSvg(c){return `<g class="bike"><g class="wheel" style="transform-origin:-34px -20px"><circle cx="-34" cy="-20" r="19" fill="none" stroke="${OL}" stroke-width="4"/><path d="M-34 -39v38M-53 -20h38" stroke="#888" stroke-width="1.2"/></g><g class="wheel" style="transform-origin:34px -20px"><circle cx="34" cy="-20" r="19" fill="none" stroke="${OL}" stroke-width="4"/><path d="M34 -39v38M15 -20h38" stroke="#888" stroke-width="1.2"/></g><path d="M-34 -20l18-30h34l16 30M-16 -50l12 30l22-30M-4 -20l-12-30M26 -66l-8 16" fill="none" stroke="${c}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-22 -56h16" stroke="${OL}" stroke-width="5" stroke-linecap="round"/><path d="M22 -68h10" stroke="${OL}" stroke-width="4" stroke-linecap="round"/></g>`}
 
 // ---------------- 動物 ----------------
@@ -155,6 +163,23 @@ const PROP={
  docs:()=>`<rect x="-14" y="-6" width="26" height="6" fill="#fff" ${ow}/><rect x="-12" y="-9" width="26" height="4" fill="#f4f6fb" ${ow}/><path d="M-8 -3h14" stroke="#9aa" stroke-width="1.2"/>`,
  phone:()=>`<rect x="-6" y="-20" width="12" height="20" rx="3" fill="#2d3340" ${ow}/><rect x="-4" y="-17" width="8" height="13" fill="#7fc7f0"/>`,
  flowerpot:()=>`<path d="M-10 0l-3-14h26l-3 14z" fill="#c8693f" ${ow}/><circle cx="-6" cy="-22" r="5" fill="#f28bb0" ${ow}/><circle cx="6" cy="-24" r="5" fill="#f5c542" ${ow}/><path d="M-6 -17v4M6 -19v6" stroke="#4e9a3a" stroke-width="2"/>`,
+ latte:(st)=>`<path d="M-9 -34h18l-2.5 34h-13z" fill="#fff" opacity=".95" ${ow}/><path d="M-8.2 -22h16.4l-1.6 21h-13.2z" fill="#a8703f"/><path d="M-8.6 -28h17.2l-.4 6h-16.4z" fill="#f2e2c6"/><path d="M-6 -31q6-4 12 0" stroke="#fff" stroke-width="2" fill="none"/>${st.cold?'':'<path class="steam" d="M-2 -38q-3-5 0-9M4 -38q-3-5 0-9" stroke="#c9d3e6" stroke-width="1.8" fill="none"/>'}`,
+ cappu:(st)=>`<ellipse cx="0" cy="-1" rx="17" ry="3.5" fill="#fff" ${ow}/><path d="M-12 -20h24l-3 18h-18z" fill="#fff" ${ow}/><path d="M12 -16q8 0 7 6q-1 4-8 4" fill="none" stroke="${OL}" stroke-width="2"/><path d="M-12 -20q12-11 24 0z" fill="#fbf1e2" ${ow}/><circle cx="-3" cy="-24" r="1.4" fill="#8a5a3c"/><circle cx="3" cy="-25" r="1.4" fill="#8a5a3c"/><circle cx="0" cy="-22" r="1.2" fill="#8a5a3c"/>`,
+ tea:(st)=>`<path d="M-11 -18h22l-3 18h-16z" fill="#fff" ${ow}/><path d="M11 -14q8 0 7 6q-1 4-8 4" fill="none" stroke="${OL}" stroke-width="2"/><ellipse cx="0" cy="-18" rx="10" ry="2.4" fill="#c46a2c"/><path d="M4 -18q2 10 10 14" stroke="#ddd" stroke-width="1.2" fill="none"/><rect x="11" y="-6" width="7" height="8" rx="1" fill="#6ab04c" ${ow}/>${st.cold?'':'<path class="steam" d="M-3 -22q-3-5 0-9" stroke="#c9d3e6" stroke-width="1.8" fill="none"/>'}`,
+ card:()=>`<rect x="-14" y="-10" width="28" height="18" rx="3" fill="#3d6fd0" ${ow}/><rect x="-14" y="-6" width="28" height="4" fill="#24356b"/><rect x="-10" y="1" width="8" height="4" rx="1" fill="#f5c542"/>`,
+ cash:()=>`<rect x="-14" y="-8" width="28" height="12" rx="1.5" fill="#9bd18c" ${ow}/><circle cx="0" cy="-2" r="3.5" fill="none" stroke="#4e8a3e" stroke-width="1.5"/>`,
+ pizza:(st)=>`<ellipse cx="0" cy="-4" rx="24" ry="6" fill="#fff" ${ow}/>${st.eaten?'':`<path d="M-17 -7l17-11l17 11q-17 5-34 0z" fill="#f2c14e" ${ow}/><circle cx="-6" cy="-9" r="2.6" fill="#c0392b"/><circle cx="5" cy="-11" r="2.6" fill="#c0392b"/><circle cx="2" cy="-7" r="2.2" fill="#5aa83a"/>`}`,
+ salad:(st)=>`<ellipse cx="0" cy="-4" rx="22" ry="6" fill="#fff" ${ow}/>${st.eaten?'':`<path d="M-15 -6q0-12 15-12q15 0 15 12z" fill="#7cc35a" ${ow}/><circle cx="-5" cy="-11" r="3" fill="#e8463b"/><circle cx="6" cy="-10" r="3" fill="#f5c542"/><path d="M-10 -8q4-4 8 0" stroke="#4e9a3a" stroke-width="2" fill="none"/>`}`,
+ eggs:(st)=>`<path d="M-22 -2l2-12h40l2 12z" fill="#d9c7a3" ${ow}/>${[-14,-4,6,16].map((x,i)=>`<ellipse cx="${x}" cy="-15" rx="5" ry="6" fill="${st.broken&&i===1?'#fff7e0':'#fbf3e3'}" stroke="${OL}" stroke-width="1.4"/>${st.broken&&i===1?`<path d="M${x-5} -15l3-3l2 3l3-3l2 3" stroke="${OL}" stroke-width="1.4" fill="none"/><ellipse cx="${x}" cy="-9" rx="5" ry="2" fill="#f5c542"/>`:''}`).join('')}`,
+ receipt:()=>`<path d="M-8 -22h16v22l-3-2l-2.5 2l-2.5-2l-2.5 2l-2.5-2l-3 2z" fill="#fff" ${ow}/><path d="M-5 -17h10M-5 -12h8M-5 -7h10" stroke="#9aa" stroke-width="1.3"/>`,
+ keycard:()=>`<rect x="-12" y="-9" width="24" height="16" rx="2.5" fill="#f5c542" ${ow}/><rect x="-8" y="-5" width="10" height="3" fill="#8a6a1a"/><circle cx="7" cy="2" r="2.4" fill="#fff"/>`,
+ passport:()=>`<rect x="-10" y="-15" width="20" height="15" rx="2" fill="#7a2638" ${ow}/><circle cx="0" cy="-8" r="3.8" fill="none" stroke="#f5c542" stroke-width="1.4"/><path d="M-5 -3h10" stroke="#f5c542" stroke-width="1.2"/>`,
+ bpass:()=>`<rect x="-16" y="-10" width="32" height="13" rx="2" fill="#fff" ${ow}/><rect x="-16" y="-10" width="32" height="4" fill="#2a63c4"/><path d="M6 -6v9" stroke="${OL}" stroke-width="1" stroke-dasharray="2 1.5"/><path d="M-12 -2h14M-12 1h10" stroke="#9aa" stroke-width="1.2"/>`,
+ suitcase:(st)=>`<rect x="-20" y="-50" width="40" height="46" rx="6" fill="#2e8f8a" ${ow}/><path d="M-20 -36h40M-20 -20h40" stroke="#22706c" stroke-width="2"/><path d="M-7 -50v-10h14v10" fill="none" stroke="${OL}" stroke-width="3"/><circle cx="-12" cy="-2" r="3.5" fill="${OL}"/><circle cx="12" cy="-2" r="3.5" fill="${OL}"/>${st.light?'':'<rect x="-10" y="-30" width="20" height="5" rx="1" fill="#f5c542" opacity=".8"/>'}`,
+ memo:(st)=>`<rect x="-12" y="-16" width="24" height="16" rx="1.5" fill="#fff6a8" ${ow}/>${st.text?`<path d="M-8 -11h16M-8 -6h12" stroke="#2a63c4" stroke-width="1.6"/>`:'<path d="M-8 -11h16M-8 -6h16" stroke="#e8dc8a" stroke-width="1.2"/>'}`,
+ bell:()=>`<path d="M-10 0h20" stroke="${OL}" stroke-width="3"/><path d="M-8 -2q0-12 8-12q8 0 8 12z" fill="#f2c14e" ${ow}/><circle cy="-16" r="2.4" fill="#f2c14e" ${ow}/>`,
+ fan:()=>`<rect x="-3" y="-20" width="6" height="18" fill="#cfd6e2" ${ow}/><ellipse cx="0" cy="0" rx="12" ry="3" fill="#cfd6e2" ${ow}/><circle cy="-30" r="13" fill="#fff" ${ow}/><path d="M0 -30l-8-6M0 -30l8-6M0 -30l0 9" stroke="#7fa6d8" stroke-width="3"/>`,
+ jacket:()=>`<path d="M-14 0v-22l6-6h16l6 6v22z" fill="#c0392b" ${ow}/><path d="M0 -28v28" stroke="${OL}" stroke-width="1.5"/>`,
  money:()=>`<rect x="-12" y="-6" width="24" height="6" rx="1" fill="#9bd18c" ${ow}/>`,
 };
 function propSvg(type,st={}){const f=PROP[type];return `<g class="pr">${f?f(st):''}</g>`}

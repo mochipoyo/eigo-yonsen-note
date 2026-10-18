@@ -48,6 +48,9 @@ const VB={
   state:(S,e)=>[`${cap(e.o.en)} ${isAre(e.o)} ${e.p} ${e.r.en}.`,`${e.o.ja}は${e.r.ja}${PJ[e.p]}にあります。`]},
  give:{prog:(S,e)=>[`${S.en} ${S.be} giving ${e.o.en} to ${e.r.en}.`,`${S.ja}は${e.r.ja}に${e.o.ja}を渡しています。`],past:(S,e)=>[`${S.en} gave ${e.o.en} to ${e.r.en}.`,`${S.ja}は${e.r.ja}に${e.o.ja}を渡しました。`],
   state:(S,e)=>[`${cap(e.r.en)} has ${e.o.en}.`,`${e.r.ja}が${e.o.ja}を持っています。`]},
+ talkto:{prog:(S,e)=>[`${S.en} ${S.be} going over to talk to ${e.r.en}.`,`${S.ja}は${e.r.ja}に話しかけに行くところです。`],past:(S,e)=>[`${S.en} went over to talk to ${e.r.en}.`,`${S.ja}は${e.r.ja}に話しかけに行きました。`]},
+ ring:{prog:(S,e)=>[`${S.en} ${S.be} ringing ${e.o.en}.`,`${S.ja}は${e.o.ja}を鳴らしています。`],past:(S,e)=>[`${S.en} rang ${e.o.en}.`,`${S.ja}は${e.o.ja}を鳴らしました。`]},
+ hangup:{prog:(S,e)=>[`${S.en} ${S.be} hanging up the phone.`,`${S.ja}は電話を切っています。`],past:(S,e)=>[`${S.en} hung up the phone.`,`${S.ja}は電話を切りました。`]},
  show:{prog:(S,e)=>[`${S.en} ${S.be} showing ${e.o.en} to ${e.r.en}.`,`${S.ja}は${e.r.ja}に${e.o.ja}を見せています。`],past:(S,e)=>[`${S.en} showed ${e.o.en} to ${e.r.en}.`,`${S.ja}は${e.r.ja}に${e.o.ja}を見せました。`]},
  read:{prog:(S,e)=>e.o.lookAt?[`${S.en} ${S.be} looking at ${e.o.en}.`,`${S.ja}は${e.o.ja}を見ています。`]:[`${S.en} ${S.be} reading ${e.o.en}.`,`${S.ja}は${e.o.ja}を読んでいます。`],
   past:(S,e)=>e.o.lookAt?[`${S.en} looked at ${e.o.en}.`,`${S.ja}は${e.o.ja}を見ました。`]:[`${S.en} read ${e.o.en}.`,`${S.ja}は${e.o.ja}を読みました。`]},
@@ -89,6 +92,10 @@ const VB={
  depart:{prog:(S,e)=>[`${cap(e.o.en)} ${isAre(e.o)} leaving.`,`${e.o.ja}が出発するところです。`],past:(S,e)=>[`${cap(e.o.en)} left.`,`${e.o.ja}が出発しました。`]},
 };
 // 文型の「何を学べるか」ラベル(苦手分析用)
+// ストーリーの特別な動作: 文型をシーン側で持つ({S}=主語 {be}=be動詞 {Sja}=主語の日本語 {poss}=所有格)
+const txFill=(t,S)=>String(t||'').replace(/\{S\}/g,S.en).replace(/\{be\}/g,S.be).replace(/\{Sja\}/g,S.ja).replace(/\{poss\}/g,S.poss);
+VB.custom={prog:(S,e)=>[txFill(e.tx.prog[0],S),txFill(e.tx.prog[1],S)],past:(S,e)=>e.tx.past&&e.tx.past.length?[txFill(e.tx.past[0],S),txFill(e.tx.past[1],S)]:null,
+ state:(S,e)=>e.tx.state?[txFill(e.tx.state[0],S),txFill(e.tx.state[1],S)]:null};
 const VERB_TAG={meeting:'start',sitA:'sit',liedown:'lie down',putdown:'put',jumpon:'jump onto',sit:'sit',sitfloor:'sit',lie:'lie',sleep:'sleep',stand:'stand up',walk:'walk',run:'run',go:'go',jump:'jump',wave:'wave',raise:'raise',bark:'bark',swim:'swim',pickup:'pick up',takeout:'take out',put:'put',place:'put',give:'give',show:'show',read:'read',open:'open',close:'close',turnon:'turn on',turnoff:'turn off',watch:'watch',drink:'drink',eat:'eat',pour:'pour',throw:'throw',catch:'catch',write:'write',use:'use',answer:'answer',order:'order',pay:'pay',bring:'bring',board:'get on',getoff:'get off',gothrough:'go through',enter:'go into',exit:'come out of',cross:'cross',ride:'ride',getonbike:'get on',getoffbike:'get off',wear:'put on',takeoff:'take off',drive:'drive',stopcar:'stop',light:'change',write_nb:'write',fetch:'bring back',arrive:'arrive',depart:'leave'};
 // 一つの出来事から、学習カード用の文をまとめて作る
 function describe(ev,mode='noun'){
@@ -96,7 +103,7 @@ function describe(ev,mode='noun'){
  const S=subj(ev.a,ev.a&&ev.a.user?'I':mode);
  const own=x=>x&&x.owner&&ev.a&&x.owner===ev.a.id?{...x,en:S.poss+' '+x.base,ja:'自分の'+x.baseja}:x;
  if(ev.r&&ev.r.owner||ev.o&&ev.o.owner)ev={...ev,r:own(ev.r),o:own(ev.o),state:ev.state?{...ev.state,r:own(ev.state.r),o:own(ev.state.o)}:ev.state};
- const mk=f=>{if(!f)return null;const [en,ja]=f(S,ev);return {en:T(en),ja}};
+ const mk=f=>{if(!f)return null;const r=f(S,ev);if(!r)return null;const [en,ja]=r;return {en:T(en),ja}};
  const out={prog:mk(vb.prog),past:mk(vb.past),state:mk(vb.state),v:ev.v,p:ev.p||(ev.state&&ev.state.p)||null,tag:VERB_TAG[ev.v]||ev.v};
  if(ev.state&&VB[ev.state.v]&&VB[ev.state.v].state){const e2={...ev.state,a:ev.a};const [en,ja]=VB[ev.state.v].state(S,e2);out.state={en:T(en),ja}}
  out.main=ev.stateFirst&&out.state?out.state:out.prog;

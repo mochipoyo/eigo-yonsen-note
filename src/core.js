@@ -121,8 +121,8 @@ function confetti(){const cv=document.getElementById('fx');if(matchMedia('(prefe
 // ---- router ----
 let V={name:'home'};let RT={};// RT = 実行中の画面の一時データ(クイズの進行など)
 const VIEWS={};
-function go(v,replace){stopAllAudio();if(!['drill','quest'].includes(v.name))RT.lc=null;if(V.name==='passive')RT.passiveStop&&RT.passiveStop();V=v;try{replace?history.replaceState(v,''):history.pushState(v,'')}catch(e){}render();window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'})}
-window.addEventListener('popstate',e=>{stopAllAudio();RT.passiveStop&&RT.passiveStop();V=e.state||{name:'home'};if(['quiz','vsess','drill','lesson-run'].includes(V.name))V={name:'home'};render()});
+function go(v,replace){stopAllAudio();if(RT.wLeave){RT.wLeave();RT.wLeave=null}if(!['drill','quest'].includes(v.name))RT.lc=null;if(V.name==='passive')RT.passiveStop&&RT.passiveStop();V=v;try{replace?history.replaceState(v,''):history.pushState(v,'')}catch(e){}render();window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'})}
+window.addEventListener('popstate',e=>{stopAllAudio();if(RT.wLeave){RT.wLeave();RT.wLeave=null}RT.passiveStop&&RT.passiveStop();V=e.state||{name:'home'};if(['quiz','vsess','drill','lesson-run'].includes(V.name))V={name:'home'};render()});
 function render(){renderChip();const app=document.getElementById('app');(VIEWS[V.name]||VIEWS.home)(app)}
 const backBtn=(label,v)=>`<button class="back" data-go='${JSON.stringify(v)}'>← ${label}</button>`;
 function wireGo(root){root.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>go(JSON.parse(b.dataset.go)))}

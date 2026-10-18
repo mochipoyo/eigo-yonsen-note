@@ -1,0 +1,57 @@
+// ===== シーン 08 駅 =====
+(()=>{
+const DEST=[{id:'air',en:'the airport',d:'Airport',ja:'空港',u:['airport']},{id:'cen',en:'Central Station',d:'Central',ja:'中央駅',u:['central']}];
+const DL=[{id:'d20',say:'twenty',num:'20',ja:'20分',u:['twenty','20']},{id:'d30',say:'thirty',num:'30',ja:'30分',u:['thirty','30']}];
+WSC.add({id:'station',t:'駅',cat:'travel',en:'Station',bg:'station',floor:[380,580],ground:{en:'the platform',ja:'ホーム'},
+ ents:[
+  {id:'train',k:'fix',art:'train',en:'the train',ja:'電車',x:600,y:300,z:290,st:{open:true,here:true},doorX:-120,boardY:384,hit:{x0:340,x1:860,y0:96,y1:320}},
+  {id:'clock',k:'fix',art:'clock',en:'the clock',ja:'時計',x:180,y:120,wall:true},
+  {id:'sboard',k:'fix',art:'fboard',wall:true,en:'the departure board',ja:'発車案内',x:190,y:300,o:{n:2,title:'DEPARTURES',gl:'Track'},st:{t1:'10:15',d1:'Airport',g1:'2',s1:'ON TIME',t2:'10:30',d2:'Hillside',g2:'1',s2:'ON TIME'},hit:{x0:20,x1:360,y0:196,y1:300}},
+  {id:'gate',k:'fix',art:'gate',en:'the ticket gate',ja:'改札',x:150,y:500,st:{open:false},near:{x:250,y:514,p:'next to'}},
+  {id:'bench',k:'fix',art:'bench',o:{c:'#5a8fc9'},en:'the bench',ja:'ベンチ',x:820,y:470,seats:[{x:778,y:472,h:40,face:1},{x:862,y:472,h:40,face:-1}]},
+  {id:'ticket',k:'prop',art:'ticket',en:'the ticket',ind:'a ticket',ja:'切符',show:true,small:true,x:0,y:0},
+  {id:'bag',k:'prop',art:'bag',en:'the bag',ind:'a bag',ja:'かばん',x:700,y:560,small:true},
+  P('staff','the station attendant','駅員','he',LK.staff,330,480,{staff:'check'}),
+  P('man','the man','男性','he',LK.man,500,560,{holdInit:'ticket'}),
+  P('woman','the woman','女性','she',LK.woman,900,560),
+ ],
+ missions:[
+  {t:[['man','train','Get on']],v:['board'],ex:{v:'board',a:'man',r:'train'}},
+  {t:[['woman','train','Get on'],['woman','self','Get off']],v:['getoff'],ex:{v:'getoff',a:'woman',r:'train'}},
+  {t:[['man','staff','Show']],v:['show'],o:'ticket',ex:{v:'show',a:'man',o:'ticket',r:'staff'}},
+  {t:[['woman','bench','Sit on']],v:['sit'],r:'bench',ex:{v:'sit',a:'woman',r:'bench',p:'on'}},
+  {t:[['woman','bag','Pick up']],v:['pickup'],o:'bag',ex:{v:'pickup',a:'woman',o:'bag'}},
+  {t:[['man','gate','Go through']],v:['gothrough'],ex:{v:'gothrough',a:'man',r:'gate'}},
+  {t:[['direct','train','Make the train leave']],v:['depart'],ex:{v:'depart',o:'train'}},
+ ],
+ stories:[
+ {id:'station-delay',t:'電車が遅れている',en:'The train is delayed',me:'woman',desc:'駅の放送と案内板を見て、駅員に英語で確かめ、正しく行動する。',goalJa:'乗る予定の10:15の電車の状況を確かめて、その電車に乗る',
+  focus:['could','doyoumean','sayagain'],
+  intro:'あなたは10時15分発の電車に乗る予定です。行き先は案内板を見てください。',
+  vars:{dest:DEST,dl:DL},
+  variants:[{id:'delay',w:2},{id:'normal',w:1}],
+  init:[{op:'hide',id:['man','train']},{op:'set',id:'train',st:{here:false,open:false}},{op:'set',id:'sboard',st:{d1:'{dest.d}',s1:'ON TIME'}},{op:'pos',who:'woman',x:900,y:560},{op:'pos',who:'staff',x:420,y:500}],
+  steps:[
+   {if:{variant:'delay'},do:[{op:'announce',say:'Attention, please. The ten fifteen train to {dest.en} is delayed by about {dl.say} minutes because of signal trouble. We apologize for the inconvenience.',ja:'お知らせします。{dest.ja}行き10時15分の電車は、信号トラブルのため約{dl.ja}遅れています。ご迷惑をおかけして申し訳ありません。'},{op:'set',id:'sboard',st:{s1:'DELAYED {dl.num} MIN'}}]},
+   {if:{variant:'normal'},do:[{op:'announce',say:'The ten fifteen train to {dest.en} will arrive shortly on track two.',ja:'{dest.ja}行き10時15分の電車は、まもなく2番線に到着します。'}]},
+   {id:'go',t:[['staff','Talk to']],act:{ja:'駅員に話しかけに行く',hint:'駅員をタップして「Talk to the station attendant」'},ev:{v:'talkto',r:'staff'}},
+   {id:'ask',focus:'could',talk:{ja:'自分の電車が時間どおりか聞こう',hint:'Excuse me. Could you tell me if the ten fifteen train to {dest.en} is on time?'},to:'staff',
+    intents:[I('ask',[['train','ten fifteen','{dest.u}','my train'],['on time','delayed','late','what time','when','leave','arrive','depart','coming','running','schedule']],'Excuse me. Could you tell me if the ten fifteen train to {dest.en} is on time?',{main:true,ja:'すみません、{dest.ja}行き10時15分の電車は時間どおりか教えていただけますか。',alts:['Is the ten fifteen train delayed?']}),
+     I('again',[['announcement','did not catch','didnt catch','could not hear','couldnt hear','what did they say','say again']],"Sorry, I couldn't hear the announcement. Is the ten fifteen train on time?",{ja:'すみません、放送が聞こえなかったのですが、10時15分の電車は時間どおりですか。'})],
+    choices:[{en:'Excuse me. Could you tell me if the ten fifteen train to {dest.en} is on time?',i:'ask'},{en:"Sorry, I couldn't hear the announcement. Is the ten fifteen train on time?",i:'again'}]},
+   {if:{variant:'delay'},npc:'staff',say:"I'm afraid it's delayed by about {dl.say} minutes. It's because of signal trouble.",ja:'あいにく約{dl.ja}遅れています。信号トラブルのためです。',expr:'sorry',exprAfter:'normal',key:true},
+   {if:{variant:'normal'},npc:'staff',say:"Yes, it's on time. It'll arrive on track two in a few minutes.",ja:'はい、時間どおりです。数分で2番線に到着します。',key:true},
+   {if:{variant:'delay'},id:'conf',focus:'doyoumean',talk:{ja:'遅れの時間を確かめよう',hint:'Do you mean about {dl.say} minutes?'},to:'staff',
+    intents:[I('ok',[U.doyoumean.concat(['so','about','right']),['{dl.u}']],'Do you mean about {dl.say} minutes?',{main:true,ja:'約{dl.ja}ということですか。',reply:[{say:"Yes, that's right. You can wait on the bench over there.",ja:'はい、そうです。あちらのベンチでお待ちいただけます。'}]}),
+     I('why',[['why','reason','what happened']],'Why is it delayed?',{retry:true,ja:'なぜ遅れているのですか。',reply:[{say:'Because of signal trouble.',ja:'信号トラブルのためです。'}]}),
+     I('thx',[U.thanks.concat(['i see','got it'])],'I see. Thank you.',{ja:'わかりました。ありがとう。',reply:[{say:'You can wait on the bench over there.',ja:'あちらのベンチでお待ちいただけます。'}]})],
+    choices:[{en:'Do you mean about {dl.say} minutes?',i:'ok'},{en:'Why is it delayed?',i:'why'},{en:'I see. Thank you.',i:'thx'}]},
+   {if:{variant:'normal'},id:'thx',talk:{ja:'お礼を言おう',hint:'Great. Thank you!'},to:'staff',intents:[I('thx',[U.thanks.concat(['great','perfect'])],'Great. Thank you!',{main:true,ja:'よかった。ありがとう。'})],choices:[{en:'Great. Thank you!',i:'thx'}]},
+   {if:{variant:'delay'},id:'sit',t:[['bench','Sit on']],act:{ja:'ベンチで待つ',hint:'ベンチをタップして「Sit on the bench」'},ev:{v:'sit',a:'woman'},done:{seated:'woman'}},
+   {if:{variant:'delay'},do:[{op:'wait',ms:500},{op:'set',id:'sboard',st:{s1:'ARRIVING'}},{op:'announce',say:'The ten fifteen train to {dest.en} is now arriving on track two. Thank you for waiting.',ja:'お待たせしました。{dest.ja}行き10時15分の電車が2番線に到着します。'}]},
+   DO({op:'show',id:'train'},{op:'set',id:'train',st:{here:true,open:true,leaving:false}},{op:'wait',ms:400}),
+   {id:'board',t:[['train','Get on']],act:{ja:'電車に乗る',hint:'電車をタップして「Get on the train」'},ev:{v:'board',a:'woman'},done:{inside:['woman','train']}},
+  ],
+  goal:{inside:['woman','train']}},
+ ]});
+})();

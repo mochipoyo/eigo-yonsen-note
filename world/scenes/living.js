@@ -1,0 +1,26 @@
+// ===== シーン 01 リビング =====
+WSC.add({id:'living',t:'リビング',en:'Living Room',bg:'living',floor:[400,575],ground:{en:'the floor',ja:'床'},
+ ents:[
+  {id:'window',k:'fix',art:'window',en:'the window',ja:'窓',x:150,y:250,wall:true,toggle:'open',st:{open:false},near:{x:150,y:420,p:'next to'},hit:{x0:70,x1:230,y0:118,y1:256}},
+  {id:'door',k:'fix',art:'door',en:'the door',ja:'ドア',x:910,y:340,wall:true,toggle:'open',st:{open:false},near:{x:900,y:420,p:'in front of'},hit:{x0:860,x1:960,y0:156,y1:345}},
+  {id:'tv',k:'fix',art:'tv',en:'the TV',ja:'テレビ',x:740,y:372,toggle:'on',st:{on:false},near:{x:680,y:430,p:'in front of'}},
+  {id:'sidetable',k:'fix',art:'table',o:{w:80,h:58,c:'#b07a48'},en:'the side table',ja:'サイドテーブル',x:290,y:395,surf:{x0:258,x1:322,y:333,front:396}},
+  {id:'sofa',k:'fix',art:'sofa',o:{c:'#7a9cc6'},en:'the sofa',ja:'ソファ',x:300,y:480,seats:[{x:248,y:482,h:40,face:1},{x:345,y:482,h:40,face:1}],animalOn:{x:300,y:440,depth:484},near:{x:450,y:500,p:'next to'}},
+  {id:'table',k:'fix',art:'table',o:{w:170,h:44,c:'#c58a52'},en:'the table',ja:'テーブル',x:600,y:545,surf:{x0:525,x1:675,y:497,front:546},under:{x0:540,x1:660,y:535}},
+  {id:'book',k:'prop',art:'book',en:'the book',ind:'a book',ja:'本',read:true,at:{p:'on',ref:'table'},x:570,small:true},
+  {id:'remote',k:'prop',art:'remote',en:'the remote',ind:'a remote',ja:'リモコン',at:{p:'on',ref:'table'},x:640,small:true},
+  {id:'glass',k:'prop',art:'glass',en:'the glass',ind:'a glass',ja:'コップ',liq:'water',liqja:'水',st:{full:true},at:{p:'on',ref:'sidetable'},x:290,small:true},
+  P('man','the man','男性','he',LK.man,560,440),
+  P('woman','the woman','女性','she',LK.woman,820,500),
+  P('boy','the boy','男の子','he',LK.boy,430,570,{extra:['run','jump']}),
+  {id:'dog',k:'animal',art:'dog',en:'the dog',ja:'犬',x:150,y:560},
+ ],
+ missions:[
+  {t:[['man','sofa','Sit on']],v:['sit'],a:'man',r:'sofa',ex:{v:'sit',a:'man',r:'sofa',p:'on'}},
+  {t:[['woman','book','Read']],v:['read'],a:'woman',o:'book',ex:{v:'read',a:'woman',o:'book'}},
+  {t:[['dog','table','Go under']],v:['go'],a:'dog',r:'table',p:'under',ex:{v:'go',a:'dog',r:'table',p:'under',stateFirst:true}},
+  {t:[['drag','glass','table']],v:['put','place'],o:'glass',r:'table',p:'on',ex:{v:'place',o:'glass',r:'table',p:'on'}},
+  {t:[['direct','door','Open']],v:['open'],o:'door',ex:{v:'open',a:'boy',o:'door'}},
+  {t:[['direct','tv','Turn on']],v:['turnon'],o:'tv',ex:{v:'turnon',a:'man',o:'tv'}},
+  {t:[['direct','tv','Turn on'],['boy','tv','Watch TV']],v:['watch'],ex:{v:'watch',a:'boy'}},
+ ]});

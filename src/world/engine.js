@@ -1,56 +1,4 @@
-// ===== うごかす英語ワールド: 動き・操作・判定(描画と英文生成から独立) =====
-const USER={user:true,en:'I',ja:'私',k:'user'};
-// 家具の大きさ(当たり判定用) [幅, 高さ]
-const FIXSZ={towel:[124,24],sea:[1000,160],whiteboard:[290,156],sofa:[250,110],chair:[56,104],table:[160,70],desk:[120,64],tv:[150,150],door:[96,186],window:[172,130],fridge:[90,192],sink:[210,100],bed:[280,112],lamp:[60,160],clock:[56,56],tree:[220,290],bench:[176,90],pond:[264,70],flowers:[124,44],bicycle:[110,70],counter:[250,104],register:[64,56],blackboard:[316,164],shelf:[204,184],gate:[124,110],train:[524,206],computer:[70,60],deskphone:[44,30],parasol:[224,200],car:[210,110],trafficlight:[50,214],crosswalk:[260,72],shop:[284,244],building:[184,320]};
-const SPEED={walk:150,run:330};
-function W_new(def){// シーン定義から実行用の状態を作る
- const W={def,ents:{},order:[],busy:false,sel:null,ground:{en:def.ground?.en||'the floor',ja:def.ground?.ja||'床',k:'ground',id:'ground'}};
- for(const d of def.ents){const e=JSON.parse(JSON.stringify(d));e.st=e.st||{};e.x0=e.x;e.y0=e.y;
-  if(e.k==='person'){e.pose='stand';e.hold=null;e.flip=!!e.flip;e.act=null}
-  if(e.k==='animal'){e.pose=e.pose||'stand';e.flip=!!e.flip}
-  if(e.k==='fix'&&e.seats)e.seats.forEach(s=>s.occ=null);
-  W.ents[e.id]=e;W.order.push(e.id)}
- // 最初から物が家具の上・中にある場合
- for(const e of Object.values(W.ents)){if(e.k==='prop'&&e.at){const r=W.ents[e.at.ref];if(!e.home)e.home=e.at.ref;if(r)placeProp(W,e,r,e.at.p,e.x,true)}}
- // 最初から座っている人
- for(const e of Object.values(W.ents)){if(e.k==='person'&&e.holdInit){const pr=W.ents[e.holdInit];if(pr)placeProp(W,pr,e)}}
- for(const e of Object.values(W.ents)){if(e.k==='person'&&e.sitOn){const f=W.ents[e.sitOn];const s=f&&f.seats.find(s=>!s.occ);if(s){seatPerson(e,f,s)}}}
- return W}
-const ents=W=>Object.values(W.ents);
-const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
-function fixHit(f){if(f.hit)return f.hit;const sz=FIXSZ[f.art]||[100,100];return {x0:f.x-sz[0]/2,x1:f.x+sz[0]/2,y0:f.y-sz[1],y1:f.y+8}}
-const inRect=(p,r)=>p.x>=r.x0&&p.x<=r.x1&&p.y>=r.y0&&p.y<=r.y1;
-function seatPerson(e,f,s){e.seat={f:f.id,s:f.seats.indexOf(s)};s.occ=e.id;e.x=s.x;e.y=s.y;e.flip=s.face===-1;e.sh=s.h??40;e.pose='sit'}
-function unseat(W,e){if(e.seat){const f=W.ents[e.seat.f];if(f)f.seats[e.seat.s].occ=null;e.seat=null}e.lie=null;e.pose='stand';e.act=null;if(e.k==='person'&&e.standAt){e.x=e.standAt.x;e.y=e.standAt.y;e.standAt=null}}
-// 物を置く: 位置と「どこにあるか」を記録
-function placeProp(W,p,r,prep,xHint,init){
- p.heldBy=null;p.inC=null;p.hidden=false;
- if(r.k==='prop'){// 入れ物(かご・皿・袋)
-  const n=ents(W).filter(o=>o.inC===r.id).length;const sl=(r.cap&&r.cap.slots)||[[0,-12]];const s=sl[n%sl.length];
-  p.inC=r.id;p.cdx=s[0];p.cdy=s[1];p.at={p:prep,ref:r.id};return}
- if(r.k==='fix'&&prep==='on'&&r.surf){const S=r.surf;let x=Math.max(S.x0+14,Math.min(S.x1-14,xHint??(S.x0+S.x1)/2));
-  for(let t=0;t<8;t++){const clash=ents(W).find(o=>o!==p&&o.k==='prop'&&o.at&&o.at.ref===r.id&&o.at.p==='on'&&!o.inC&&Math.abs(o.x-x)<28);if(!clash)break;x=x+30>S.x1-14?S.x0+14+t*9:x+30}
-  p.x=x;p.y=S.y;p.depth=S.front??r.y+2;p.at={p:'on',ref:r.id};return}
- if(r.k==='fix'&&prep==='under'&&r.under){const U=r.under;p.x=Math.max(U.x0,Math.min(U.x1,xHint??(U.x0+U.x1)/2));p.y=U.y;p.depth=U.y-3;p.at={p:'under',ref:r.id};return}
- if(r.k==='fix'&&prep==='in'&&r.inside){const I=r.inside;const n=ents(W).filter(o=>o!==p&&o.at&&o.at.ref===r.id&&o.at.p==='in').length;
-  p.x=I.x0+18+((n*34)%Math.max(30,I.x1-I.x0-36));p.y=I.y;p.depth=I.depth??r.y+2;p.at={p:'in',ref:r.id};return}
- if(r.k==='person'){p.heldBy=r.id;r.hold=p.id;p.at=null;return}
- p.at=r.k==='ground'?{p:'on',ref:'ground'}:{p:prep,ref:r.id};p.depth=null}
-function layout(W,e){// 描画位置と奥行き
- if(e.k==='prop'){
-  if(e.heldBy){const h=W.ents[e.heldBy];const L=layout(W,h);const pose=personPose(W,h);const k=(h.look&&h.look.k)||1;const hp=handPos(pose,h.sh);
-   return {x:L.x+(h.flip?-1:1)*hp[0]*k,y:L.y+hp[1]*k+12*k,d:L.d+0.5,hidden:L.hidden||h.hidden}}
-  if(e.inC){const c=W.ents[e.inC];const L=layout(W,c);return {x:L.x+(e.cdx||0),y:L.y+(e.cdy||0),d:L.d+0.3,hidden:L.hidden}}
-  const hid=e.hidden||(e.at&&e.at.p==='in'&&W.ents[e.at.ref]&&W.ents[e.at.ref].inside&&W.ents[e.at.ref].inside.needOpen&&!W.ents[e.at.ref].st.open);
-  return {x:e.x,y:e.y,d:e.depth??e.y,hidden:hid}}
- return {x:e.x,y:e.y,d:e.z??(e.k==='fix'&&e.wall?-1000+e.y:e.y+(e.lie?2:0)),hidden:e.hidden}}
-function personPose(W,e){
- if(e.moving)return e.moving==='run'?'run':'walk';
- if(e.swim)return 'swim';if(e.ride)return 'ride';if(e.lie)return 'lie';
- const a=e.act;
- if(e.seat){return a==='read'?'sitread':a==='drink'?'sitdrink':a==='eat'?'siteat':a==='type'?'sittype':a==='raise'?'sitraise':a==='phone'?'sitphone':a==='write'?'sitwrite':e.hold?'sithold':'sit'}
- if(a&&POSE[a])return a;
- return e.hold?'hold':'stand'}
+// ===== ワールド: 描画エンジン(SVGへの描画・タップ/ドラッグ入力・ドロップ先の判定) =====
 function artFor(W,e){
  if(e.nodraw)return '';
  if(e.k==='person'){const pose=personPose(W,e);const s=personSvg(e.look,pose,e.expr||(e.lie?'sleep':'normal'),{h:e.sh});return pose==='lie'?`<g transform="translate(${(e.look.k||1)*70} ${-(e.lie.h||56)})">${s}</g>`:s}
@@ -58,7 +6,9 @@ function artFor(W,e){
  if(e.k==='prop')return propSvg(e.art,e.st);
  if(e.k==='fix')return fixSvg(e.art,e.st,e.o||{});
  return ''}
-
+function wThumb(def){// シーン一覧用の小さな絵(ビルド時に world/thumbs/*.svg として書き出す)
+ const W=W_new(def);const list=W.order.map(id=>W.ents[id]).sort((a,b)=>layout(W,a).d-layout(W,b).d);
+ return `<svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">${bgSvg(def.bg)}${list.map(e=>{const l=layout(W,e);if(l.hidden)return '';const fl=(e.k==='person'||e.k==='animal')&&e.flip?' scale(-1 1)':'';return `<g transform="translate(${l.x} ${l.y})${fl}">${artFor(W,e)}</g>`}).join('')}</svg>`}
 // ---------------- 実行時(DOM) ----------------
 function W_mount(host,W,api){
  host.innerHTML=`<svg class="wsvg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="${esc(W.def.t)}"><g class="wbg">${bgSvg(W.def.bg,W.bgst)}</g><g class="wents"></g><g class="wfx"></g></svg>`;
@@ -69,7 +19,9 @@ function W_mount(host,W,api){
  const drawAll=(dur=0)=>{
   const list=W.order.map(id=>W.ents[id]);
   const L={};list.forEach(e=>L[e.id]=layout(W,e));
-  list.forEach(e=>{const g=nodes[e.id],l=L[e.id];const art=artFor(W,e);if(g._art!==art){g.innerHTML=art;g._art=art}
+  list.forEach(e=>{const g=nodes[e.id],l=L[e.id];let art=artFor(W,e);
+   // 小さな物はタップしやすいように透明の当たり判定を広げる(スマホ向け)
+   if(e.k==='prop'&&!e.heldBy&&!e.inC&&art)art+=`<rect class="hitpad" x="-30" y="-58" width="60" height="66"/>`;if(g._art!==art){g.innerHTML=art;g._art=art}
    const fl=(e.k==='person'||e.k==='animal')&&e.flip?' scale(-1 1)':'';
    g.style.transition=dur?`transform ${dur}ms linear, opacity .3s`:'opacity .3s';
    g.style.transform=`translate(${l.x}px,${l.y}px)${fl.replace(' scale(-1 1)',' scaleX(-1)')}`;
@@ -84,7 +36,8 @@ function W_mount(host,W,api){
  const toSvg=ev=>{const pt=svg.createSVGPoint();pt.x=ev.clientX;pt.y=ev.clientY;const m=svg.getScreenCTM();return m?pt.matrixTransform(m.inverse()):{x:0,y:0}};
  let drag=null;
  svg.addEventListener('pointerdown',ev=>{if(W.busy)return;const g=ev.target.closest('.went');const p=toSvg(ev);
-  const e=g?W.ents[g.dataset.id]:null;
+  let e=g?W.ents[g.dataset.id]:null;
+  if(!e)e=nearTap(W,p);// 指がわずかにずれても、近くの人・物を選ぶ
   drag={e,p0:p,moved:false,id:ev.pointerId,off:e?Math.max(0,layout(W,e).y-p.y):0};
   if(e&&e.k!=='fix'&&!(e.k==='prop'&&e.heldBy&&W.ents[e.heldBy]&&W.ents[e.heldBy].ride))svg.setPointerCapture(ev.pointerId)});
  svg.addEventListener('pointermove',ev=>{if(!drag||!drag.e||drag.e.k==='fix'||W.busy)return;const p=toSvg(ev);
@@ -126,6 +79,9 @@ function dropZone(W,e,pt){
   const nf=nearestNear(W,pt,100);if(nf)return {kind:'near',r:nf,p:nf.near.p||'next to'};
   return {kind:'walk'}}
  return null}
+function nearTap(W,p){let best=null,bd=34;for(const e of ents(W)){if(e.k==='fix'||e.hidden||e.nodraw)continue;const l=layout(W,e);if(l.hidden)continue;
+ const k=(e.look&&e.look.k)||1;const cy=e.k==='person'?l.y-80*k:e.k==='animal'?l.y-24:l.y-16;const r=e.k==='person'?30*k:0;
+ const d=Math.max(0,Math.hypot(p.x-l.x,(p.y-cy)*(e.k==='person'?.45:1))-r);if(d<bd){bd=d;best=e}}return best}
 function nearestNear(W,pt,lim){let best=null,bd=lim;for(const f of ents(W)){if(f.k==='fix'&&f.near&&!f.hidden){const d=Math.hypot(f.near.x-pt.x,f.near.y-pt.y);if(d<bd){bd=d;best=f}}}return best}
 function bandOf(W,y){const B=W.def.floors||[W.def.floor];let bi=0,bd=1e9;B.forEach((b,i)=>{const d=y<b[0]?b[0]-y:y>b[1]?y-b[1]:0;if(d<bd){bd=d;bi=i}});return bi}
 function clampFloor(W,pt,band){const B=W.def.floors||[W.def.floor];const b=B[band??bandOf(W,pt.y)];return {x:Math.max(40,Math.min(960,pt.x)),y:Math.max(b[0],Math.min(b[1],pt.y))}}
@@ -146,6 +102,7 @@ async function dropAct(W,e,pt){const z=dropZone(W,e,pt);const P=clampFloor(W,pt)
   return nf?{v:'place',a:USER,o:e,r:nf,p:nf.near.p||'next to',stateFirst:true}:{v:'place',a:USER,o:e,r:W.ground,p:'on',stateFirst:true}}
  if(e.k==='person'){
   if(e.inside||e.swim)return null;
+  if(e.stay&&W.ents[e.stay]){const f=W.ents[e.stay];const hw=(f.o&&f.o.w||240)/2-20;await moveTo(W,e,Math.max(f.x-hw,Math.min(f.x+hw,pt.x)),f.staffY,'walk');return {v:'walk',a:e}}
   if(W.def.floors&&bandOf(W,pt.y)!==bandOf(W,e.y)&&!ents(W).some(f=>f.k==='fix'&&f.art==='crosswalk'&&inRect(pt,fixHit(f)))){const cw=ents(W).find(f=>f.art==='crosswalk');if(cw&&crossOk(W)){const act=comboMenu(W,e,cw).find(a=>a.en==='Cross the street');if(act)return act.run()}bubble(W,e,'Red light!');return null}
   if(z.kind==='sit'){await sitOn(W,e,z.r);return {v:z.r.floorSit?'sitfloor':'sit',a:e,r:z.r,p:'on'}}
   if(z.kind==='lie'){await lieOn(W,e,z.r);return {v:'lie',a:e,r:z.r,p:'on'}}
