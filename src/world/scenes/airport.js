@@ -2,10 +2,10 @@
 // 会話ミッションの t は自動テスト用の手順([相手,動作の名前の先頭]。'self' は自分の役、'@変数' はそのときの品)
 (()=>{
 const DE=[{id:'syd',en:'Sydney',ja:'シドニー',u:['sydney']},{id:'van',en:'Vancouver',ja:'バンクーバー',u:['vancouver']},{id:'lon',en:'London',ja:'ロンドン',u:['london']}];
-const SEAT=[{id:'window',w:'window',ja:'窓側',no:'14A',u:['window']},{id:'aisle',w:'aisle',ja:'通路側',no:'14C',u:['aisle','isle']}];
+const SEAT=[{id:'window',w:'window',a:'a window',ja:'窓側',no:'14A',u:['window']},{id:'aisle',w:'aisle',a:'an aisle',ja:'通路側',no:'14C',u:['aisle','isle']}];
 WSC.add({id:'airport',t:'空港',en:'Airport',cat:'travel',bg:'airport',floor:[420,580],ground:{en:'the floor',ja:'床'},
  ents:[
-  {id:'fboard',k:'fix',art:'fboard',wall:true,en:'the departure board',ja:'出発案内',x:520,y:330,o:{n:3,title:'DEPARTURES'},st:{t1:'11:40',d1:'Sydney',g1:'8',s1:'ON TIME',t2:'12:05',d2:'Seoul',g2:'10',s2:'ON TIME',t3:'12:30',d3:'Honolulu',g3:'14',s3:'BOARDING'},hit:{x0:350,x1:690,y0:196,y1:330}},
+  {id:'fboard',k:'fix',art:'fboard',wall:true,en:'the departure board',ja:'出発案内',x:430,y:330,o:{n:3,title:'DEPARTURES'},st:{t1:'11:40',d1:'Sydney',g1:'8',s1:'ON TIME',t2:'12:05',d2:'Seoul',g2:'10',s2:'ON TIME',t3:'12:30',d3:'Honolulu',g3:'14',s3:'BOARDING'},hit:{x0:260,x1:600,y0:196,y1:330}},
   {id:'counter',k:'fix',art:'counter',o:{w:240,c:'#5a6b8c'},en:'the check-in counter',ja:'チェックインカウンター',x:170,y:450,staffY:425,surf:{x0:60,x1:280,y:350,front:452},near:{x:190,y:488,p:'in front of'}},
   {id:'scale',k:'fix',art:'scale',en:'the scale',ja:'手荷物の計り',x:340,y:470,surf:{x0:300,x1:380,y:430,front:471},near:{x:340,y:505,p:'next to'}},
   {id:'gateA',k:'fix',art:'gatesign',o:{label:'Gate 8',c:'#2a63c4'},en:'Gate 8',ja:'8番ゲート',x:640,y:440,near:{x:640,y:490,p:'next to'},hit:{x0:590,x1:690,y0:230,y1:445}},
@@ -68,7 +68,7 @@ WSC.add({id:'airport',t:'空港',en:'Airport',cat:'travel',bg:'airport',floor:[4
     other:{say:'Sorry, window or aisle?',ja:'すみません、窓側と通路側どちらに?'},
     choices:[{en:'A window seat, please.',i:'s_window'},{en:'An aisle seat, please.',i:'s_aisle'}]},
    DO({op:'show',id:'bpass'},{op:'place',what:'bpass',to:'agent'},{op:'give',who:'agent',what:'passport',to:'trav'},{op:'hide',id:'passport'},{op:'give',who:'agent',what:'bpass',to:'trav'}),
-   SAY('agent',"Here's your boarding pass. You're in seat {seat.no}, a {seat.w} seat. Boarding starts at eleven ten at Gate eight.",'搭乗券です。お席は{seat.no}、{seat.ja}です。搭乗は11時10分から8番ゲートで始まります。',{key:true}),
+   SAY('agent',"Here's your boarding pass. You're in seat {seat.no}, {seat.a} seat. Boarding starts at eleven ten at Gate eight.",'搭乗券です。お席は{seat.no}、{seat.ja}です。搭乗は11時10分から8番ゲートで始まります。',{key:true}),
    {id:'conf',focus:'doyoumean',talk:{ja:'ゲートを確かめよう',hint:'Sorry, which gate did you say? / Do you mean Gate 8?'},to:'agent',
     intents:[I('dym',[U.doyoumean.concat(['so','right','just to confirm']),['gate eight','eight','8']],'Do you mean Gate eight?',{main:true,ja:'8番ゲートということですか。',reply:[{say:"Yes, that's right. Have a nice flight!",ja:'はい、そうです。よいご旅行を!'}]}),
      I('which',[['which gate','what gate','gate number','where is the gate','which number']],'Sorry, which gate did you say?',{ja:'すみません、何番ゲートとおっしゃいましたか。',reply:[{say:'Gate eight. Have a nice flight!',ja:'8番ゲートです。よいご旅行を!',slow:true}]}),

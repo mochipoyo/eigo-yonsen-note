@@ -67,7 +67,7 @@ const dMain=step=>step.intents.find(i=>i.main)||step.intents.find(i=>!i.tone)||s
 
 // 答えを判定する。res: answerBox の結果 {text, alts, typed, conf, gaveUp, hint} か、選択肢 {choice:intentId, text}
 async function dJudge(step,res,ctx={}){
- const how=res.choice?'choice':res.typed?'typed':'voice';
+ const how=res.gaveUp?'none':res.choice?'choice':res.typed?'typed':'voice';
  const base={how,text:res.text||'',hint:!!res.hint,conf:how==='voice'&&res.conf>0?res.conf:null};
  if(res.gaveUp||!res.text&&!res.choice)return {...base,kind:'skip'};
  if(res.choice){const it=step.intents.find(i=>i.id===res.choice);return {...base,kind:'intent',it,match:100}}

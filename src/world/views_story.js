@@ -65,7 +65,7 @@ function wStoryCtl(c){const {W,def,story,mode,$}=c;story.scene=def.id;W.story=st
    ${mode===5&&s.choices.length?`<div class="wchoice">${shuffle(s.choices.map((x,i)=>i)).map(i=>`<button class="wact" data-ch="${i}"><span class="en">${esc(s.choices[i].en)}</span></button>`).join('')}</div>
     <div class="row"><button class="btn ghost sm" id="w-own">${IC.mic}自分の声で言う</button>${hint?'<button class="btn ghost sm" id="w-hn">ヒント</button>':''}<button class="btn ghost sm" id="w-sk">わからない</button></div><div id="w-hx"></div><div id="w-ab"></div>`
     :`<div id="w-ab"></div>`}`;
-   const send=res=>{if(ST&&ST.alive)stOnAnswer(ST,res)};
+   const send=res=>{if(ST&&ST.alive){W.busy=true;stOnAnswer(ST,res).finally(()=>{W.busy=false})}};
    now.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{const ch=s.choices[+b.dataset.ch];send({choice:ch.i,text:ch.en,hint:false})});
    const sk=now.querySelector('#w-sk');if(sk)sk.onclick=()=>send({gaveUp:true,text:''});
    const hn=now.querySelector('#w-hn');if(hn)hn.onclick=()=>{stHint(ST,'talk');now.querySelector('#w-hx').innerHTML=`<div class="hintbox">${esc(hint)}</div>`;hn.remove()};
@@ -91,7 +91,7 @@ function wStoryCtl(c){const {W,def,story,mode,$}=c;story.scene=def.id;W.story=st
   async start(){const opt=RT.stOpt||{};ST=stNew(W,story,mode,ui,opt);RT.st=ST;
    if(story.init)await stOps(ST,story.init);W.draw();renderGoal();
    const intro=stTx(ST,story.intro||'');log.innerHTML=intro?`<div class="wintro">${esc(intro)}</div>`:'';
-   await wait(300);if(ST.alive)stRun(ST)}}}
+   await wait(300);if(ST.alive){W.busy=true;try{await stRun(ST)}finally{W.busy=false}}}}}
 
 // ---- 会話後の学習フィードバック ----
 function wFeedbackHtml(fb,mode){const m=fb.metrics;const pct=v=>v==null?'—':v+'%';

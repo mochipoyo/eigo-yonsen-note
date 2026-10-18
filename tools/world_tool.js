@@ -4,7 +4,10 @@ const vm=require('vm'),fs=require('fs'),path=require('path');
 const [bundle,scDir,outDir]=process.argv.slice(2);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ctx={console,esc,WORLD:{scenes:{}},VIEWS:{},S:{set:{}},Math,JSON,Object,Array,String,Number,setTimeout,Promise};
+ctx.window={};ctx.navigator={};
 vm.createContext(ctx);
+// 会話判定で使う単語の正規化(normWords など)は src/speech.js にある
+vm.runInContext(fs.readFileSync(path.join(__dirname,'..','src','speech.js'),'utf8'),ctx,{filename:'speech.js'});
 vm.runInContext(fs.readFileSync(bundle,'utf8'),ctx,{filename:'world.js'});
 const order=JSON.parse(fs.readFileSync(path.join(scDir,'_order.json'),'utf8'));
 for(const id of order)vm.runInContext(fs.readFileSync(path.join(scDir,id+'.js'),'utf8'),ctx,{filename:id+'.js'});

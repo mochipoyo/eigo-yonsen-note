@@ -85,7 +85,7 @@ WSC.add({id:'cafe',t:'カフェ',en:'Café',cat:'daily',bg:'cafe',floor:[440,580
     choices:[{en:'For here or to go?',i:'ask'},{en:'Do you want a bag?',i:'bag'}]},
    SAY('guest','{where.say}','{where.ja}',{key:true}),
    {id:'price',talk:{ja:'値段を伝えよう(メニューボードを見る)',hint:"That'll be {serve.price}, please."},to:'guest',
-    intents:[I('price',[['{serve.p}']],"That'll be {serve.price}, please.",{main:true,ja:'{serve.pj}になります。',alts:["It's {serve.price}.","{serve.price}, please."]}),
+    intents:[I('price',[['{serve.p}']],"That'll be {serve.price}, please.",{main:true,ja:'{serve.pj}になります。',alts:["It's {serve.price}."]}),
      I('wrongp',[['{wp.p}']],"That'll be {wp.price}.",{tone:'wrong',retry:true,why:'メニューボードの値段とちがいます。',reply:[{say:'Hmm, the board says {serve.price}.',ja:'あれ、ボードには{serve.pj}って書いてありますよ。',expr:'confused',exprAfter:'normal'}]})],
     other:{say:'Sorry, how much is it?',ja:'すみません、おいくらですか。'},
     choices:[{en:"That'll be {serve.price}, please.",i:'price'},{en:"That'll be {wp.price}, please.",i:'wrongp'}]},

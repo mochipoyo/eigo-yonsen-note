@@ -76,7 +76,8 @@ VIEWS.wscene=function(app){
  async function doAct(fn){if(W.busy)return;W.busy=true;let evs;try{evs=await fn()}catch(err){console.error(err);evs=null}W.busy=false;W.tgt=null;W.draw();
   if(!W.alive)return;evs=(Array.isArray(evs)?evs:[evs]).filter(Boolean);
   let sp=null;for(const ev of evs)sp=onEvent(ev)||sp;
-  if(ctl&&ctl.onEvents&&evs.length){if(sp)await sp;await ctl.onEvents(evs)}
+  // 会話ミッション: 相手が反応し終わるまで(話す・動く)は操作を受けつけない
+  if(ctl&&ctl.onEvents&&evs.length){W.busy=true;try{if(sp)await sp;await ctl.onEvents(evs)}finally{W.busy=false}}
   if(W.sel&&W.ents[W.sel]&&!W.ents[W.sel].hidden&&!W.busy&&!role){const e=W.ents[W.sel];showMenu(cap(e.en),e.ja,selfMenu(W,e),e)}}
  function onEvent(ev){const d=describe(ev);if(!d)return null;W.lastD={d,ev,mode:'noun'};(W.evlog=W.evlog||[]).push({ev,en:d.main.en,state:d.state&&d.state.en,past:d.past&&d.past.en});
   const key=d.main.en;const isNew=!R.found[key];R.found[key]=(R.found[key]||0)+1;R.n++;

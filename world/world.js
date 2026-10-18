@@ -468,6 +468,75 @@ function imperative(g){const v=g.v,A=g.a,O=g.o,R=g.r,p=g.p;
    // 「〜させる」: Make + 人 + 動詞の原形 … は文型ごとに作るのが難しいため、目標の状態(進行形)をそのまま示す
    return {en:d.main.en,ja:d.main.ja,target:true}}}}
 
+// ===== ワールド: 英文の検証(ビルド時に tools/world_tool.js から呼ぶ) =====
+// 1) 文の形の検査: 文頭の大文字・文末記号・a/an・同じ語の重複・置きかえ忘れの {..}
+// 2) 会話ミッションの検査: 模範の英文・ほかの言い方・選択肢が、それぞれ自分の意図として受け取られるか(正しい言い方を不正解にしないため)
+// 3) 参照の検査: 登場人物・物・変数が存在するか
+const A_OK=/^(a|an) (one|once|uni|use[drs]?|usual|euro|user|united|university|hour|honest|honor|heir)/i;
+function wLint(t,where){const e=[];if(!t)return e;const s=String(t).trim();
+ if(/\{[\w.]+\}/.test(s))e.push(`${where}: 置きかえ忘れ ${s}`);
+ if(/  /.test(s))e.push(`${where}: 空白が2つ "${s}"`);
+ if(/^[a-z]/.test(s)&&!/^(iPhone|e\.g\.)/.test(s))e.push(`${where}: 文頭が小文字 "${s}"`);
+ if(!/[.?!"')…]$/.test(s))e.push(`${where}: 文末記号なし "${s}"`);
+ const w=s.toLowerCase().replace(/[^a-z0-9' ]/g,' ').split(/\s+/).filter(Boolean);
+ for(let i=0;i+1<w.length;i++){if(w[i]===w[i+1]&&!['that','had','very','bye'].includes(w[i]))e.push(`${where}: 同じ語の重複 "${w[i]} ${w[i+1]}" in "${s}"`);
+  if(w[i]==='a'&&/^[aeio]/.test(w[i+1])&&!A_OK.test('a '+w[i+1]))e.push(`${where}: a + 母音 "${s}"`);
+  if(w[i]==='an'&&/^[bcdfgjklmnpqrstvwxyz]/.test(w[i+1])&&!A_OK.test('an '+w[i+1]))e.push(`${where}: an + 子音 "${s}"`)}
+ return e}
+// 変数の組み合わせ(多すぎるときは代表だけ)
+// 判定の「質」が同じなら、別の意図に当たってもよい(どちらも正しい応答で、流れが同じ)
+const wQual=it=>(it.tone||'ok')+(it.retry?'-retry':'');
+function wVarCombos(story){const keys=Object.keys(story.vars||{});let out=[{}];
+ for(const k of keys){const n=[];for(const o of out)for(const v of story.vars[k])n.push({...o,[k]:v.id});out=n;if(out.length>60){out=out.filter((_,i)=>i%Math.ceil(out.length/60)===0)}}return out}
+function wCheckAll(order){const errors=[],rep=[];let nIntent=0,nChoice=0,nLine=0,nStep=0,nStory=0,nMission=0,nSent=0;
+ const modes=['noun','pron','I','you'];
+ for(const id of order){const def=WSC.defs[id];if(!def){errors.push('scene missing '+id);continue}
+  const W=W_new(def);
+  // ---- ミッション(モード2〜4) ----
+  for(const [mi,m] of (def.missions||[]).entries()){nMission++;
+   for(const k of ['a','o','r']){const v=m.ex[k];if(typeof v==='string'&&!W.ents[v])errors.push(`${id} mission${mi}: ${k}=${v} がない`)}
+   const g=k=>m.ex[k]?(typeof m.ex[k]==='object'&&!Array.isArray(m.ex[k])?m.ex[k]:W.ents[m.ex[k]]):null;
+   const ev={...m.ex,a:m.ex.a?g('a'):USER,o:g('o'),r:m.ex.r?g('r'):null};
+   for(const md of modes){const d=describe(ev,md);if(!d){errors.push(`${id} mission${mi}: 英文が作れない`);continue}
+    for(const x of [d.prog,d.past,d.state].filter(Boolean)){nSent++;errors.push(...wLint(x.en,`${id} mission${mi}/${md}`));if(!x.ja)errors.push(`${id} mission${mi}: 和訳なし`)}}}
+  // ---- 会話ミッション ----
+  for(const st of def.stories||[]){nStory++;const where=`${id}/${st.id}`;
+   if(!W.ents[st.me])errors.push(`${where}: me=${st.me} がない`);
+   const ids=new Set();
+   const chkRef=(x,label)=>{if(typeof x!=='string')return;if(x[0]==='@'){if(!(st.vars||{})[x.slice(1)])errors.push(`${where}: ${label} 変数 ${x} がない`)}else if(x!=='ground'&&!W.ents[x])errors.push(`${where}: ${label} ${x} がない`)};
+   const chkOps=(ops,label)=>{for(const o of ops||[]){for(const k of ['who','what','to'])chkRef(o[k],label+'.'+o.op);if(o.id)[].concat(o.id).forEach(x=>chkRef(x,label+'.'+o.op))}};
+   chkOps(st.init,'init');
+   const combos=wVarCombos(st);
+   for(const combo of combos){
+    const vars={};for(const [k,v] of Object.entries(combo))vars[k]=st.vars[k].find(x=>x.id===v);
+    const ST={W,story:st,vars,flags:{},said:{},variant:'normal',log:{heard:[]}};
+    // ゲームと同じ順で変数を決める(other: ちがう品を選ぶ)。検査では候補の最初のものを使う
+    const setv=o=>{if(o.op!=='setvar')return;if(o.other){const cur=vars[o.other];const list=Object.values(st.vars||{}).find(l=>l.includes(cur))||[];vars[o.k]=list.find(x=>x!==cur&&x!==vars.serve)||list.find(x=>x!==cur)||cur}else if(typeof o.v==='string'&&o.v[0]==='@')vars[o.k]=vars[o.v.slice(1)]};
+    (st.init||[]).forEach(setv);
+    for(const [si,s] of st.steps.entries()){const sw=`${where} step${si}${s.id?'('+s.id+')':''}`;
+     if(combo===combos[0]){nStep++;if(s.id){if(ids.has(s.id))errors.push(`${sw}: id の重複`);ids.add(s.id)}
+      if(s.npc)chkRef(s.npc,sw+' npc');if(s.to)chkRef(s.to,sw+' to');chkOps(s.do,sw);
+      if(s.act&&!s.t)errors.push(`${sw}: 自動テスト用の手順 t がない`);
+      for(const a of s.acts||[]){if(a.on)chkRef(a.on,sw+' acts.on');chkOps(a.do,sw+' acts')}
+      for(const r of s.wrong||[]){if(r.npc)chkRef(r.npc,sw+' wrong');chkOps(r.do,sw+' wrong')}}
+     (s.do||[]).forEach(setv);
+     if(s.npc){nLine++;errors.push(...wLint(stTx(ST,s.say),sw));if(!s.ja)errors.push(`${sw}: 和訳なし`)}
+     if(s.talk){const r=stResolve(ST,s);if(!r.intents.length){errors.push(`${sw}: 意図がない`);continue}
+      const main=dMain(r);if(!main.ja)errors.push(`${sw}: 模範の和訳なし`);
+      for(const it of r.intents){nIntent++;
+       for(const t of [it.model,...(it.alts||[])]){if(!t)continue;errors.push(...wLint(t,sw+' '+it.id));
+        const m=dIntent([t],r.intents);if(!m.best)errors.push(`${sw}: 「${t}」が意図 ${it.id} として受け取られない(どの意図にも当たらない)`);
+        else if(m.best.it.id!==it.id&&wQual(m.best.it)!==wQual(it))errors.push(`${sw}: 「${t}」が ${it.id} ではなく ${m.best.it.id} と判定される`)}
+       for(const rl of it.reply||[]){nLine++;errors.push(...wLint(stTx(ST,rl.say),sw+' reply'));if(!rl.ja)errors.push(`${sw}: 返事の和訳なし`)}
+       chkOps(it.do,sw+' '+it.id)}
+      for(const c of r.choices){nChoice++;if(!r.intents.find(i=>i.id===c.i)){errors.push(`${sw}: 選択肢の意図 ${c.i} がない`);continue}
+       errors.push(...wLint(c.en,sw+' choice'));const m=dIntent([c.en],r.intents);
+       const ci=r.intents.find(i=>i.id===c.i);if(!m.best||(m.best.it.id!==c.i&&wQual(m.best.it)!==wQual(ci)))errors.push(`${sw}: 選択肢「${c.en}」を声で言うと ${m.best?m.best.it.id:'不明'} と判定される(${c.i} のはず)`)}
+      if(r.choices.length&&!r.choices.some(c=>c.i===main.id||r.intents.find(i=>i.id===c.i&&!i.tone&&!i.retry)))errors.push(`${sw}: 正解の選択肢がない`)}
+    }}}}
+ rep.push(`シーン ${order.length} / ミッション ${nMission}(英文 ${nSent}) / 会話ミッション ${nStory}(手順 ${nStep}、相手の発言 ${nLine}、意図 ${nIntent}、選択肢 ${nChoice})`);
+ return {errors:[...new Set(errors)],report:rep.join('\n')+'\n'+(errors.length?'エラー:\n'+[...new Set(errors)].join('\n'):'エラーなし')+'\n'}}
+
 // ===== ワールド: オブジェクト状態管理(配置・持つ・座る・位置と奥行き)。描画やDOMには依存しない =====
 const USER={user:true,en:'I',ja:'私',k:'user'};
 // 家具の大きさ(当たり判定用) [幅, 高さ]
@@ -532,8 +601,8 @@ async function moveTo(W,e,x,y,gait='walk'){
 function faceTo(e,t){e.flip=t.x<e.x}
 function spotNear(W,a,t){// 相手の横に立つ位置
  // カウンターの中にいる店員(stay)は中を移動し、客はカウンターの前から話す
- if(a.stay&&W.ents[a.stay]){const f=W.ents[a.stay];const hw=(f.o&&f.o.w||240)/2-20;return {x:Math.max(f.x-hw,Math.min(f.x+hw,t.x+(t.k==='person'?0:0))),y:f.staffY}}
- if(t.k==='person'&&t.stay&&W.ents[t.stay]){const f=W.ents[t.stay];return clampFloor(W,{x:t.x+(a.x<t.x?-12:12),y:(f.near?f.near.y:f.y)+14})}
+ if(a.stay&&W.ents[a.stay]){const f=W.ents[a.stay];const hw=(f.o&&f.o.w||240)/2-20;return {x:Math.max(f.x-hw,Math.min(f.x+hw,t.x+(t.k==='person'?(a.x<=t.x?-46:46):0))),y:f.staffY}}
+ if(t.k==='person'&&t.stay&&W.ents[t.stay]){const f=W.ents[t.stay];return clampFloor(W,{x:t.x+(a.x<t.x?-52:52),y:(f.near?f.near.y:f.y)+14})}
  if(t.k==='fix'&&t.near)return {x:t.near.x,y:t.near.y};
  const side=a.x<t.x?-1:1;let y=t.k==='prop'&&t.at&&t.at.ref&&W.ents[t.at.ref]?W.ents[t.at.ref].y+14:t.y+2;
  if(t.k==='prop'&&t.inC){const c=W.ents[t.inC];y=c.at&&W.ents[c.at.ref]?W.ents[c.at.ref].y+14:c.y+2}
@@ -933,7 +1002,7 @@ const dMain=step=>step.intents.find(i=>i.main)||step.intents.find(i=>!i.tone)||s
 
 // 答えを判定する。res: answerBox の結果 {text, alts, typed, conf, gaveUp, hint} か、選択肢 {choice:intentId, text}
 async function dJudge(step,res,ctx={}){
- const how=res.choice?'choice':res.typed?'typed':'voice';
+ const how=res.gaveUp?'none':res.choice?'choice':res.typed?'typed':'voice';
  const base={how,text:res.text||'',hint:!!res.hint,conf:how==='voice'&&res.conf>0?res.conf:null};
  if(res.gaveUp||!res.text&&!res.choice)return {...base,kind:'skip'};
  if(res.choice){const it=step.intents.find(i=>i.id===res.choice);return {...base,kind:'intent',it,match:100}}
@@ -1234,7 +1303,8 @@ VIEWS.wscene=function(app){
  async function doAct(fn){if(W.busy)return;W.busy=true;let evs;try{evs=await fn()}catch(err){console.error(err);evs=null}W.busy=false;W.tgt=null;W.draw();
   if(!W.alive)return;evs=(Array.isArray(evs)?evs:[evs]).filter(Boolean);
   let sp=null;for(const ev of evs)sp=onEvent(ev)||sp;
-  if(ctl&&ctl.onEvents&&evs.length){if(sp)await sp;await ctl.onEvents(evs)}
+  // 会話ミッション: 相手が反応し終わるまで(話す・動く)は操作を受けつけない
+  if(ctl&&ctl.onEvents&&evs.length){W.busy=true;try{if(sp)await sp;await ctl.onEvents(evs)}finally{W.busy=false}}
   if(W.sel&&W.ents[W.sel]&&!W.ents[W.sel].hidden&&!W.busy&&!role){const e=W.ents[W.sel];showMenu(cap(e.en),e.ja,selfMenu(W,e),e)}}
  function onEvent(ev){const d=describe(ev);if(!d)return null;W.lastD={d,ev,mode:'noun'};(W.evlog=W.evlog||[]).push({ev,en:d.main.en,state:d.state&&d.state.en,past:d.past&&d.past.en});
   const key=d.main.en;const isNew=!R.found[key];R.found[key]=(R.found[key]||0)+1;R.n++;
@@ -1350,7 +1420,7 @@ function wStoryCtl(c){const {W,def,story,mode,$}=c;story.scene=def.id;W.story=st
    ${mode===5&&s.choices.length?`<div class="wchoice">${shuffle(s.choices.map((x,i)=>i)).map(i=>`<button class="wact" data-ch="${i}"><span class="en">${esc(s.choices[i].en)}</span></button>`).join('')}</div>
     <div class="row"><button class="btn ghost sm" id="w-own">${IC.mic}自分の声で言う</button>${hint?'<button class="btn ghost sm" id="w-hn">ヒント</button>':''}<button class="btn ghost sm" id="w-sk">わからない</button></div><div id="w-hx"></div><div id="w-ab"></div>`
     :`<div id="w-ab"></div>`}`;
-   const send=res=>{if(ST&&ST.alive)stOnAnswer(ST,res)};
+   const send=res=>{if(ST&&ST.alive){W.busy=true;stOnAnswer(ST,res).finally(()=>{W.busy=false})}};
    now.querySelectorAll('[data-ch]').forEach(b=>b.onclick=()=>{const ch=s.choices[+b.dataset.ch];send({choice:ch.i,text:ch.en,hint:false})});
    const sk=now.querySelector('#w-sk');if(sk)sk.onclick=()=>send({gaveUp:true,text:''});
    const hn=now.querySelector('#w-hn');if(hn)hn.onclick=()=>{stHint(ST,'talk');now.querySelector('#w-hx').innerHTML=`<div class="hintbox">${esc(hint)}</div>`;hn.remove()};
@@ -1376,7 +1446,7 @@ function wStoryCtl(c){const {W,def,story,mode,$}=c;story.scene=def.id;W.story=st
   async start(){const opt=RT.stOpt||{};ST=stNew(W,story,mode,ui,opt);RT.st=ST;
    if(story.init)await stOps(ST,story.init);W.draw();renderGoal();
    const intro=stTx(ST,story.intro||'');log.innerHTML=intro?`<div class="wintro">${esc(intro)}</div>`:'';
-   await wait(300);if(ST.alive)stRun(ST)}}}
+   await wait(300);if(ST.alive){W.busy=true;try{await stRun(ST)}finally{W.busy=false}}}}}
 
 // ---- 会話後の学習フィードバック ----
 function wFeedbackHtml(fb,mode){const m=fb.metrics;const pct=v=>v==null?'—':v+'%';
